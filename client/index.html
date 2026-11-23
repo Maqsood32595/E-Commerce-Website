@@ -688,6 +688,169 @@
       cursor: pointer;
     }
 
+    /* ALL FILTERS SLIDE-OUT DRAWER */
+    .filter-drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(26, 26, 26, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 1099;
+      display: none;
+    }
+    .filter-drawer-overlay.open { display: block; }
+    .filter-drawer {
+      position: fixed;
+      top: 0;
+      left: -480px;
+      width: 440px;
+      max-width: 92vw;
+      height: 100vh;
+      background: #FFFFFF;
+      box-shadow: 8px 0 32px rgba(0, 0, 0, 0.15);
+      z-index: 1100;
+      transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+    }
+    .filter-drawer.open { left: 0; }
+    .filter-drawer-header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .filter-header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .filter-header-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--brand-espresso);
+    }
+    .close-filter-btn {
+      background: none;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+      line-height: 1;
+      color: var(--brand-espresso);
+    }
+    .active-filters-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .active-tag-chip {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      text-decoration: underline;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      color: var(--brand-espresso);
+    }
+    .clear-all-link {
+      font-size: 12px;
+      text-decoration: underline;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .clear-all-link:hover { color: var(--brand-terracotta); }
+
+    .filter-drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 24px 24px;
+      scrollbar-width: thin;
+    }
+    .filter-accordion-item {
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 16px 0;
+    }
+    .filter-accordion-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .filter-accordion-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--brand-espresso);
+    }
+    .filter-accordion-icon {
+      font-size: 14px;
+      transition: transform 0.2s;
+    }
+    .filter-accordion-content {
+      margin-top: 14px;
+      display: block;
+    }
+    .filter-accordion-content.collapsed { display: none; }
+    
+    .filter-checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 0;
+      font-size: 13px;
+      color: var(--brand-espresso);
+      cursor: pointer;
+    }
+    .filter-checkbox-item input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: #000;
+      cursor: pointer;
+    }
+    .size-box-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .size-box-btn {
+      background: #FFF;
+      border: 1px solid #C4C4C4;
+      padding: 10px 0;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: all 0.15s;
+    }
+    .size-box-btn.selected {
+      border-color: #000;
+      background: #000;
+      color: #FFF;
+    }
+    .filter-drawer-footer {
+      padding: 16px 24px 20px;
+      border-top: 1px solid var(--border-subtle);
+      background: #FFF;
+    }
+    .btn-filter-apply {
+      width: 100%;
+      background: #000000;
+      color: #FFFFFF;
+      border: none;
+      padding: 16px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 2px;
+    }
+    .btn-filter-apply:hover { opacity: 0.9; }
+
     /* CUSTOM LUXURY THEMED MODAL */
     .alo-modal-overlay {
       position: fixed;
@@ -798,7 +961,7 @@
     <!-- Catalog Interactive Filter & Sort Bar -->
     <div class="catalog-filter-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border-subtle); margin-bottom: 24px; position: relative;">
       <div class="filter-btn-group" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-        <button class="filter-pill-btn" id="btn-filter-all" onclick="toggleFilterPopover('all')">
+        <button class="filter-pill-btn" id="btn-filter-all" onclick="openFilterDrawer()">
           <span>ALL FILTERS ⑂</span>
         </button>
         <button class="filter-pill-btn" id="btn-filter-size" onclick="toggleFilterPopover('size')">
@@ -905,6 +1068,99 @@
       </div>
     </div>
   </footer>
+
+  <!-- ALL FILTERS SLIDE-OUT DRAWER -->
+  <div class="filter-drawer-overlay" id="filter-drawer-overlay" onclick="closeFilterDrawer()"></div>
+  <aside class="filter-drawer" id="filter-drawer">
+    <div class="filter-drawer-header">
+      <div class="filter-header-top">
+        <div class="filter-header-title">Filters Selected (<span id="filter-selected-count">0</span>)</div>
+        <button class="close-filter-btn" onclick="closeFilterDrawer()">&times;</button>
+      </div>
+      <div class="active-filters-row" id="active-filters-row">
+        <!-- Rendered active filter chips and Clear All -->
+      </div>
+    </div>
+
+    <div class="filter-drawer-body">
+      <!-- Accordion 1: PRODUCT TYPE -->
+      <div class="filter-accordion-item">
+        <div class="filter-accordion-header" onclick="toggleFilterAccordion('pt')">
+          <span class="filter-accordion-title">PRODUCT TYPE</span>
+          <span class="filter-accordion-icon" id="acc-icon-pt">▲</span>
+        </div>
+        <div class="filter-accordion-content" id="acc-content-pt">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;">Women</div>
+          <div id="filter-product-types-list">
+            <!-- Dynamically populated from /api/catalog/filters -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Accordion 2: SIZE -->
+      <div class="filter-accordion-item">
+        <div class="filter-accordion-header" onclick="toggleFilterAccordion('sz')">
+          <span class="filter-accordion-title">SIZE</span>
+          <span class="filter-accordion-icon" id="acc-icon-sz">▲</span>
+        </div>
+        <div class="filter-accordion-content" id="acc-content-sz">
+          <div class="size-box-grid" id="filter-sizes-list">
+            <button class="size-box-btn" id="sz-btn-XXS" onclick="toggleSizeFilter('XXS')">XXS</button>
+            <button class="size-box-btn" id="sz-btn-XS" onclick="toggleSizeFilter('XS')">XS</button>
+            <button class="size-box-btn" id="sz-btn-S" onclick="toggleSizeFilter('S')">S</button>
+            <button class="size-box-btn" id="sz-btn-M" onclick="toggleSizeFilter('M')">M</button>
+            <button class="size-box-btn" id="sz-btn-L" onclick="toggleSizeFilter('L')">L</button>
+            <button class="size-box-btn" id="sz-btn-XL" onclick="toggleSizeFilter('XL')">XL</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Accordion 3: COLOR -->
+      <div class="filter-accordion-item">
+        <div class="filter-accordion-header" onclick="toggleFilterAccordion('col')">
+          <span class="filter-accordion-title">COLOR</span>
+          <span class="filter-accordion-icon" id="acc-icon-col">▼</span>
+        </div>
+        <div class="filter-accordion-content collapsed" id="acc-content-col">
+          <div id="filter-colors-list">
+            <!-- Dynamically populated from /api/catalog/filters -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Accordion 4: FABRIC -->
+      <div class="filter-accordion-item">
+        <div class="filter-accordion-header" onclick="toggleFilterAccordion('fab')">
+          <span class="filter-accordion-title">FABRIC</span>
+          <span class="filter-accordion-icon" id="acc-icon-fab">▼</span>
+        </div>
+        <div class="filter-accordion-content collapsed" id="acc-content-fab">
+          <div id="filter-fabrics-list">
+            <!-- Dynamically populated from /api/catalog/filters -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Accordion 5: PERCENT OFF -->
+      <div class="filter-accordion-item">
+        <div class="filter-accordion-header" onclick="toggleFilterAccordion('pct')">
+          <span class="filter-accordion-title">PERCENT OFF</span>
+          <span class="filter-accordion-icon" id="acc-icon-pct">▼</span>
+        </div>
+        <div class="filter-accordion-content collapsed" id="acc-content-pct">
+          <div id="filter-discounts-list">
+            <label class="filter-checkbox-item"><input type="checkbox" id="pct-30" onchange="toggleDiscountFilter('30%')"> 30% Off</label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="pct-40" onchange="toggleDiscountFilter('40%')"> 40% Off</label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="pct-50" onchange="toggleDiscountFilter('50%')"> 50% Off</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-drawer-footer">
+      <button class="btn-filter-apply" onclick="applyDrawerFilters()">APPLY</button>
+    </div>
+  </aside>
 
   <!-- Mini-Cart Drawer -->
   <div class="cart-drawer-overlay" id="cart-overlay"></div>
@@ -1246,67 +1502,252 @@
       renderProducts(sorted, document.getElementById('catalog-heading').innerText.split(' (')[0], null, true);
     }
 
-    function toggleFilterPopover(facet) {
-      const popover = document.getElementById('filter-popover');
-      const content = document.getElementById('filter-popover-content');
-      if (!popover || !content) return;
+    let drawerFilters = { productTypes: [], sizes: [], colors: [], fabrics: [], discounts: [] };
+    let availableFiltersData = null;
 
-      if (popover.style.display === 'block' && popover.dataset.currentFacet === facet) {
-        popover.style.display = 'none';
-        return;
+    async function fetchDynamicFilters() {
+      try {
+        const res = await (await fetch('/api/catalog/filters')).json();
+        if (res.filters) {
+          availableFiltersData = res.filters;
+          renderFilterDrawerFacets();
+        }
+      } catch (e) {
+        console.error('Failed to load dynamic filters:', e);
       }
-      popover.dataset.currentFacet = facet;
-      popover.style.display = 'block';
+    }
 
-      if (facet === 'size') {
-        content.innerHTML = `
-          <h4 style="font-size: 13px; font-weight: 700; text-transform: uppercase; margin-bottom: 12px; color: var(--brand-espresso);">Filter By Size</h4>
-          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            ${['XS', 'S', 'M', 'L', 'XL'].map(sz => `
-              <button class="filter-pill-btn" onclick="applyFacetFilter('size', '${sz}')" style="min-width: 44px; text-align: center;">${sz}</button>
-            `).join('')}
-          </div>
-        `;
-      } else if (facet === 'color') {
-        const colors = [
-          { name: 'Black', hex: '#111111' },
-          { name: 'Ivory', hex: '#F9F8F6' },
-          { name: 'Deep Gravel', hex: '#5A5856' },
-          { name: 'Espresso', hex: '#362B28' },
-          { name: 'Moonshadow Blue', hex: '#6C8299' },
-          { name: 'Rich Bordeaux', hex: '#58111A' },
-          { name: 'Bamboo Green', hex: '#5B7065' }
+    function renderFilterDrawerFacets() {
+      if (!availableFiltersData) return;
+
+      // 1. Product Types
+      const ptList = document.getElementById('filter-product-types-list');
+      if (ptList) {
+        const standardTypes = [
+          'Bras', 'Dresses', 'Hair Ties', 'Headbands', 'Hoodies', 'Jackets',
+          'Leggings', 'Long Sleeves', 'Onesies', 'Pants', 'Pullovers', 'Scarves',
+          'Shorts', 'Skirts', 'Sweaters', 'Sweatpants', 'Sweatshirts', 'Tops'
         ];
-        content.innerHTML = `
-          <h4 style="font-size: 13px; font-weight: 700; text-transform: uppercase; margin-bottom: 12px; color: var(--brand-espresso);">Filter By Color</h4>
-          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-            ${colors.map(c => `
-              <div onclick="applyFacetFilter('color', '${c.name}')" style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 4px 6px; border-radius: 4px;">
-                <span style="width: 16px; height: 16px; border-radius: 50%; background: ${c.hex}; border: 1px solid rgba(0,0,0,0.2);"></span>
-                <span style="font-size: 12px; color: var(--brand-espresso);">${c.name}</span>
-              </div>
-            `).join('')}
-          </div>
-        `;
-      } else if (facet === 'fabric') {
-        const fabrics = ['Airlift', 'Airbrush', 'Alosoft', 'French Terry', 'Seamless'];
-        content.innerHTML = `
-          <h4 style="font-size: 13px; font-weight: 700; text-transform: uppercase; margin-bottom: 12px; color: var(--brand-espresso);">Filter By Fabric Technology</h4>
-          <div style="display: flex; flex-direction: column; gap: 8px;">
-            ${fabrics.map(f => `
-              <button class="filter-pill-btn" onclick="applyFacetFilter('fabric', '${f}')" style="text-align: left; justify-content: flex-start;">${f}</button>
-            `).join('')}
-          </div>
-        `;
-      } else {
-        content.innerHTML = `
-          <h4 style="font-size: 13px; font-weight: 700; text-transform: uppercase; margin-bottom: 12px; color: var(--brand-espresso);">All Facet Filters</h4>
-          <div style="font-size: 12px; color: var(--text-muted); line-height: 1.6;">
-            Select any facet above (Size, Color, Fabric) to refine your curated luxury collection.
-          </div>
-          <button class="alo-modal-btn" style="margin-top: 14px; width: 100%;" onclick="filterProducts('all', null, 'Save 30% — All Products')">Reset All Filters</button>
-        `;
+        ptList.innerHTML = standardTypes.map(t => {
+          const isChecked = drawerFilters.productTypes.includes(t);
+          return `
+            <label class="filter-checkbox-item">
+              <input type="checkbox" id="chk-pt-${t.toLowerCase().replace(/\s+/g, '-')}" ${isChecked ? 'checked' : ''} onchange="toggleProductTypeFilter('${t}', this.checked)">
+              <span>${t}</span>
+            </label>
+          `;
+        }).join('');
       }
+
+      // 2. Colors
+      const colList = document.getElementById('filter-colors-list');
+      if (colList && availableFiltersData.colors) {
+        colList.innerHTML = availableFiltersData.colors.map(c => {
+          const isChecked = drawerFilters.colors.includes(c.name);
+          return `
+            <label class="filter-checkbox-item">
+              <input type="checkbox" id="chk-col-${c.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}" ${isChecked ? 'checked' : ''} onchange="toggleColorFilter('${c.name}', this.checked)">
+              <span style="width: 14px; height: 14px; border-radius: 50%; background: ${c.hex}; border: 1px solid rgba(0,0,0,0.2); display: inline-block;"></span>
+              <span>${c.name}</span>
+            </label>
+          `;
+        }).join('');
+      }
+
+      // 3. Fabrics
+      const fabList = document.getElementById('filter-fabrics-list');
+      if (fabList && availableFiltersData.fabrics) {
+        fabList.innerHTML = availableFiltersData.fabrics.map(f => {
+          const isChecked = drawerFilters.fabrics.includes(f);
+          return `
+            <label class="filter-checkbox-item">
+              <input type="checkbox" id="chk-fab-${f.toLowerCase().replace(/[^a-z0-9]/g, '-')}" ${isChecked ? 'checked' : ''} onchange="toggleFabricFilter('${f}', this.checked)">
+              <span>${f}</span>
+            </label>
+          `;
+        }).join('');
+      }
+
+      updateFilterHeader();
+    }
+
+    function toggleFilterAccordion(accId) {
+      const content = document.getElementById(`acc-content-${accId}`);
+      const icon = document.getElementById(`acc-icon-${accId}`);
+      if (!content) return;
+      const isCollapsed = content.classList.contains('collapsed');
+      if (isCollapsed) {
+        content.classList.remove('collapsed');
+        if (icon) icon.innerText = '▲';
+      } else {
+        content.classList.add('collapsed');
+        if (icon) icon.innerText = '▼';
+      }
+    }
+
+    function openFilterDrawer() {
+      fetchDynamicFilters();
+      const drawer = document.getElementById('filter-drawer');
+      const overlay = document.getElementById('filter-drawer-overlay');
+      if (drawer) drawer.classList.add('open');
+      if (overlay) overlay.classList.add('open');
+    }
+
+    function closeFilterDrawer() {
+      const drawer = document.getElementById('filter-drawer');
+      const overlay = document.getElementById('filter-drawer-overlay');
+      if (drawer) drawer.classList.remove('open');
+      if (overlay) overlay.classList.remove('open');
+    }
+
+    function toggleProductTypeFilter(type, isChecked) {
+      if (isChecked && !drawerFilters.productTypes.includes(type)) {
+        drawerFilters.productTypes.push(type);
+      } else if (!isChecked) {
+        drawerFilters.productTypes = drawerFilters.productTypes.filter(t => t !== type);
+      }
+      updateFilterHeader();
+    }
+
+    function toggleSizeFilter(sz) {
+      const btn = document.getElementById(`sz-btn-${sz}`);
+      if (drawerFilters.sizes.includes(sz)) {
+        drawerFilters.sizes = drawerFilters.sizes.filter(s => s !== sz);
+        if (btn) btn.classList.remove('selected');
+      } else {
+        drawerFilters.sizes.push(sz);
+        if (btn) btn.classList.add('selected');
+      }
+      updateFilterHeader();
+    }
+
+    function toggleColorFilter(color, isChecked) {
+      if (isChecked && !drawerFilters.colors.includes(color)) {
+        drawerFilters.colors.push(color);
+      } else if (!isChecked) {
+        drawerFilters.colors = drawerFilters.colors.filter(c => c !== color);
+      }
+      updateFilterHeader();
+    }
+
+    function toggleFabricFilter(fabric, isChecked) {
+      if (isChecked && !drawerFilters.fabrics.includes(fabric)) {
+        drawerFilters.fabrics.push(fabric);
+      } else if (!isChecked) {
+        drawerFilters.fabrics = drawerFilters.fabrics.filter(f => f !== fabric);
+      }
+      updateFilterHeader();
+    }
+
+    function toggleDiscountFilter(pct) {
+      if (drawerFilters.discounts.includes(pct)) {
+        drawerFilters.discounts = drawerFilters.discounts.filter(d => d !== pct);
+      } else {
+        drawerFilters.discounts.push(pct);
+      }
+      updateFilterHeader();
+    }
+
+    function removeDrawerFilter(facet, value) {
+      if (facet === 'productTypes') {
+        drawerFilters.productTypes = drawerFilters.productTypes.filter(t => t !== value);
+        const chk = document.getElementById(`chk-pt-${value.toLowerCase().replace(/\s+/g, '-')}`);
+        if (chk) chk.checked = false;
+      } else if (facet === 'sizes') {
+        drawerFilters.sizes = drawerFilters.sizes.filter(s => s !== value);
+        const btn = document.getElementById(`sz-btn-${value}`);
+        if (btn) btn.classList.remove('selected');
+      } else if (facet === 'colors') {
+        drawerFilters.colors = drawerFilters.colors.filter(c => c !== value);
+        const chk = document.getElementById(`chk-col-${value.toLowerCase().replace(/[^a-z0-9]/g, '-')}`);
+        if (chk) chk.checked = false;
+      } else if (facet === 'fabrics') {
+        drawerFilters.fabrics = drawerFilters.fabrics.filter(f => f !== value);
+        const chk = document.getElementById(`chk-fab-${value.toLowerCase().replace(/[^a-z0-9]/g, '-')}`);
+        if (chk) chk.checked = false;
+      } else if (facet === 'discounts') {
+        drawerFilters.discounts = drawerFilters.discounts.filter(d => d !== value);
+      }
+      updateFilterHeader();
+      applyDrawerFilters(false);
+    }
+
+    function clearAllDrawerFilters() {
+      drawerFilters = { productTypes: [], sizes: [], colors: [], fabrics: [], discounts: [] };
+      document.querySelectorAll('#filter-drawer input[type="checkbox"]').forEach(c => c.checked = false);
+      document.querySelectorAll('.size-box-btn').forEach(b => b.classList.remove('selected'));
+      updateFilterHeader();
+      renderProducts(allProducts, 'Save 30% — All Products', 'Double-knit Airlift, Peach-finish Alosoft, and Accolade French Terry');
+    }
+
+    function updateFilterHeader() {
+      const allSelected = [
+        ...drawerFilters.productTypes.map(v => ({ facet: 'productTypes', label: v })),
+        ...drawerFilters.sizes.map(v => ({ facet: 'sizes', label: v })),
+        ...drawerFilters.colors.map(v => ({ facet: 'colors', label: v })),
+        ...drawerFilters.fabrics.map(v => ({ facet: 'fabrics', label: v })),
+        ...drawerFilters.discounts.map(v => ({ facet: 'discounts', label: v }))
+      ];
+
+      const countEl = document.getElementById('filter-selected-count');
+      if (countEl) countEl.innerText = allSelected.length;
+
+      const row = document.getElementById('active-filters-row');
+      if (row) {
+        if (allSelected.length === 0) {
+          row.innerHTML = '';
+        } else {
+          row.innerHTML = allSelected.map(item => `
+            <span class="active-tag-chip" onclick="removeDrawerFilter('${item.facet}', '${item.label.replace(/'/g, "\\'")}')">
+              ${item.label} &times;
+            </span>
+          `).join('') + `<a class="clear-all-link" onclick="clearAllDrawerFilters()">Clear All</a>`;
+        }
+      }
+    }
+
+    function applyDrawerFilters(closeAfter = true) {
+      let filtered = allProducts;
+
+      if (drawerFilters.productTypes.length > 0) {
+        filtered = filtered.filter(p => {
+          const title = (p.title || '').toLowerCase();
+          const cat = (p.category_id || '').toLowerCase();
+          return drawerFilters.productTypes.some(pt => {
+            const ptL = pt.toLowerCase();
+            return title.includes(ptL) || cat.includes(ptL) || (ptL === 'onesies' && (title.includes('onesie') || cat.includes('onesie')));
+          });
+        });
+      }
+
+      if (drawerFilters.colors.length > 0) {
+        filtered = filtered.filter(p => {
+          const col = (p.color_family || '').toLowerCase();
+          return drawerFilters.colors.some(c => col.includes(c.toLowerCase()) || c.toLowerCase().includes(col));
+        });
+      }
+
+      if (drawerFilters.fabrics.length > 0) {
+        filtered = filtered.filter(p => {
+          const fab = (p.fabric_technology || '').toLowerCase();
+          const title = (p.title || '').toLowerCase();
+          return drawerFilters.fabrics.some(f => fab.includes(f.toLowerCase()) || title.includes(f.toLowerCase()));
+        });
+      }
+
+      if (drawerFilters.discounts.length > 0) {
+        filtered = filtered.filter(p => {
+          const disc = (p.discount_label || '').toLowerCase();
+          return drawerFilters.discounts.some(d => disc.includes(d.toLowerCase()));
+        });
+      }
+
+      const label = drawerFilters.productTypes.length > 0 
+        ? drawerFilters.productTypes.join(', ')
+        : (drawerFilters.colors.length > 0 ? drawerFilters.colors.join(', ') : 'Filtered Collection');
+
+      renderProducts(filtered, label, `Filtered by ${Object.values(drawerFilters).flat().length} criteria`, true);
+      if (closeAfter) closeFilterDrawer();
     }
 
     function applyFacetFilter(type, value) {

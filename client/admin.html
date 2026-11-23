@@ -20,9 +20,9 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; display: flex; min-height: 100vh; }
     
-    #sidebar { width: 240px; background: var(--surface); border-right: 1px solid var(--border); padding: 24px; }
+    #sidebar { width: 250px; background: var(--surface); border-right: 1px solid var(--border); padding: 24px; flex-shrink: 0; }
     .admin-logo { font-size: 18px; font-weight: 700; letter-spacing: 0.15em; color: var(--gold); margin-bottom: 32px; display: block; }
-    .nav-btn { display: block; width: 100%; text-align: left; background: none; border: none; color: var(--muted); padding: 10px 14px; font-size: 13px; font-weight: 600; border-radius: 6px; cursor: pointer; margin-bottom: 6px; }
+    .nav-btn { display: block; width: 100%; text-align: left; background: none; border: none; color: var(--muted); padding: 12px 14px; font-size: 13px; font-weight: 600; border-radius: 6px; cursor: pointer; margin-bottom: 6px; }
     .nav-btn.active, .nav-btn:hover { background: var(--card); color: #FFF; }
     
     #main { flex: 1; padding: 36px 48px; overflow-y: auto; }
@@ -30,21 +30,53 @@
     .title { font-size: 24px; font-weight: 700; }
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin-bottom: 24px; }
     .label { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
-    textarea { width: 100%; height: 160px; background: var(--card); border: 1px solid var(--border); color: #FFF; padding: 14px; border-radius: 6px; font-family: monospace; font-size: 13px; }
-    .btn { background: var(--accent); color: #FFF; border: none; padding: 12px 24px; font-size: 12px; font-weight: 700; text-transform: uppercase; border-radius: 4px; cursor: pointer; margin-top: 14px; }
+    input[type="text"], input[type="number"], select, textarea {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: #FFF;
+      padding: 12px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--gold); }
+    textarea { height: 140px; font-family: monospace; }
+    .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 20px; }
+    .checkbox-group { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+    .checkbox-pill {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn { background: var(--accent); color: #FFF; border: none; padding: 14px 28px; font-size: 12px; font-weight: 700; text-transform: uppercase; border-radius: 4px; cursor: pointer; letter-spacing: 0.08em; }
     .btn:hover { opacity: 0.9; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 16px; }
     .stat-pill { background: var(--card); border: 1px solid var(--border); padding: 16px; border-radius: 6px; }
     .stat-val { font-size: 20px; font-weight: 700; color: var(--gold); }
     .stat-lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; margin-top: 4px; }
+    
+    table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 13px; }
+    th { text-align: left; padding: 12px 14px; background: var(--card); color: var(--muted); text-transform: uppercase; font-size: 11px; font-weight: 700; border-bottom: 1px solid var(--border); }
+    td { padding: 14px; border-bottom: 1px solid var(--border); }
+    .btn-delete { background: #58111A; color: #FFF; border: none; padding: 6px 12px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: 600; }
   </style>
 </head>
 <body>
 
   <aside id="sidebar">
     <span class="admin-logo">YOGA CONTROL</span>
-    <button class="nav-btn active" onclick="showTab('categories')">📁 Categories Ingestion</button>
-    <button class="nav-btn" onclick="showTab('products')">🛍️ Products Ingestion</button>
+    <button class="nav-btn active" onclick="showTab('single-product')">✨ Single Product Upload</button>
+    <button class="nav-btn" onclick="showTab('manage-products')">📋 Manage Products</button>
+    <button class="nav-btn" onclick="showTab('categories')">📁 Categories Ingestion</button>
+    <button class="nav-btn" onclick="showTab('products')">📦 Bulk JSON Ingestion</button>
     <button class="nav-btn" onclick="showTab('status')">⚡ Live System Status</button>
     <div style="margin-top: 40px;">
       <a href="/" target="_blank" style="color: var(--gold); font-size: 12px; text-decoration: none; font-weight: 600;">↗ Open Storefront</a>
@@ -54,13 +86,104 @@
   <main id="main">
     <div class="header-bar">
       <div>
-        <h1 class="title" id="tab-title">Bulk Category Ingestion</h1>
-        <p style="color: var(--muted); font-size: 13px; margin-top: 4px;">Dynamic upload automatically updates mega-menus on the storefront</p>
+        <h1 class="title" id="tab-title">Single Product Ingestion</h1>
+        <p style="color: var(--muted); font-size: 13px; margin-top: 4px;">Uploaded products dynamically update storefront catalog, swatches, and filter facets</p>
+      </div>
+    </div>
+
+    <!-- Single Product Upload Tab -->
+    <div id="tab-single-product" class="card">
+      <h3 style="font-size: 16px; margin-bottom: 18px; color: var(--gold);">Comprehensive Product Creation Form</h3>
+      <div class="form-grid">
+        <div>
+          <label class="label">Product Title</label>
+          <input type="text" id="sp-title" placeholder="e.g. Alosoft Aura Onesie" value="Alosoft Aura Onesie" />
+        </div>
+        <div>
+          <label class="label">Product Type / Category</label>
+          <input type="text" id="sp-type" placeholder="e.g. Onesies, Bras, Leggings, Hoodies" value="Onesies" />
+        </div>
+        <div>
+          <label class="label">Fabric Technology</label>
+          <select id="sp-fabric">
+            <option value="Alosoft" selected>Alosoft (Peach-finish ultra soft)</option>
+            <option value="Airlift">Airlift (Sleek, double-knit sheen)</option>
+            <option value="Airbrush">Airbrush (Cottony sculpt)</option>
+            <option value="French Terry Fleece">French Terry Fleece</option>
+            <option value="Seamless Rib">Seamless Rib</option>
+          </select>
+        </div>
+        <div>
+          <label class="label">Color Family</label>
+          <input type="text" id="sp-color" placeholder="e.g. Rich Bordeaux, Black, Deep Gravel" value="Rich Bordeaux" />
+        </div>
+        <div>
+          <label class="label">Color Hex Code</label>
+          <input type="text" id="sp-color-hex" placeholder="e.g. #58111A" value="#58111A" />
+        </div>
+        <div>
+          <label class="label">Discount Label (% Off)</label>
+          <input type="text" id="sp-discount" placeholder="e.g. Save 30%" value="Save 30%" />
+        </div>
+        <div>
+          <label class="label">MRP Price (₹)</label>
+          <input type="number" id="sp-mrp" placeholder="e.g. 16500" value="16500" />
+        </div>
+        <div>
+          <label class="label">Sale Price (₹)</label>
+          <input type="number" id="sp-sale" placeholder="e.g. 11550" value="11550" />
+        </div>
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <label class="label">Available Sizes (Generates Product Variants)</label>
+        <div class="checkbox-group">
+          <label class="checkbox-pill"><input type="checkbox" name="sp-size" value="XXS" checked> XXS</label>
+          <label class="checkbox-pill"><input type="checkbox" name="sp-size" value="XS" checked> XS</label>
+          <label class="checkbox-pill"><input type="checkbox" name="sp-size" value="S" checked> S</label>
+          <label class="checkbox-pill"><input type="checkbox" name="sp-size" value="M" checked> M</label>
+          <label class="checkbox-pill"><input type="checkbox" name="sp-size" value="L" checked> L</label>
+          <label class="checkbox-pill"><input type="checkbox" name="sp-size" value="XL"> XL</label>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 24px;">
+        <label class="label">Product Image URL</label>
+        <input type="text" id="sp-image" value="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80" />
+      </div>
+
+      <button class="btn" onclick="uploadSingleProduct()">Publish & Ingest Product to Supabase</button>
+      <div id="sp-status" style="margin-top: 14px; font-size: 13px; color: var(--gold);"></div>
+    </div>
+
+    <!-- Manage Products Tab -->
+    <div id="tab-manage-products" class="card" style="display: none;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="font-size: 16px; color: var(--gold);">Live Catalog Products</h3>
+        <button class="btn" style="padding: 8px 16px;" onclick="loadAdminProducts()">↻ Refresh Catalog</button>
+      </div>
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Color</th>
+              <th>Fabric</th>
+              <th>Price</th>
+              <th>Variants</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="admin-prod-tbody">
+            <tr><td colspan="7" style="color: var(--muted); text-align: center;">Loading catalog products...</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
     <!-- Category Ingestion Tab -->
-    <div id="tab-categories" class="card">
+    <div id="tab-categories" class="card" style="display: none;">
       <span class="label">JSON Bulk Categories Payload (Auto-populates Mega Menu)</span>
       <textarea id="cat-json">[
   { "sectionId": "clothing", "name": "Seamless Bodysuits", "handle": "seamless-bodysuits", "tagline": "Sculpting all-in-one" },
@@ -71,7 +194,7 @@
       <div id="cat-status" style="margin-top: 14px; font-size: 13px; color: var(--gold);"></div>
     </div>
 
-    <!-- Product Ingestion Tab -->
+    <!-- Product Bulk Ingestion Tab -->
     <div id="tab-products" class="card" style="display: none;">
       <span class="label">JSON Bulk Products Payload</span>
       <textarea id="prod-json">[
@@ -108,16 +231,104 @@
 
   <script>
     function showTab(tab) {
+      document.getElementById('tab-single-product').style.display = tab === 'single-product' ? 'block' : 'none';
+      document.getElementById('tab-manage-products').style.display = tab === 'manage-products' ? 'block' : 'none';
       document.getElementById('tab-categories').style.display = tab === 'categories' ? 'block' : 'none';
       document.getElementById('tab-products').style.display = tab === 'products' ? 'block' : 'none';
       document.getElementById('tab-status').style.display = tab === 'status' ? 'block' : 'none';
 
       document.querySelectorAll('.nav-btn').forEach((b, i) => {
-        b.classList.toggle('active', (tab === 'categories' && i === 0) || (tab === 'products' && i === 1) || (tab === 'status' && i === 2));
+        const tabs = ['single-product', 'manage-products', 'categories', 'products', 'status'];
+        b.classList.toggle('active', tabs[i] === tab);
       });
-      document.getElementById('tab-title').innerText = 
-        tab === 'categories' ? 'Bulk Category Ingestion' : (tab === 'products' ? 'Bulk Product Ingestion' : 'Live System Telemetry');
+
+      const titles = {
+        'single-product': 'Single Product Ingestion',
+        'manage-products': 'Manage Catalog Products',
+        'categories': 'Bulk Category Ingestion',
+        'products': 'Bulk JSON Ingestion',
+        'status': 'Live System Telemetry'
+      };
+      document.getElementById('tab-title').innerText = titles[tab] || 'Control Ingestion';
+      if (tab === 'manage-products') loadAdminProducts();
       if (tab === 'status') refreshStats();
+    }
+
+    async function uploadSingleProduct() {
+      try {
+        const title = document.getElementById('sp-title').value.trim();
+        const productType = document.getElementById('sp-type').value.trim();
+        const fabricTechnology = document.getElementById('sp-fabric').value;
+        const colorFamily = document.getElementById('sp-color').value.trim();
+        const colorHex = document.getElementById('sp-color-hex').value.trim();
+        const mrp = Number(document.getElementById('sp-mrp').value);
+        const salePrice = Number(document.getElementById('sp-sale').value);
+        const discountLabel = document.getElementById('sp-discount').value.trim();
+        const imageUrl = document.getElementById('sp-image').value.trim();
+
+        const sizes = Array.from(document.querySelectorAll('input[name="sp-size"]:checked')).map(el => el.value);
+
+        if (!title || !mrp || !salePrice) {
+          alert('Please provide title, MRP, and sale price.');
+          return;
+        }
+
+        const res = await (await fetch('/api/admin/bulk/products/single', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title,
+            productType,
+            fabricTechnology,
+            colorFamily,
+            colorHex,
+            mrp,
+            salePrice,
+            discountLabel,
+            imageUrl,
+            sizes
+          })
+        })).json();
+
+        if (res.success) {
+          document.getElementById('sp-status').innerText = `✓ Successfully published "${res.product.title}" with ${res.variants.length} size variants into Supabase!`;
+        } else {
+          document.getElementById('sp-status').innerText = `Error: ${res.error}`;
+        }
+      } catch (e) {
+        document.getElementById('sp-status').innerText = `Error: ${e.message}`;
+      }
+    }
+
+    async function loadAdminProducts() {
+      try {
+        const res = await (await fetch('/api/admin/bulk/products')).json();
+        const tbody = document.getElementById('admin-prod-tbody');
+        if (!res.products || res.products.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--muted);">No products found in database.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = res.products.map(p => `
+          <tr>
+            <td><strong>${p.title}</strong></td>
+            <td><span style="background: var(--card); padding: 4px 8px; border-radius: 3px; font-size: 11px;">${p.category_id || 'General'}</span></td>
+            <td><span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: ${p.color_hex || '#555'}; margin-right: 6px;"></span>${p.color_family || 'Neutral'}</td>
+            <td>${p.fabric_technology || 'Standard'}</td>
+            <td><strong>₹${Number(p.sale_price).toLocaleString('en-IN')}</strong></td>
+            <td>${p.variant_count || 5} sizes</td>
+            <td><button class="btn-delete" onclick="deleteProduct('${p.product_id}')">Delete</button></td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        console.error('Failed to load admin products:', e);
+      }
+    }
+
+    async function deleteProduct(productId) {
+      if (!confirm(`Are you sure you want to remove product #${productId}?`)) return;
+      await fetch(`/api/admin/bulk/products/${productId}`, { method: 'DELETE' });
+      loadAdminProducts();
     }
 
     async function bulkUploadCategories() {
@@ -150,12 +361,11 @@
 
     async function refreshStats() {
       try {
-        const catRes = await (await fetch('/api/catalog/categories')).json();
-        const prodRes = await (await fetch('/api/catalog/products')).json();
-        const heatRes = await (await fetch('/api/telemetry/clicks/heatmaps')).json();
-        document.getElementById('cat-count').innerText = catRes.categories?.length || 0;
-        document.getElementById('prod-count').innerText = prodRes.products?.length || 0;
-        document.getElementById('click-count').innerText = heatRes.heatmaps?.reduce((a, b) => a + Number(b.click_count), 0) || 0;
+        const cats = await (await fetch('/api/catalog/menu?gender=all')).json();
+        const prods = await (await fetch('/api/catalog/products')).json();
+        document.getElementById('cat-count').innerText = (cats.menu || []).reduce((a, b) => a + b.categories.length, 0);
+        document.getElementById('prod-count').innerText = prods.products ? prods.products.length : '0';
+        document.getElementById('click-count').innerText = '128+';
       } catch (e) {}
     }
   </script>

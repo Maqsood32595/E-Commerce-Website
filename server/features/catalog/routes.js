@@ -78,4 +78,48 @@ router.post('/categories', async (req, res) => {
     }
 });
 
+// GET /api/catalog/filters (Dynamic Facets from Products & Categories)
+router.get('/filters', async (req, res) => {
+    try {
+        const colorsRes = await db.query(`
+            SELECT DISTINCT color_family, color_hex 
+            FROM products 
+            WHERE color_family IS NOT NULL AND is_active = true 
+            ORDER BY color_family ASC;
+        `);
+
+        const fabricsRes = await db.query(`
+            SELECT DISTINCT fabric_technology 
+            FROM products 
+            WHERE fabric_technology IS NOT NULL AND is_active = true 
+            ORDER BY fabric_technology ASC;
+        `);
+
+        // Dynamic Product Types extracted from categories
+        const typesRes = await db.query(`
+            SELECT DISTINCT name, handle, category_id 
+            FROM categories 
+            WHERE is_active = true 
+            ORDER BY name ASC;
+        `);
+
+        const sizes = ['XXS', 'XS', 'S', 'M', 'L', 'XL'];
+        const percentOff = ['30% Off', '40% Off', '50% Off'];
+
+        res.json({
+            success: true,
+            slice: 'catalog',
+            filters: {
+                productTypes: typesRes.rows,
+                sizes,
+                colors: colorsRes.rows.map(r => ({ name: r.color_family, hex: r.color_hex || '#333333' })),
+                fabrics: fabricsRes.rows.map(r => r.fabric_technology),
+                percentOff
+            }
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message, slice: 'catalog' });
+    }
+});
+
 module.exports = router;
