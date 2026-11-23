@@ -43,7 +43,35 @@ router.get('/menu', async (req, res) => {
             LIMIT 3;
         `);
 
-        res.json({ success: true, slice: 'catalog', menu, featuredShoes: shoesRes.rows });
+        // Featured Holiday Visual Cards for Gift Guide mega menu (Exact Alo Yoga Spec)
+        const featuredGifts = [
+            {
+                title: 'Holiday Après-Ski Edit',
+                handle: 'holiday-apres-ski',
+                subtitle: 'Alpine warmth & luxury tailoring',
+                image_url: 'https://images.unsplash.com/photo-1548883354-7622d03aca27?auto=format&fit=crop&w=800&q=80',
+                link_filter: 'c-jackets',
+                filter_label: 'Jackets & Outerwear'
+            },
+            {
+                title: 'Cozy Lounge Sets',
+                handle: 'cozy-lounge-sets',
+                subtitle: 'Peach-finish Alosoft fleece',
+                image_url: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80',
+                link_filter: 'act-lounge',
+                filter_label: 'Lounge'
+            },
+            {
+                title: 'Performance Studio Gifts',
+                handle: 'performance-studio-gifts',
+                subtitle: 'Double-knit Airlift essentials',
+                image_url: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80',
+                link_filter: 'act-yoga',
+                filter_label: 'Yoga'
+            }
+        ];
+
+        res.json({ success: true, slice: 'catalog', menu, featuredShoes: shoesRes.rows, featuredGifts });
     } catch (err) {
         res.status(500).json({ error: err.message, slice: 'catalog' });
     }

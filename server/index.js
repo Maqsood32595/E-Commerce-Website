@@ -16,7 +16,7 @@ app.use(express.static(path.resolve(__dirname, '../client')));
 async function startServer() {
     await kernel.boot(app, './features');
 
-    app.get(['/', '/account', '/pages/in-access'], (req, res) => {
+    app.get(['/', '/account', '/pages/in-access', '/pages/gift-guide'], (req, res) => {
         res.sendFile(path.resolve(__dirname, '../client/index.html'));
     });
 

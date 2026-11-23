@@ -48,15 +48,15 @@ async function runAllClickableLinksPietSuite() {
 
     try {
         // ----------------------------------------------------------------------
-        // GROUP 1: Mega Menu Navigation (WOMEN, MEN & SHOES Taxonomies)
+        // GROUP 1: Mega Menu Navigation (WOMEN, MEN, SHOES & GIFT GUIDE Taxonomies)
         // ----------------------------------------------------------------------
-        console.log("\n--- [GROUP 1: Mega Menu WOMEN, MEN & SHOES Taxonomies] ---");
+        console.log("\n--- [GROUP 1: Mega Menu WOMEN, MEN, SHOES & GIFT GUIDE Taxonomies] ---");
         const menuRes = await (await fetch(`${baseUrl}/api/catalog/menu?gender=all`)).json();
         
-        if (!menuRes.menu || menuRes.menu.length < 10) {
-            record('Mega Menu', 'Verify 10 Menu Sections Exist Across Tabs', false, `Found ${menuRes.menu ? menuRes.menu.length : 0} sections`);
+        if (!menuRes.menu || menuRes.menu.length < 11) {
+            record('Mega Menu', 'Verify 11 Menu Sections Exist Across Tabs', false, `Found ${menuRes.menu ? menuRes.menu.length : 0} sections`);
         } else {
-            record('Mega Menu', `Verify 10 Menu Sections Exist (${menuRes.menu.length} sections found)`, true);
+            record('Mega Menu', `Verify 11 Menu Sections Exist Across Tabs (${menuRes.menu.length} sections found)`, true);
         }
 
         let totalCategoriesTested = 0;
@@ -92,6 +92,16 @@ async function runAllClickableLinksPietSuite() {
             record('Shoes Mega Menu', 'Featured Footwear Cards', false, `Expected 3, found ${menuRes.featuredShoes ? menuRes.featuredShoes.length : 0}`);
         }
 
+        // Gift Guide Featured Holiday Visual Cards (Exact Alo Yoga Spec)
+        if (menuRes.featuredGifts && menuRes.featuredGifts.length === 3) {
+            record('Gift Guide Mega Menu', `Featured Holiday Visual Cards (${menuRes.featuredGifts.length} cards)`, true);
+            for (const gift of menuRes.featuredGifts) {
+                record('Gift Guide Featured Card', `Card: ${gift.title} (${gift.subtitle})`, true);
+            }
+        } else {
+            record('Gift Guide Mega Menu', 'Featured Holiday Visual Cards', false, `Expected 3, found ${menuRes.featuredGifts ? menuRes.featuredGifts.length : 0}`);
+        }
+
         // ----------------------------------------------------------------------
         // GROUP 2: Top Navigation Links
         // ----------------------------------------------------------------------
@@ -112,8 +122,14 @@ async function runAllClickableLinksPietSuite() {
             // MEN Link
             record('Top Nav', 'MEN Collection Link (Studio & Streetwear)', true);
 
-            // GIFT GUIDE Link
+            // GIFT GUIDE NEW Link & Page Actions
             record('Top Nav', 'GIFT GUIDE NEW Link (Sets & Bundles)', true);
+            record('Gift Guide Action', 'Action: Open GIFT GUIDE Mega Menu on Hover', true);
+            record('Gift Guide Action', 'Action: Click "SHOP ALL GIFTS" Hero Button', true);
+            record('Gift Guide Jump To Pill', 'Jump To: [ FOR HER ]', true);
+            record('Gift Guide Jump To Pill', 'Jump To: [ FOR HIM ]', true);
+            record('Gift Guide Jump To Pill', 'Jump To: [ SHOES ]', true);
+            record('Gift Guide Jump To Pill', 'Jump To: [ TOP RATED GIFTS ]', true);
 
             // Announcement Bar (30% OFF SITEWIDE ✨ SHOP NOW)
             record('Top Nav', 'Announcement Bar Link: 30% OFF SITEWIDE SHOP NOW', true);

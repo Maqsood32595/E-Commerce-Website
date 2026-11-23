@@ -1208,7 +1208,7 @@
         <li><a class="active" id="nav-women">WOMEN</a></li>
         <li><a id="nav-men" onclick="filterProducts('category', 'men', 'Men\'s Studio & Streetwear')">MEN</a></li>
         <li><a id="nav-shoes" onclick="filterProducts('category', 'shoes', 'Shoes & Footwear')">SHOES</a></li>
-        <li><a id="nav-gift" onclick="filterProducts('category', 'gift', 'Gift Guide & Wellness Sets')">GIFT GUIDE <span style="color: var(--brand-terracotta); font-size: 10px;">NEW</span></a></li>
+        <li><a id="nav-gift" onclick="openGiftGuidePage()">GIFT GUIDE <span style="color: var(--brand-terracotta); font-size: 10px;">NEW</span></a></li>
       </ul>
       <div class="nav-actions">
         <!-- User State (Hi Sameera! | 1 PT) -->
@@ -1411,6 +1411,30 @@
 
   <!-- Main Catalog View (All 40+ Products) -->
   <section class="catalog-section" id="catalog-section">
+    <!-- GIFT GUIDE HERO BANNER & JUMP TO FILTER BAR (Exact Alo Yoga Spec) -->
+    <div id="gift-guide-hero" style="display: none; margin-bottom: 32px;">
+      <div style="position: relative; width: 100%; height: 360px; border-radius: 4px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: url('https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;">
+        <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.28);"></div>
+        <div style="position: relative; z-index: 2; text-align: center; color: #FFF; padding: 20px;">
+          <h1 style="font-family: var(--font-heading); font-size: 42px; font-weight: 300; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 22px; text-shadow: 0 2px 14px rgba(0,0,0,0.4);">
+            YOGA <span style="font-size: 30px; font-family: serif;">✦</span> Gift Guide
+          </h1>
+          <button class="btn-shop-all-gifts" id="btn-hero-shop-all-gifts" onclick="filterProducts('category', 'gift-shop-all', 'Shop All Gifts', 'Gift Guide')" style="background: #FFF; color: #111; border: none; padding: 14px 38px; font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; border-radius: 2px; transition: all 0.2s;">
+            SHOP ALL GIFTS
+          </button>
+        </div>
+      </div>
+
+      <!-- Jump To Bar -->
+      <div style="display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 24px; flex-wrap: wrap;">
+        <span style="font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brand-espresso);">JUMP TO:</span>
+        <button class="pill-link" id="jump-btn-her" onclick="filterProducts('category', 'gifts-for-her', 'Gifts For Her', 'Gift Guide')" style="padding: 8px 20px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase;">FOR HER</button>
+        <button class="pill-link" id="jump-btn-him" onclick="filterProducts('category', 'gifts-for-him', 'Gifts For Him', 'Gift Guide')" style="padding: 8px 20px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase;">FOR HIM</button>
+        <button class="pill-link" id="jump-btn-shoes" onclick="filterProducts('category', 'shoes', 'Shoes & Footwear', 'Gift Guide')" style="padding: 8px 20px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase;">SHOES</button>
+        <button class="pill-link" id="jump-btn-top-rated" onclick="filterProducts('category', 'top-rated-gifts', 'Top Rated Gifts', 'Gift Guide')" style="padding: 8px 20px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase;">TOP RATED GIFTS</button>
+      </div>
+    </div>
+
     <div class="section-header">
       <div>
         <h2 class="section-title" id="catalog-heading">Save 30% — Trending Now</h2>
@@ -1758,17 +1782,19 @@
     const navWomen = document.getElementById('nav-women');
     const navMen = document.getElementById('nav-men');
     const navShoes = document.getElementById('nav-shoes');
+    const navGift = document.getElementById('nav-gift');
     let menuTimer = null;
     let currentGender = 'women';
     let allMenuData = [];
     let featuredShoesData = [];
+    let featuredGiftsData = [];
 
     function openMegaMenu(gender = 'women') {
       clearTimeout(menuTimer);
       currentGender = gender;
       renderMegaMenuContent(gender);
 
-      [navWomen, navMen, navShoes].forEach(el => el && el.classList.remove('active'));
+      [navWomen, navMen, navShoes, navGift].forEach(el => el && el.classList.remove('active'));
       const activeNav = document.getElementById(`nav-${gender}`);
       if (activeNav) activeNav.classList.add('active');
 
@@ -1781,14 +1807,14 @@
       if (immediate) {
         if (megaMenu) megaMenu.classList.remove('open');
         if (megaBackdrop) megaBackdrop.classList.remove('active');
-        [navWomen, navMen, navShoes].forEach(el => el && el.classList.remove('active'));
+        [navWomen, navMen, navShoes, navGift].forEach(el => el && el.classList.remove('active'));
         if (navWomen) navWomen.classList.add('active');
         return;
       }
       menuTimer = setTimeout(() => {
         if (megaMenu) megaMenu.classList.remove('open');
         if (megaBackdrop) megaBackdrop.classList.remove('active');
-        [navWomen, navMen, navShoes].forEach(el => el && el.classList.remove('active'));
+        [navWomen, navMen, navShoes, navGift].forEach(el => el && el.classList.remove('active'));
         if (navWomen) navWomen.classList.add('active');
       }, 160);
     }
@@ -1818,6 +1844,34 @@
                 <img src="${shoe.image_url}" alt="${shoe.title}" style="width: 100%; height: 210px; object-fit: cover; border-radius: 2px; margin-bottom: 8px; background: var(--bg-surface);" />
                 <div style="font-size: 13px; font-weight: 600; color: var(--brand-espresso);">${shoe.title}</div>
                 <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">₹${Number(shoe.sale_price).toLocaleString('en-IN')}</div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        return;
+      }
+
+      if (gender === 'gift') {
+        const giftSec = allMenuData.find(s => s.gender === 'gift') || { categories: [] };
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1; display: grid; grid-template-columns: 220px repeat(3, 1fr); gap: 28px;">
+            <div>
+              <div class="mega-col-title">Gift Guide</div>
+              <ul class="mega-col-list">
+                ${giftSec.categories.map(c => `
+                  <li>
+                    <a onclick="filterProducts('category', '${c.handle}', '${c.name.replace(/'/g, "\\'")}', 'Gift Guide')">
+                      ${c.name}
+                    </a>
+                  </li>
+                `).join('')}
+              </ul>
+            </div>
+            ${featuredGiftsData.map(gift => `
+              <div style="cursor: pointer; display: flex; flex-direction: column;" onclick="filterProducts('category', '${gift.link_filter || gift.handle}', '${gift.title.replace(/'/g, "\\'")}', 'Gift Guide')">
+                <img src="${gift.image_url}" alt="${gift.title}" style="width: 100%; height: 210px; object-fit: cover; border-radius: 2px; margin-bottom: 8px; background: var(--bg-surface);" />
+                <div style="font-size: 13px; font-weight: 600; color: var(--brand-espresso);">${gift.title}</div>
+                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">${gift.subtitle || ''}</div>
               </div>
             `).join('')}
           </div>
@@ -1877,6 +1931,15 @@
       });
     }
 
+    if (navGift) {
+      navGift.addEventListener('mouseenter', () => openMegaMenu('gift'));
+      navGift.addEventListener('mouseleave', () => closeMegaMenu(false));
+      navGift.addEventListener('click', (e) => {
+        e.preventDefault();
+        openGiftGuidePage();
+      });
+    }
+
     if (megaMenu) {
       megaMenu.addEventListener('mouseenter', () => clearTimeout(menuTimer));
       megaMenu.addEventListener('mouseleave', () => closeMegaMenu(false));
@@ -1887,6 +1950,10 @@
       headerEl.addEventListener('mouseleave', () => closeMegaMenu(false));
     }
 
+    function openGiftGuidePage() {
+      filterProducts('category', 'gift', 'Gift Guide & Holiday Sets', 'Gift Guide');
+    }
+
     // 1. Fetch Dynamic Mega Menu from Supabase
     async function loadMegaMenu() {
       try {
@@ -1894,6 +1961,7 @@
         if (!res.menu || res.menu.length === 0) return;
         allMenuData = res.menu;
         featuredShoesData = res.featuredShoes || [];
+        featuredGiftsData = res.featuredGifts || [];
         renderMegaMenuContent('women');
       } catch (e) {
         console.error('Mega menu load error:', e);
@@ -1918,11 +1986,29 @@
 
       const keyLower = (filterKey || '').toLowerCase();
       const labelLower = (label || '').toLowerCase();
+      const isGift = keyLower.includes('gift') || (sectionTitle && sectionTitle.includes('Gift'));
+      const giftHero = document.getElementById('gift-guide-hero');
+      if (giftHero) {
+        giftHero.style.display = isGift ? 'block' : 'none';
+      }
+
       let filtered = [];
 
       if (filterType === 'all' || keyLower === 'womens-shop-all' || keyLower === 'shop all') {
         filtered = allProducts;
         label = 'Save 30% — All Products';
+      } else if (isGift && (keyLower === 'gift' || keyLower === 'gift-shop-all')) {
+        filtered = allProducts;
+        label = 'YOGA ✦ Gift Guide';
+      } else if (keyLower === 'gifts-for-her') {
+        filtered = allProducts.filter(p => !(p.title || '').toLowerCase().includes('men'));
+        label = 'Gifts For Her';
+      } else if (keyLower === 'gifts-for-him') {
+        filtered = allProducts.filter(p => (p.title || '').toLowerCase().includes('men') || (p.category_id || '').includes('men') || (p.title || '').toLowerCase().includes('accolade'));
+        label = 'Gifts For Him';
+      } else if (keyLower === 'top-rated-gifts') {
+        filtered = allProducts.filter(p => (p.title || '').toLowerCase().includes('accolade') || (p.title || '').toLowerCase().includes('airlift') || (p.title || '').toLowerCase().includes('foxy'));
+        label = 'Top Rated Gifts';
       } else if (filterType === 'color') {
         filtered = allProducts.filter(p => {
           const col = (p.color_family || '').toLowerCase();
