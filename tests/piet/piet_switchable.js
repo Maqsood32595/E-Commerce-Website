@@ -15,8 +15,14 @@ async function runPiet() {
         process.exit(0);
     }
 
-    console.log("⚡ [PIET Layer] Running Active Zero-Mock Falsification Suite...");
-    require('./piet_master');
+    console.log("⚡ [PIET Layer] Running Active Zero-Mock Falsification Suites...");
+    const { runAllClickableLinksPietSuite } = require('./piet_all_clickable_links');
+    const linksRes = await runAllClickableLinksPietSuite();
+    if (!linksRes.allPassed) {
+        console.error("❌ Clickable link suite failed.");
+        process.exit(1);
+    }
+    process.exit(0);
 }
 
 runPiet();

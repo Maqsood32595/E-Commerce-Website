@@ -136,12 +136,43 @@
       border-radius: 10px;
     }
 
-    /* MEGA MENU DROPDOWN */
+    /* MEGA MENU DROPDOWN (OVERLAY ON HOVER) */
+    .mega-menu-backdrop {
+      position: fixed;
+      inset: 0;
+      top: 75px;
+      background: rgba(44, 30, 24, 0.45);
+      backdrop-filter: blur(4px);
+      z-index: 400;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s;
+    }
+    .mega-menu-backdrop.active {
+      opacity: 1;
+      visibility: visible;
+    }
     .mega-menu-drawer {
-      background: #FFF;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #FFFFFF;
       border-bottom: 1px solid var(--border-subtle);
-      box-shadow: 0 16px 32px rgba(0,0,0,0.06);
-      padding: 40px 32px 48px;
+      box-shadow: 0 24px 64px rgba(44, 30, 24, 0.14);
+      padding: 36px 48px 48px;
+      z-index: 500;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s;
+      pointer-events: none;
+    }
+    .mega-menu-drawer.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
     }
     .mega-menu-grid {
       max-width: 1400px;
@@ -478,12 +509,12 @@
   <!-- Header -->
   <header>
     <div class="nav-container">
-      <a class="brand-logo" onclick="showCatalogView()">YOGA</a>
+      <a class="brand-logo" onclick="filterProducts('all', null, 'Save 30% — All Products')">YOGA</a>
       <ul class="nav-links">
-        <li><a class="active" onclick="showCatalogView()">WOMEN</a></li>
-        <li><a onclick="openPlaceholder('MEN Collection', 'Explore studio essentials and high-performance outerwear for Men.')">MEN</a></li>
-        <li><a onclick="openPlaceholder('SHOES Collection', 'Recovery slides, sunset sneakers, and cushioned mules.')">SHOES</a></li>
-        <li><a onclick="openPlaceholder('GIFT GUIDE', 'Curated holiday gifts, wellness bundles, and sets.')">GIFT GUIDE <span style="color: var(--brand-terracotta); font-size: 10px;">NEW</span></a></li>
+        <li><a class="active" id="nav-women">WOMEN</a></li>
+        <li><a id="nav-men" onclick="filterProducts('category', 'men', 'Men\'s Studio & Streetwear')">MEN</a></li>
+        <li><a id="nav-shoes" onclick="filterProducts('category', 'shoes', 'Shoes & Footwear')">SHOES</a></li>
+        <li><a id="nav-gift" onclick="filterProducts('category', 'gift', 'Gift Guide & Wellness Sets')">GIFT GUIDE <span style="color: var(--brand-terracotta); font-size: 10px;">NEW</span></a></li>
       </ul>
       <div class="nav-actions">
         <!-- User State (Hi Sameera! | 1 PT) -->
@@ -497,26 +528,30 @@
         </button>
       </div>
     </div>
+
+    <!-- Mega Menu Drawer (Placed Inside Header as Overlay) -->
+    <div class="mega-menu-drawer" id="mega-menu">
+      <div class="mega-menu-grid" id="mega-menu-grid">
+        <p style="color: var(--text-muted);">Loading category hierarchy from Supabase...</p>
+      </div>
+    </div>
   </header>
 
-  <!-- Complete Mega Menu Drawer (Directly Matching Screenshot) -->
-  <div class="mega-menu-drawer" id="mega-menu">
-    <div class="mega-menu-grid" id="mega-menu-grid">
-      <p style="color: var(--text-muted);">Loading category hierarchy from Supabase...</p>
-    </div>
-  </div>
+  <!-- Mega Menu Backdrop Overlay -->
+  <div class="mega-menu-backdrop" id="mega-menu-backdrop" onclick="closeMegaMenu()"></div>
 
   <!-- Trending Now Filter Pills -->
   <div class="trending-pills-bar">
     <span class="trending-label">Trending Now:</span>
-    <a class="pill-link" onclick="openPlaceholder('New Arrivals', 'Explore our freshest drops and seasonal color releases.')">New Arrivals</a>
-    <a class="pill-link" onclick="openPlaceholder('Sweatshirts & Hoodies', 'Ultra-soft fleece, French Terry, and crewnecks.')">Sweatshirts</a>
-    <a class="pill-link" onclick="openPlaceholder('Outerwear Edit', 'Puffers, Sherpa jackets, and studio trenches.')">Outerwear</a>
-    <a class="pill-link" onclick="openPlaceholder('Pants & Trousers', 'Suit Up trousers, Dreamscape tailoring, and joggers.')">Pants</a>
-    <a class="pill-link" onclick="openPlaceholder('Last Few Pieces', 'Final sizes in limited-edition color palettes.')">Last Few Pieces</a>
+    <a class="pill-link" onclick="filterProducts('trending', 'new-arrivals', 'New Arrivals')">New Arrivals</a>
+    <a class="pill-link" onclick="filterProducts('category', 'c-sweatshirts', 'Sweatshirts & Hoodies')">Sweatshirts</a>
+    <a class="pill-link" onclick="filterProducts('category', 'c-jackets', 'Jackets & Outerwear')">Outerwear</a>
+    <a class="pill-link" onclick="filterProducts('category', 'c-pants', 'Pants & Trousers')">Pants</a>
+    <a class="pill-link" onclick="filterProducts('trending', 'last-few', 'Last Few Pieces')">Last Few Pieces</a>
+    <a class="pill-link" onclick="filterProducts('category', 'cat-women-leggings', 'Leggings')">Leggings</a>
   </div>
 
-  <!-- Dynamic Content View for Any Clicked Link -->
+  <!-- Dynamic Content View for CMS Pages -->
   <div class="content-view" id="content-view">
     <h1 class="content-title" id="content-title">Section View</h1>
     <div class="content-body" id="content-body">
@@ -529,8 +564,13 @@
   <section class="catalog-section" id="catalog-section">
     <div class="section-header">
       <div>
-        <h2 class="section-title">Save 30% — Trending Now</h2>
-        <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Double-knit Airlift, Peach-finish Alosoft, and Accolade French Terry</p>
+        <h2 class="section-title" id="catalog-heading">Save 30% — Trending Now</h2>
+        <p id="catalog-subheading" style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Double-knit Airlift, Peach-finish Alosoft, and Accolade French Terry</p>
+      </div>
+      <div id="catalog-filter-badge" style="display: none;">
+        <button class="pill-link" onclick="filterProducts('all', null, 'Save 30% — All Products')" style="background: var(--brand-terracotta); color: #FFF; border-color: var(--brand-terracotta);">
+          ✕ Reset Filter
+        </button>
       </div>
     </div>
     <div class="product-grid" id="product-grid">
@@ -643,6 +683,44 @@
   <script>
     let currentCartId = localStorage.getItem('yoga_cart_id') || null;
     let isLoggedIn = true; // Sameera Maqsood account active
+    let allProducts = [];
+    let currentMenuData = [];
+    let currentFilter = { type: 'all', key: null, label: 'Save 30% — All Products' };
+
+    // Mega Menu Hover Logic
+    const megaMenu = document.getElementById('mega-menu');
+    const megaBackdrop = document.getElementById('mega-menu-backdrop');
+    const navWomen = document.getElementById('nav-women');
+    let menuTimer = null;
+
+    function openMegaMenu() {
+      clearTimeout(menuTimer);
+      if (megaMenu) megaMenu.classList.add('open');
+      if (megaBackdrop) megaBackdrop.classList.add('active');
+      if (navWomen) navWomen.classList.add('active');
+    }
+
+    function closeMegaMenu() {
+      menuTimer = setTimeout(() => {
+        if (megaMenu) megaMenu.classList.remove('open');
+        if (megaBackdrop) megaBackdrop.classList.remove('active');
+        if (navWomen) navWomen.classList.remove('active');
+      }, 180);
+    }
+
+    if (navWomen) {
+      navWomen.addEventListener('mouseenter', openMegaMenu);
+      navWomen.addEventListener('mouseleave', closeMegaMenu);
+      navWomen.addEventListener('click', (e) => {
+        e.preventDefault();
+        filterProducts('all', null, 'Save 30% — All Products');
+      });
+    }
+
+    if (megaMenu) {
+      megaMenu.addEventListener('mouseenter', () => clearTimeout(menuTimer));
+      megaMenu.addEventListener('mouseleave', closeMegaMenu);
+    }
 
     // 1. Fetch Dynamic Mega Menu from Supabase
     async function loadMegaMenu() {
@@ -650,17 +728,29 @@
         const res = await (await fetch('/api/catalog/menu')).json();
         const grid = document.getElementById('mega-menu-grid');
         if (!res.menu || res.menu.length === 0) return;
+        currentMenuData = res.menu;
 
-        grid.innerHTML = res.menu.map(sec => `
-          <div>
-            <div class="mega-col-title">${sec.title}</div>
-            <ul class="mega-col-list">
-              ${sec.categories.map(c => `
-                <li><a onclick="openPlaceholder('${c.name}', 'Explore our curated ${c.name} collection engineered for performance and studio aesthetics.')">${c.name}</a></li>
-              `).join('')}
-            </ul>
-          </div>
-        `).join('');
+        grid.innerHTML = res.menu.map(sec => {
+          let filterType = 'category';
+          if (sec.sectionId === 'shop-by-color') filterType = 'color';
+          else if (sec.sectionId === 'shop-by-activity') filterType = 'activity';
+          else if (sec.sectionId === 'new-trending') filterType = 'trending';
+
+          return `
+            <div>
+              <div class="mega-col-title">${sec.title}</div>
+              <ul class="mega-col-list">
+                ${sec.categories.map(c => `
+                  <li>
+                    <a onclick="filterProducts('${filterType}', '${c.handle}', '${c.name.replace(/'/g, "\\'")}', '${sec.title.replace(/'/g, "\\'")}')">
+                      ${c.name}
+                    </a>
+                  </li>
+                `).join('')}
+              </ul>
+            </div>
+          `;
+        }).join('');
       } catch (e) {
         console.error('Mega menu load error:', e);
       }
@@ -670,32 +760,125 @@
     async function loadProducts() {
       try {
         const res = await (await fetch('/api/catalog/products')).json();
-        const grid = document.getElementById('product-grid');
-        if (!res.products || res.products.length === 0) return;
-
-        grid.innerHTML = res.products.map(p => `
-          <div class="product-card">
-            <div class="card-img-wrap">
-              <span class="card-discount-badge">${p.discount_label || 'Save 30%'}</span>
-              <img class="card-img" src="${p.image_url}" alt="${p.title}" />
-            </div>
-            <div class="card-details">
-              <h3 class="prod-title">${p.title}</h3>
-              <div class="prod-color">${p.color_family || 'Studio Neutral'}</div>
-              <div class="price-row">
-                <span class="sale-price">₹${Number(p.sale_price).toLocaleString('en-IN')}</span>
-                <span class="mrp-price">₹${Number(p.mrp).toLocaleString('en-IN')}</span>
-              </div>
-              <button class="btn-atc" onclick="addToCart('${p.product_id}', '${p.title.replace(/'/g, "\\'")}', ${p.sale_price})">Add to Bag</button>
-            </div>
-          </div>
-        `).join('');
+        allProducts = res.products || [];
+        renderProducts(allProducts, 'Save 30% — Trending Now', 'Double-knit Airlift, Peach-finish Alosoft, and Accolade French Terry');
       } catch (e) {
         console.error('Product load error:', e);
       }
     }
 
-    // 3. Fetch Social Lookbook Handles
+    // 3. Dynamic Filter Function
+    function filterProducts(filterType, filterKey, label, sectionTitle) {
+      closeMegaMenu();
+      showCatalogView();
+
+      const keyLower = (filterKey || '').toLowerCase();
+      const labelLower = (label || '').toLowerCase();
+      let filtered = [];
+
+      if (filterType === 'all' || keyLower === 'womens-shop-all' || keyLower === 'shop all') {
+        filtered = allProducts;
+        label = 'Save 30% — All Products';
+      } else if (filterType === 'color') {
+        filtered = allProducts.filter(p => {
+          const col = (p.color_family || '').toLowerCase();
+          return col.includes(labelLower) || keyLower.includes(col);
+        });
+      } else if (filterType === 'activity') {
+        filtered = allProducts.filter(p => {
+          const fabric = (p.fabric_technology || '').toLowerCase();
+          const title = (p.title || '').toLowerCase();
+          if (keyLower.includes('yoga') || keyLower.includes('pilates')) {
+            return fabric.includes('airbrush') || fabric.includes('alosoft') || fabric.includes('seamless') || title.includes('bra') || title.includes('tank') || title.includes('mat');
+          } else if (keyLower.includes('run') || keyLower.includes('train')) {
+            return fabric.includes('airlift') || title.includes('charger') || title.includes('sneaker') || title.includes('short');
+          } else if (keyLower.includes('lounge')) {
+            return fabric.includes('alosoft') || fabric.includes('fleece') || title.includes('hoodie') || title.includes('sweatpant');
+          } else if (keyLower.includes('court')) {
+            return title.includes('short') || title.includes('skirt') || title.includes('bra');
+          }
+          return true;
+        });
+      } else if (filterType === 'trending') {
+        if (keyLower.includes('set')) {
+          filtered = allProducts.filter(p => p.title.toLowerCase().includes('set') || p.title.toLowerCase().includes('suit'));
+        } else if (keyLower.includes('lastfew') || keyLower.includes('almost-gone') || keyLower.includes('last-few')) {
+          filtered = allProducts.filter(p => (p.discount_label || '').includes('40') || p.title.toLowerCase().includes('rebel'));
+        } else if (keyLower.includes('new') || keyLower.includes('bestseller') || keyLower.includes('best-seller')) {
+          filtered = allProducts.slice(0, 12);
+        } else {
+          filtered = allProducts.filter(p => p.sale_price > 10000);
+        }
+      } else {
+        // Category filtering
+        filtered = allProducts.filter(p => {
+          const catId = (p.category_id || '').toLowerCase();
+          const catName = (p.category_name || '').toLowerCase();
+          const title = (p.title || '').toLowerCase();
+
+          if (catId === keyLower) return true;
+          if (catName.includes(labelLower) || labelLower.includes(catName)) return true;
+          if (keyLower.includes('legging') && (catId.includes('legging') || title.includes('legging'))) return true;
+          if (keyLower.includes('sweatshirt') && (catId.includes('sweat') || title.includes('hoodie') || title.includes('pullover'))) return true;
+          if (keyLower.includes('pant') && (catId.includes('pant') || title.includes('trouser') || title.includes('sweatpant'))) return true;
+          if (keyLower.includes('bra') && (catId.includes('bra') || title.includes('bra'))) return true;
+          if (keyLower.includes('top') && (catId.includes('top') || title.includes('tank') || title.includes('sleeve'))) return true;
+          if (keyLower.includes('short') && (catId.includes('short') || title.includes('short'))) return true;
+          if (keyLower.includes('shoe') && (catId.includes('shoe') || title.includes('sneaker') || title.includes('mule'))) return true;
+          if (keyLower.includes('sweater') && (catId.includes('sweater') || title.includes('cardigan'))) return true;
+          if (keyLower.includes('jacket') && (catId.includes('jacket') || title.includes('jacket') || title.includes('coat'))) return true;
+          if (keyLower.includes('skirt') && title.includes('skirt')) return true;
+          if (keyLower.includes('mat') && (catId.includes('mat') || title.includes('mat'))) return true;
+          return false;
+        });
+      }
+
+      currentFilter = { type: filterType, key: filterKey, label };
+      const subheading = sectionTitle ? `Section: ${sectionTitle} • Curated studio athleisure` : `Filtered Collection • 30% Off Sitewide`;
+      renderProducts(filtered, label, subheading, filterType !== 'all');
+    }
+
+    function renderProducts(products, headingText, subheadingText, showReset = false) {
+      const grid = document.getElementById('product-grid');
+      const heading = document.getElementById('catalog-heading');
+      const subheading = document.getElementById('catalog-subheading');
+      const badgeWrap = document.getElementById('catalog-filter-badge');
+
+      if (heading) heading.innerText = `${headingText} (${products.length})`;
+      if (subheading) subheading.innerText = subheadingText || 'Double-knit Airlift, Peach-finish Alosoft, and Accolade French Terry';
+      if (badgeWrap) badgeWrap.style.display = showReset ? 'block' : 'none';
+
+      if (!products || products.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1; padding: 48px 24px; text-align: center; background: #FFF; border: 1px solid var(--border-subtle); border-radius: 4px;">
+            <h3 style="font-family: var(--font-heading); font-size: 22px; color: var(--brand-espresso); margin-bottom: 8px;">Exploring: ${headingText}</h3>
+            <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">New arrivals in ${headingText} are currently being curated for the YOGA Studio collection.</p>
+            <button class="alo-modal-btn" onclick="filterProducts('all', null, 'Save 30% — All Products')">View All Products</button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = products.map(p => `
+        <div class="product-card">
+          <div class="card-img-wrap">
+            <span class="card-discount-badge">${p.discount_label || 'Save 30%'}</span>
+            <img class="card-img" src="${p.image_url || 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80'}" alt="${p.title}" />
+          </div>
+          <div class="card-details">
+            <h3 class="prod-title">${p.title}</h3>
+            <div class="prod-color">${p.color_family || 'Studio Neutral'}</div>
+            <div class="price-row">
+              <span class="sale-price">₹${Number(p.sale_price).toLocaleString('en-IN')}</span>
+              <span class="mrp-price">₹${Number(p.mrp).toLocaleString('en-IN')}</span>
+            </div>
+            <button class="btn-atc" onclick="addToCart('${p.product_id}', '${p.title.replace(/'/g, "\\'")}', ${p.sale_price})">Add to Bag</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // 4. Fetch Social Lookbook Handles
     async function loadLookbook() {
       try {
         const res = await (await fetch('/api/catalog/lookbook')).json();
@@ -703,7 +886,7 @@
         if (!res.lookbook || res.lookbook.length === 0) return;
 
         wrap.innerHTML = res.lookbook.map(post => `
-          <div class="social-pill" onclick="openPlaceholder('${post.handle} Lookbook', 'Styled exclusively in YOGA by ${post.handle}.')">
+          <div class="social-pill" onclick="filterProducts('trending', 'lookbook', 'Lookbook: ${post.handle}', 'As Seen On You')">
             ${post.handle}
           </div>
         `).join('');
@@ -712,7 +895,7 @@
       }
     }
 
-    // 4. View Switching & Auth Gating
+    // 5. View Switching & Auth Gating
     function openPlaceholder(title, desc) {
       document.getElementById('catalog-section').style.display = 'none';
       const cv = document.getElementById('content-view');
@@ -738,6 +921,7 @@
       } catch (e) {
         openPlaceholder('Information', 'Page content is currently synchronizing with Supabase.');
       }
+    }
     }
 
     function openAuthGated(destination) {
