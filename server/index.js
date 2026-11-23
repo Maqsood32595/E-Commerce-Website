@@ -1,30 +1,30 @@
 const express = require('express');
+const path = require('path');
 const kernel = require('./kernel');
+require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-// Boot the Kernel — discovers and mounts all features automatically
-kernel.boot(app, './features').then(() => {
+// Serve client storefront
+app.use(express.static(path.resolve(__dirname, '../client')));
 
-    // Built-in: expose feature list for Admin UI or debugging
-    app.get('/api/features', (req, res) => {
-        const features = kernel.getAllFeatures().map(f => ({
-            id: f.id,
-            name: f.name,
-            description: f.description || '',
-            basePath: f.basePath,
-            enabled: f.enabled !== false,
-            loaded: f.loaded,
-            version: f.version || '1.0.0'
-        }));
-        res.json({ count: features.length, features });
+// Boot the Fractal Kernel
+async function startServer() {
+    await kernel.boot(app, './features');
+
+    app.get('/', (req, res) => {
+        res.sendFile(path.resolve(__dirname, '../client/index.html'));
     });
 
     app.listen(PORT, () => {
-        console.log(`Server running at http://localhost:${PORT}`);
-        console.log(`Feature list:  http://localhost:${PORT}/api/features\n`);
+        console.log(`\n=======================================================`);
+        console.log(`🚀 Alo Luxury E-Commerce Server Live on http://localhost:${PORT}`);
+        console.log(`   Indian Athleisure Color Suite & Multi-Tier Slices Active`);
+        console.log(`=======================================================\n`);
     });
-});
+}
+
+startServer();
