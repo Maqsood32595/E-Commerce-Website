@@ -1,0 +1,9 @@
+{
+    "id": "cart",
+    "name": "Cart Operations",
+    "description": "Child slice handling dynamic cart items, quantity modifiers, and free shipping thresholds.",
+    "version": "1.0.0",
+    "enabled": true,
+    "basePath": "/cart",
+    "routes": "./routes.js"
+}

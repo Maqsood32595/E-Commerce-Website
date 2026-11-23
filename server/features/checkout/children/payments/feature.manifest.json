@@ -1,0 +1,9 @@
+{
+    "id": "payments",
+    "name": "Indian Localized Payments",
+    "description": "Child slice handling UPI, Netbanking, Cards, and order confirmation in INR.",
+    "version": "1.0.0",
+    "enabled": true,
+    "basePath": "/payments",
+    "routes": "./routes.js"
+}

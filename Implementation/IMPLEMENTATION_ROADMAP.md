@@ -40,12 +40,12 @@
 ---
 
 ### Phase 4: Cart, Promotions & Localized Checkout Engine
-- [ ] **Step 4.1:** Apply Cart & Order database schema (`carts`, `cart_items`, `discount_coupons`, `orders`, `order_items`).
-- [ ] **Step 4.2:** Build Checkout Parent Slice (`/api/checkout`).
-- [ ] **Step 4.3:** Build Cart Child Slice (`/api/checkout/cart`) providing real-time line-item updates, quantity steppers, and free-shipping threshold calculation (e.g., Free Express Shipping > ₹5,000).
-- [ ] **Step 4.4:** Build Coupons Grandchild Slice (`/api/checkout/cart/coupons`) validating promo codes and calculating discount subtotals.
-- [ ] **Step 4.5:** Build Payments Child Slice (`/api/checkout/payments`) simulating localized Indian checkout (UPI, Netbanking, Cards) with currency formatting in INR (`₹`).
-- [ ] **Step 4.6:** Extend PIET suite with Gate 9: Cart lifecycle, coupon application, and payment order generation.
+- [x] **Step 4.1:** Apply Cart & Order database schema (`carts`, `cart_items`, `discount_coupons`, `orders`, `order_items`).
+- [x] **Step 4.2:** Build Checkout Parent Slice (`/api/checkout`).
+- [x] **Step 4.3:** Build Cart Child Slice (`/api/checkout/cart`) providing real-time line-item updates, quantity steppers, and free-shipping threshold calculation (e.g., Free Express Shipping > ₹5,000).
+- [x] **Step 4.4:** Build Coupons Grandchild Slice (`/api/checkout/cart/coupons`) validating promo codes and calculating discount subtotals.
+- [x] **Step 4.5:** Build Payments Child Slice (`/api/checkout/payments`) simulating localized Indian checkout (UPI, Netbanking, Cards) with currency formatting in INR (`₹`).
+- [x] **Step 4.6:** Extend PIET suite with Gate 9: Cart lifecycle, coupon application, and payment order generation.
 
 ---
 

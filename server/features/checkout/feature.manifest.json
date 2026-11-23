@@ -1,0 +1,9 @@
+{
+    "id": "checkout",
+    "name": "Checkout & Order Management",
+    "description": "Parent slice orchestrating customer checkout, cart state, promotions, and localized Indian payments.",
+    "version": "1.0.0",
+    "enabled": true,
+    "basePath": "/api/checkout",
+    "routes": "./routes.js"
+}
