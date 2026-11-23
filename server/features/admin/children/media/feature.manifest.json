@@ -1,0 +1,9 @@
+{
+    "id": "media",
+    "name": "Product Media & Bucket Storage",
+    "description": "Child slice orchestrating cloud storage uploads, signed tickets, and catalog asset associations.",
+    "version": "1.0.0",
+    "enabled": true,
+    "basePath": "/media",
+    "routes": "./routes.js"
+}

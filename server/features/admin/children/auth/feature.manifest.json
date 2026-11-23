@@ -1,0 +1,9 @@
+{
+    "id": "auth",
+    "name": "Admin Authentication",
+    "description": "Child slice managing admin credentials, session generation, and role access.",
+    "version": "1.0.0",
+    "enabled": true,
+    "basePath": "/auth",
+    "routes": "./routes.js"
+}

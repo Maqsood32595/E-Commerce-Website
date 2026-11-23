@@ -1,0 +1,9 @@
+{
+    "id": "admin",
+    "name": "Admin Management",
+    "description": "Root admin domain handling system administration, security, and catalog assets.",
+    "version": "1.0.0",
+    "enabled": true,
+    "basePath": "/api/admin",
+    "routes": "./routes.js"
+}

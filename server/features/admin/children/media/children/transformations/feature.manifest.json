@@ -1,0 +1,9 @@
+{
+    "id": "transformations",
+    "name": "Media Transformations & Presets",
+    "description": "Grandchild slice calculating responsive dimensions, blurhash placeholders, and AVIF/WebP specs.",
+    "version": "1.0.0",
+    "enabled": true,
+    "basePath": "/transform",
+    "routes": "./routes.js"
+}

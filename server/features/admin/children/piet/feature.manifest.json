@@ -1,0 +1,9 @@
+{
+    "id": "piet",
+    "name": "PIET Testing Harness",
+    "description": "Pre-merge Isolated Ephemeral Twin (PIET) zero-mock falsification testing engine with mandatory teardown invariant.",
+    "version": "1.0.0",
+    "enabled": true,
+    "basePath": "/piet",
+    "routes": "./routes.js"
+}

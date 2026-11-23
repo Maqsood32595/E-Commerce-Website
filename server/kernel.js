@@ -2,32 +2,21 @@ const fs = require('fs');
 const path = require('path');
 
 /**
- * THE FRACTAL KERNEL
+ * THE FRACTAL KERNEL v2.0 (Hierarchical Multi-Tier Discovery)
  *
- * A manifest-driven feature discovery engine for Node.js + Express.
- *
- * How it works:
- *   1. Scans the features/ directory recursively
- *   2. Any folder with a feature.manifest.json is treated as a Feature
- *   3. The Feature's routes are auto-mounted on Express
- *   4. Recursion stops at a Feature — it owns its own sub-directories
- *
- * You never modify this file. You only add/remove feature folders.
+ * Supports Parent -> Child -> Grandchild discovery.
+ * Auto-resolves nested basePaths and builds traceable lineage breadcrumbs:
+ * e.g. 'admin.media.transformations' -> /api/admin/media/transform
  */
 class Kernel {
     constructor() {
-        this.features = new Map(); // id → feature object
+        this.features = new Map(); // lineage/id -> feature object
         this.app = null;
         this.loaded = false;
     }
 
-    /**
-     * Boot the kernel: discover all features, then mount them.
-     * @param {Object} app - Express app instance
-     * @param {String} featuresDir - Relative path to features dir (default: ./features)
-     */
     async boot(app, featuresDir = './features') {
-        console.log('🚀 [Kernel] Booting...');
+        console.log('🚀 [Kernel] Booting Fractal Kernel v2.0 (Multi-Tier)...');
         this.app = app;
 
         const absFeaturesDir = path.resolve(__dirname, featuresDir);
@@ -37,34 +26,40 @@ class Kernel {
             return;
         }
 
-        // Phase 1 — Discovery (recursive)
+        // Phase 1 — Recursive Multi-Tier Discovery
         this.discoverFeatures(absFeaturesDir);
-        console.log(`🔍 [Kernel] Discovered ${this.features.size} feature(s).`);
+        console.log(`🔍 [Kernel] Discovered ${this.features.size} feature slice(s).`);
 
-        // Phase 2 — Mount
-        for (const [id] of this.features) {
-            await this.mountFeature(id);
+        // Phase 2 — Mount features ordered by lineage depth
+        const sortedFeatures = Array.from(this.features.values()).sort(
+            (a, b) => (a.lineage.split('.').length) - (b.lineage.split('.').length)
+        );
+
+        for (const feature of sortedFeatures) {
+            await this.mountFeature(feature);
         }
 
+        // Register system diagnostics endpoint
+        this.registerDiagnostics();
+
         this.loaded = true;
-        console.log(`✅ [Kernel] Ready. ${this.features.size} feature(s) active.\n`);
+        console.log(`✅ [Kernel] Ready. ${this.features.size} active slice(s).\n`);
     }
 
     /**
-     * Recursively walk directories looking for feature.manifest.json.
-     * Stops recursion when a manifest is found (that feature owns its children).
+     * Recursive discovery traversing parent, child, and grandchild folders.
      */
-    discoverFeatures(currentPath) {
+    discoverFeatures(currentPath, parentLineage = '', parentBasePath = '') {
         if (!fs.existsSync(currentPath)) return;
 
         const manifestPath = path.join(currentPath, 'feature.manifest.json');
+        let currentFeature = null;
 
-        // If this folder has a manifest, it IS a feature — register and stop recursion
         if (fs.existsSync(manifestPath)) {
             try {
                 const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
 
-                if (!manifest.id || !manifest.basePath) {
+                if (!manifest.id || manifest.basePath === undefined) {
                     console.warn(`⚠️  [Kernel] Skipping manifest at ${currentPath}: missing id or basePath`);
                     return;
                 }
@@ -74,18 +69,31 @@ class Kernel {
                     return;
                 }
 
-                this.features.set(manifest.id, {
+                // Compute lineage & inherited basePath
+                const lineage = parentLineage ? `${parentLineage}.${manifest.id}` : manifest.id;
+                
+                // If basePath starts with '/', it can be absolute or relative to parent
+                let computedBasePath = manifest.basePath;
+                if (parentBasePath && !manifest.basePath.startsWith(parentBasePath)) {
+                    computedBasePath = path.posix.join(parentBasePath, manifest.basePath);
+                }
+
+                currentFeature = {
                     ...manifest,
+                    lineage,
+                    basePath: computedBasePath,
                     dirPath: currentPath,
                     loaded: false
-                });
+                };
+
+                this.features.set(lineage, currentFeature);
             } catch (e) {
                 console.error(`❌ [Kernel] Could not parse manifest at ${currentPath}: ${e.message}`);
+                return;
             }
-            return; // Stop — this feature owns its own children
         }
 
-        // No manifest here — walk children to find features
+        // Recursively inspect child directories (including children/ or subdirectories)
         const IGNORE = ['node_modules', '.git', '_example', '_template', 'temp', '.DS_Store'];
         let entries;
 
@@ -99,44 +107,34 @@ class Kernel {
         for (const entry of entries) {
             if (!entry.isDirectory()) continue;
             if (IGNORE.includes(entry.name)) continue;
-            this.discoverFeatures(path.join(currentPath, entry.name));
+
+            const nextParentLineage = currentFeature ? currentFeature.lineage : parentLineage;
+            const nextParentBasePath = currentFeature ? currentFeature.basePath : parentBasePath;
+
+            this.discoverFeatures(
+                path.join(currentPath, entry.name),
+                nextParentLineage,
+                nextParentBasePath
+            );
         }
     }
 
-    /**
-     * Mount a single feature's routes and optional boot script onto Express.
-     */
-    async mountFeature(featureId) {
-        const feature = this.features.get(featureId);
-
+    async mountFeature(feature) {
         try {
-            // Mount primary route file
             if (feature.routes) {
                 const routePath = path.join(feature.dirPath, feature.routes);
                 if (fs.existsSync(routePath)) {
                     const router = require(routePath);
                     this.app.use(feature.basePath, router);
-                    console.log(`  🔌 ${feature.name} → ${feature.basePath}`);
+                    const tierLabel = feature.lineage.split('.').length === 1 
+                        ? '[Parent]' 
+                        : (feature.lineage.split('.').length === 2 ? '[Child]' : '[Grandchild]');
+                    console.log(`  🔌 ${tierLabel} ${feature.lineage} (${feature.name}) → ${feature.basePath}`);
                 } else {
-                    console.warn(`  ⚠️  Routes file not found for ${featureId}: ${routePath}`);
+                    console.warn(`  ⚠️  Routes file not found for ${feature.lineage}: ${routePath}`);
                 }
             }
 
-            // Mount additional routes if declared (e.g. webhooks, callbacks)
-            if (Array.isArray(feature.additionalRoutes)) {
-                for (const routeDef of feature.additionalRoutes) {
-                    if (routeDef.path && routeDef.file) {
-                        const routePath = path.join(feature.dirPath, routeDef.file);
-                        if (fs.existsSync(routePath)) {
-                            const router = require(routePath);
-                            this.app.use(routeDef.path, router);
-                            console.log(`     + ${routeDef.path}`);
-                        }
-                    }
-                }
-            }
-
-            // Run optional boot script (for cron jobs, event listeners, etc.)
             if (feature.boot) {
                 const bootPath = path.join(feature.dirPath, feature.boot);
                 if (fs.existsSync(bootPath)) {
@@ -147,22 +145,34 @@ class Kernel {
             }
 
             feature.loaded = true;
-
         } catch (error) {
-            console.error(`  ❌ Failed to mount ${featureId}: ${error.message}`);
+            console.error(`  ❌ Failed to mount ${feature.lineage}: ${error.message}`);
         }
     }
 
-    /** Returns all discovered features as an array */
+    registerDiagnostics() {
+        if (!this.app) return;
+        this.app.get('/api/kernel/tree', (req, res) => {
+            const list = Array.from(this.features.values()).map(f => ({
+                id: f.id,
+                name: f.name,
+                lineage: f.lineage,
+                tier: f.lineage.split('.').length === 1 ? 'parent' : (f.lineage.split('.').length === 2 ? 'child' : 'grandchild'),
+                basePath: f.basePath,
+                version: f.version,
+                loaded: f.loaded
+            }));
+            res.json({ count: list.length, slices: list });
+        });
+    }
+
     getAllFeatures() {
         return Array.from(this.features.values());
     }
 
-    /** Returns a single feature by id */
-    getFeature(id) {
-        return this.features.get(id);
+    getFeature(lineageOrId) {
+        return this.features.get(lineageOrId);
     }
 }
 
-// Export as singleton — one Kernel per process
 module.exports = new Kernel();
