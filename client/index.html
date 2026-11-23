@@ -48,12 +48,11 @@
 
     /* HEADER & MEGA NAVIGATION */
     header {
-      background: rgba(249, 248, 246, 0.98);
-      backdrop-filter: blur(12px);
+      background: #F9F8F6;
       border-bottom: 1px solid var(--border-subtle);
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 1000;
     }
     .nav-container {
       max-width: 1440px;
@@ -141,10 +140,10 @@
     .mega-menu-backdrop {
       position: fixed;
       inset: 0;
-      top: 75px;
+      top: 0;
       background: rgba(44, 30, 24, 0.45);
       backdrop-filter: blur(4px);
-      z-index: 400;
+      z-index: 900;
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.25s ease, visibility 0.25s;
@@ -158,14 +157,14 @@
       top: 100%;
       left: 0;
       right: 0;
-      background: #FFFFFF;
+      background: #FFFFFF !important;
       border-bottom: 1px solid var(--border-subtle);
-      box-shadow: 0 24px 64px rgba(44, 30, 24, 0.14);
-      padding: 36px 48px 48px;
-      z-index: 500;
+      box-shadow: 0 32px 72px rgba(44, 30, 24, 0.18);
+      padding: 40px 48px 48px;
+      z-index: 1001;
       opacity: 0;
       visibility: hidden;
-      transform: translateY(-8px);
+      transform: translateY(-6px);
       transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s;
       pointer-events: none;
     }
@@ -701,17 +700,24 @@
       if (navWomen) navWomen.classList.add('active');
     }
 
-    function closeMegaMenu() {
+    function closeMegaMenu(immediate = false) {
+      clearTimeout(menuTimer);
+      if (immediate) {
+        if (megaMenu) megaMenu.classList.remove('open');
+        if (megaBackdrop) megaBackdrop.classList.remove('active');
+        if (navWomen) navWomen.classList.remove('active');
+        return;
+      }
       menuTimer = setTimeout(() => {
         if (megaMenu) megaMenu.classList.remove('open');
         if (megaBackdrop) megaBackdrop.classList.remove('active');
         if (navWomen) navWomen.classList.remove('active');
-      }, 180);
+      }, 160);
     }
 
     if (navWomen) {
       navWomen.addEventListener('mouseenter', openMegaMenu);
-      navWomen.addEventListener('mouseleave', closeMegaMenu);
+      navWomen.addEventListener('mouseleave', () => closeMegaMenu(false));
       navWomen.addEventListener('click', (e) => {
         e.preventDefault();
         filterProducts('all', null, 'Save 30% — All Products');
@@ -720,7 +726,12 @@
 
     if (megaMenu) {
       megaMenu.addEventListener('mouseenter', () => clearTimeout(menuTimer));
-      megaMenu.addEventListener('mouseleave', closeMegaMenu);
+      megaMenu.addEventListener('mouseleave', () => closeMegaMenu(false));
+    }
+
+    const headerEl = document.querySelector('header');
+    if (headerEl) {
+      headerEl.addEventListener('mouseleave', () => closeMegaMenu(false));
     }
 
     // 1. Fetch Dynamic Mega Menu from Supabase
@@ -770,7 +781,7 @@
 
     // 3. Dynamic Filter Function
     function filterProducts(filterType, filterKey, label, sectionTitle) {
-      closeMegaMenu();
+      closeMegaMenu(true);
       showCatalogView();
 
       const keyLower = (filterKey || '').toLowerCase();
