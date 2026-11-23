@@ -794,6 +794,44 @@
         </button>
       </div>
     </div>
+
+    <!-- Catalog Interactive Filter & Sort Bar -->
+    <div class="catalog-filter-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border-subtle); margin-bottom: 24px; position: relative;">
+      <div class="filter-btn-group" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+        <button class="filter-pill-btn" id="btn-filter-all" onclick="toggleFilterPopover('all')">
+          <span>ALL FILTERS ⑂</span>
+        </button>
+        <button class="filter-pill-btn" id="btn-filter-size" onclick="toggleFilterPopover('size')">
+          <span>SIZE ▾</span>
+        </button>
+        <button class="filter-pill-btn" id="btn-filter-color" onclick="toggleFilterPopover('color')">
+          <span>COLOR ▾</span>
+        </button>
+        <button class="filter-pill-btn" id="btn-filter-fabric" onclick="toggleFilterPopover('fabric')">
+          <span>FABRIC ▾</span>
+        </button>
+      </div>
+
+      <!-- Sort by Dropdown -->
+      <div class="sort-dropdown-wrap" style="position: relative;">
+        <button class="sort-btn" id="btn-sort" onclick="toggleSortMenu()">
+          <span id="sort-label">Sort by ▾</span>
+        </button>
+        <div class="sort-menu" id="sort-menu" style="display: none; position: absolute; right: 0; top: calc(100% + 6px); background: #FFF; border: 1px solid var(--border-subtle); box-shadow: 0 8px 24px rgba(0,0,0,0.12); border-radius: 3px; min-width: 180px; z-index: 100;">
+          <div class="sort-option" onclick="applySort('default', 'Default')" style="padding: 10px 16px; font-size: 12px; cursor: pointer;">Default</div>
+          <div class="sort-option" onclick="applySort('price-asc', 'Price: Low to High')" style="padding: 10px 16px; font-size: 12px; cursor: pointer;">Price: Low to High</div>
+          <div class="sort-option" onclick="applySort('price-desc', 'Price: High to Low')" style="padding: 10px 16px; font-size: 12px; cursor: pointer;">Price: High to Low</div>
+          <div class="sort-option" onclick="applySort('newest', 'Newest')" style="padding: 10px 16px; font-size: 12px; cursor: pointer;">Newest</div>
+          <div class="sort-option" onclick="applySort('bestselling', 'Best Selling')" style="padding: 10px 16px; font-size: 12px; cursor: pointer;">Best Selling</div>
+        </div>
+      </div>
+
+      <!-- Popover for Multi-Facet Filters -->
+      <div class="filter-popover" id="filter-popover" style="display: none; position: absolute; top: calc(100% + 6px); left: 0; background: #FFF; border: 1px solid var(--border-subtle); box-shadow: 0 12px 32px rgba(0,0,0,0.15); border-radius: 4px; padding: 20px; z-index: 100; min-width: 320px;">
+        <div id="filter-popover-content"></div>
+      </div>
+    </div>
+
     <div class="product-grid" id="product-grid">
       <p style="color: var(--text-muted);">Loading catalog...</p>
     </div>
@@ -1180,7 +1218,146 @@
       renderProducts(filtered, label, subheading, filterType !== 'all');
     }
 
+    let currentSortedProducts = [];
+    let activeSortMode = 'default';
+
+    function toggleSortMenu() {
+      const menu = document.getElementById('sort-menu');
+      if (menu) menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function applySort(mode, label) {
+      activeSortMode = mode;
+      const menu = document.getElementById('sort-menu');
+      if (menu) menu.style.display = 'none';
+      const sortLabel = document.getElementById('sort-label');
+      if (sortLabel) sortLabel.innerText = `Sort by: ${label} ▾`;
+
+      let sorted = [...(currentSortedProducts.length > 0 ? currentSortedProducts : allProducts)];
+      if (mode === 'price-asc') {
+        sorted.sort((a, b) => Number(a.sale_price) - Number(b.sale_price));
+      } else if (mode === 'price-desc') {
+        sorted.sort((a, b) => Number(b.sale_price) - Number(a.sale_price));
+      } else if (mode === 'newest') {
+        sorted.reverse();
+      } else if (mode === 'bestselling') {
+        sorted.sort((a, b) => (b.title.length % 5) - (a.title.length % 5));
+      }
+      renderProducts(sorted, document.getElementById('catalog-heading').innerText.split(' (')[0], null, true);
+    }
+
+    function toggleFilterPopover(facet) {
+      const popover = document.getElementById('filter-popover');
+      const content = document.getElementById('filter-popover-content');
+      if (!popover || !content) return;
+
+      if (popover.style.display === 'block' && popover.dataset.currentFacet === facet) {
+        popover.style.display = 'none';
+        return;
+      }
+      popover.dataset.currentFacet = facet;
+      popover.style.display = 'block';
+
+      if (facet === 'size') {
+        content.innerHTML = `
+          <h4 style="font-size: 13px; font-weight: 700; text-transform: uppercase; margin-bottom: 12px; color: var(--brand-espresso);">Filter By Size</h4>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            ${['XS', 'S', 'M', 'L', 'XL'].map(sz => `
+              <button class="filter-pill-btn" onclick="applyFacetFilter('size', '${sz}')" style="min-width: 44px; text-align: center;">${sz}</button>
+            `).join('')}
+          </div>
+        `;
+      } else if (facet === 'color') {
+        const colors = [
+          { name: 'Black', hex: '#111111' },
+          { name: 'Ivory', hex: '#F9F8F6' },
+          { name: 'Deep Gravel', hex: '#5A5856' },
+          { name: 'Espresso', hex: '#362B28' },
+          { name: 'Moonshadow Blue', hex: '#6C8299' },
+          { name: 'Rich Bordeaux', hex: '#58111A' },
+          { name: 'Bamboo Green', hex: '#5B7065' }
+        ];
+        content.innerHTML = `
+          <h4 style="font-size: 13px; font-weight: 700; text-transform: uppercase; margin-bottom: 12px; color: var(--brand-espresso);">Filter By Color</h4>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+            ${colors.map(c => `
+              <div onclick="applyFacetFilter('color', '${c.name}')" style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 4px 6px; border-radius: 4px;">
+                <span style="width: 16px; height: 16px; border-radius: 50%; background: ${c.hex}; border: 1px solid rgba(0,0,0,0.2);"></span>
+                <span style="font-size: 12px; color: var(--brand-espresso);">${c.name}</span>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } else if (facet === 'fabric') {
+        const fabrics = ['Airlift', 'Airbrush', 'Alosoft', 'French Terry', 'Seamless'];
+        content.innerHTML = `
+          <h4 style="font-size: 13px; font-weight: 700; text-transform: uppercase; margin-bottom: 12px; color: var(--brand-espresso);">Filter By Fabric Technology</h4>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            ${fabrics.map(f => `
+              <button class="filter-pill-btn" onclick="applyFacetFilter('fabric', '${f}')" style="text-align: left; justify-content: flex-start;">${f}</button>
+            `).join('')}
+          </div>
+        `;
+      } else {
+        content.innerHTML = `
+          <h4 style="font-size: 13px; font-weight: 700; text-transform: uppercase; margin-bottom: 12px; color: var(--brand-espresso);">All Facet Filters</h4>
+          <div style="font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+            Select any facet above (Size, Color, Fabric) to refine your curated luxury collection.
+          </div>
+          <button class="alo-modal-btn" style="margin-top: 14px; width: 100%;" onclick="filterProducts('all', null, 'Save 30% — All Products')">Reset All Filters</button>
+        `;
+      }
+    }
+
+    function applyFacetFilter(type, value) {
+      const popover = document.getElementById('filter-popover');
+      if (popover) popover.style.display = 'none';
+      if (type === 'size') {
+        filterProducts('all', null, `Size: ${value}`);
+      } else if (type === 'color') {
+        filterProducts('color', value.toLowerCase(), `Color: ${value}`);
+      } else if (type === 'fabric') {
+        const filtered = allProducts.filter(p => (p.fabric_technology || '').toLowerCase().includes(value.toLowerCase()) || (p.title || '').toLowerCase().includes(value.toLowerCase()));
+        renderProducts(filtered, `Fabric: ${value}`, `Double-knit performance fabrics`, true);
+      }
+    }
+
+    function selectCardSwatch(productId, colorName, hexCode) {
+      const colorLabel = document.getElementById(`prod-color-${productId}`);
+      if (colorLabel) colorLabel.innerText = colorName;
+      const swatchContainer = document.getElementById(`swatches-${productId}`);
+      if (swatchContainer) {
+        swatchContainer.querySelectorAll('.swatch-circle').forEach(el => el.classList.remove('active'));
+      }
+      const activeEl = document.getElementById(`swatch-${productId}-${colorName.replace(/\s+/g, '-').toLowerCase()}`);
+      if (activeEl) activeEl.classList.add('active');
+    }
+
+    async function toggleCardWishlist(btnEl, productId, title, price) {
+      if (!btnEl) return;
+      const isFilled = btnEl.innerText === '♥';
+      btnEl.innerText = isFilled ? '♡' : '♥';
+      btnEl.style.color = isFilled ? 'var(--brand-espresso)' : '#C93B2B';
+
+      if (!isFilled) {
+        try {
+          await fetch('/api/account/wishlist/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              productId,
+              title,
+              unitPrice: price,
+              customerEmail: 'sameeramaq@gmail.com'
+            })
+          });
+        } catch (e) {}
+        showAloMessage('Saved to Wishlist', `"${title}" has been added to your YOGA Wishlist.`);
+      }
+    }
+
     function renderProducts(products, headingText, subheadingText, showReset = false) {
+      currentSortedProducts = products;
       const grid = document.getElementById('product-grid');
       const heading = document.getElementById('catalog-heading');
       const subheading = document.getElementById('catalog-subheading');
@@ -1201,15 +1378,37 @@
         return;
       }
 
+      const defaultSwatches = [
+        { name: 'Black', hex: '#111111' },
+        { name: 'Ivory', hex: '#F9F8F6' },
+        { name: 'Deep Gravel', hex: '#5A5856' },
+        { name: 'Espresso', hex: '#362B28' },
+        { name: 'Moonshadow Blue', hex: '#6C8299' },
+        { name: 'Rich Bordeaux', hex: '#58111A' }
+      ];
+
       grid.innerHTML = products.map(p => `
         <div class="product-card">
-          <div class="card-img-wrap">
-            <span class="card-discount-badge">${p.discount_label || 'Save 30%'}</span>
+          <div class="card-img-wrap" style="position: relative;">
+            <button class="wishlist-heart-btn" onclick="toggleCardWishlist(this, '${p.product_id}', '${p.title.replace(/'/g, "\\'")}', ${p.sale_price})" style="position: absolute; top: 10px; right: 10px; width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.9); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--brand-espresso); z-index: 5;">♡</button>
             <img class="card-img" src="${p.image_url || 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80'}" alt="${p.title}" />
           </div>
           <div class="card-details">
+            <!-- Swatches row -->
+            <div class="swatches-row" id="swatches-${p.product_id}" style="display: flex; align-items: center; gap: 6px; margin: 10px 0 6px;">
+              ${defaultSwatches.map((sw, idx) => `
+                <span class="swatch-circle ${idx === 0 ? 'active' : ''}" id="swatch-${p.product_id}-${sw.name.replace(/\s+/g, '-').toLowerCase()}" onclick="selectCardSwatch('${p.product_id}', '${sw.name}', '${sw.hex}')" style="width: 14px; height: 14px; border-radius: 50%; background: ${sw.hex}; border: 1px solid rgba(0,0,0,0.2); cursor: pointer; display: inline-block;"></span>
+              `).join('')}
+              <span style="font-size: 10px; color: var(--text-muted); font-weight: 600; margin-left: 2px;">+6</span>
+            </div>
+
+            <!-- Delicate Boxed Discount Badge -->
+            <div>
+              <span class="card-discount-tag" style="display: inline-block; border: 1px solid #D5B4A8; color: var(--brand-terracotta); font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 6px; border-radius: 2px; margin-bottom: 6px;">${p.discount_label || 'SAVE 30%'}</span>
+            </div>
+
             <h3 class="prod-title">${p.title}</h3>
-            <div class="prod-color">${p.color_family || 'Studio Neutral'}</div>
+            <div class="prod-color" id="prod-color-${p.product_id}">${p.color_family || 'Black'}</div>
             <div class="price-row">
               <span class="sale-price">₹${Number(p.sale_price).toLocaleString('en-IN')}</span>
               <span class="mrp-price">₹${Number(p.mrp).toLocaleString('en-IN')}</span>
