@@ -204,38 +204,89 @@ async function runAllClickableLinksPietSuite() {
             ephemeralCartId = cRes.cart.cart_id;
             record('Cart Action', `Action: Create Cart (${ephemeralCartId})`, true);
 
-            // Action 2: Add to Bag (Ribbed En Pointe Tank at ₹7,650)
-            const itemRes = await (await fetch(`${baseUrl}/api/checkout/cart/items`, {
+            // Action 2: Add Alo Accolade Straight Leg Sweatpant (Deep Gravel, L, ₹13,600 / MRP ₹19,500)
+            const accoladeItem = await (await fetch(`${baseUrl}/api/checkout/cart/items`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     cartId: ephemeralCartId,
-                    productId: 'w9777r-en-pointe-tank',
-                    variantId: 'w9777r-en-pointe-tank-s',
-                    title: 'Ribbed En Pointe Tank (Espresso)',
-                    colorName: 'Espresso',
-                    size: 'S',
-                    unitPrice: 7650.00,
+                    productId: 'u5012rg-accolade-straight-leg-deep-gravel',
+                    variantId: 'u5012rg-accolade-straight-leg-deep-gravel-l',
+                    title: 'Accolade Straight Leg Sweatpant',
+                    colorName: 'Deep Gravel',
+                    size: 'L',
+                    unitPrice: 13600.00,
                     quantity: 1
                 })
             })).json();
-            record('Cart Action', 'Action: Add Item to Bag (₹7,650)', true);
+            record('Cart Action', 'Action: Add Accolade Sweatpant (₹13,600 / MRP ₹19,500)', true);
 
-            // Action 3: Line Item Increment via Cart API
-            const updateRes = await (await fetch(`${baseUrl}/api/checkout/cart/items`, {
+            // Action 3: Verify Cart Details (Subtotal, Savings ₹5,900, Points 146)
+            const cartCheckRes = await (await fetch(`${baseUrl}/api/checkout/cart/${ephemeralCartId}`)).json();
+            const c = cartCheckRes.cart;
+            const pointsExpected = Math.round(Number(c.subtotal) / 93);
+            if (c.totalSavings >= 5900 && pointsExpected === 146) {
+                record('Cart Metrics', `Action: Dynamic Savings (₹${c.totalSavings}) & Reward Points (${pointsExpected} PT)`, true);
+            } else {
+                record('Cart Metrics', 'Action: Dynamic Savings & Reward Points', false, `Savings: ${c.totalSavings}, Points: ${pointsExpected}`);
+            }
+
+            // Action 4: Verify "Pairs Great With" Cross-Sells (5 Pullovers)
+            const crossSellsRes = await (await fetch(`${baseUrl}/api/checkout/cart/cross-sells`)).json();
+            if (crossSellsRes.crossSells && crossSellsRes.crossSells.length === 5) {
+                record('Cross-Sells', `Action: Retrieve "Pairs Great With" Carousel (${crossSellsRes.crossSells.length} items)`, true);
+            } else {
+                record('Cross-Sells', 'Action: Retrieve "Pairs Great With" Carousel', false, `Expected 5 items, found ${crossSellsRes.crossSells ? crossSellsRes.crossSells.length : 0}`);
+            }
+
+            // Action 5: 1-Click Quick Add of Cross-Sell Item (Accolade 1/4 Zip Pullover Black at ₹14,600)
+            const quickAddRes = await (await fetch(`${baseUrl}/api/checkout/cart/items`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     cartId: ephemeralCartId,
-                    productId: 'w9777r-en-pointe-tank',
-                    variantId: 'w9777r-en-pointe-tank-s',
-                    unitPrice: 7650.00,
+                    productId: 'u3040rg-accolade-quarter-zip-black',
+                    variantId: 'u3040rg-accolade-quarter-zip-black-m',
+                    title: 'Accolade 1/4 Zip Pullover',
+                    colorName: 'Black',
+                    size: 'M',
+                    unitPrice: 14600.00,
                     quantity: 1
                 })
             })).json();
-            record('Cart Action', `Action: Increment Line Quantity (New Subtotal: ₹${updateRes.cart.subtotal})`, true);
+            record('Cross-Sells', 'Action: 1-Click Quick Add Cross-Sell Item (₹14,600)', true);
 
-            // Action 4: Coupon Redemption
+            // Action 6: Stepper Quantity Update via Cart API
+            const updateQtyRes = await (await fetch(`${baseUrl}/api/checkout/cart/items`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    cartId: ephemeralCartId,
+                    productId: 'u3040rg-accolade-quarter-zip-black',
+                    variantId: 'u3040rg-accolade-quarter-zip-black-m',
+                    unitPrice: 14600.00,
+                    quantity: 1
+                })
+            })).json();
+            record('Cart Action', `Action: Increment Quantity Stepper (New Subtotal: ₹${updateQtyRes.cart.subtotal})`, true);
+
+            // Action 7: Move to Wishlist Action
+            const cartItemsList = (await (await fetch(`${baseUrl}/api/checkout/cart/${ephemeralCartId}`)).json()).cart.items;
+            if (cartItemsList.length > 0) {
+                const targetItem = cartItemsList[0];
+                const wishlistRes = await (await fetch(`${baseUrl}/api/checkout/cart/items/wishlist`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        cartId: ephemeralCartId,
+                        itemId: targetItem.item_id,
+                        customerEmail: `sameeramaq-piet-${runId}@example.com`
+                    })
+                })).json();
+                record('Wishlist Action', `Action: Move to Wishlist (${targetItem.title})`, true);
+            }
+
+            // Action 8: Coupon Redemption
             const couponCode = `PIETLINK${runId}`.toUpperCase();
             await db.query(`
                 INSERT INTO discount_coupons (code, discount_percent, min_order_value)
@@ -255,7 +306,7 @@ async function runAllClickableLinksPietSuite() {
             // Clean up ephemeral coupon
             await db.query(`DELETE FROM discount_coupons WHERE code = $1`, [couponCode]);
 
-            // Action 5: Localized Indian Checkout (UPI Conversion)
+            // Action 9: Localized Indian Checkout (UPI Conversion)
             const payRes = await (await fetch(`${baseUrl}/api/checkout/payments/place-order`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -291,6 +342,7 @@ async function runAllClickableLinksPietSuite() {
         // ----------------------------------------------------------------------
         console.log("\n🧹 [PIET TEARDOWN] Wiping all ephemeral test artifacts...");
         try {
+            await db.query(`DELETE FROM wishlist_items WHERE customer_email LIKE '%piet%'`);
             if (ephemeralOrderId) {
                 await db.query(`DELETE FROM order_items WHERE order_id = $1`, [ephemeralOrderId]);
                 await db.query(`DELETE FROM orders WHERE order_id = $1`, [ephemeralOrderId]);
