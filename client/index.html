@@ -423,6 +423,93 @@
     }
     .btn-checkout:hover { background: var(--brand-terracotta); }
 
+    /* MULTI-STEP LOCALIZED CHECKOUT MODAL */
+    .checkout-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(44, 30, 24, 0.6);
+      backdrop-filter: blur(8px);
+      z-index: 1500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .checkout-modal-overlay.open { display: flex; }
+    .checkout-modal-card {
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      width: 92%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      border-radius: 4px;
+      box-shadow: 0 32px 64px rgba(0,0,0,0.25);
+      display: flex;
+      flex-direction: column;
+    }
+    .checkout-header {
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-card);
+    }
+    .checkout-body { padding: 28px; }
+    .step-indicator {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 14px;
+    }
+    .step-item {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+    }
+    .step-item.active { color: var(--brand-terracotta); }
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .form-control {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid var(--border-subtle);
+      background: #FFF;
+      font-size: 13px;
+      font-family: inherit;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .payment-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .payment-option-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid var(--border-subtle);
+      background: #FFF;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .payment-option-label.selected {
+      border-color: var(--brand-espresso);
+      background: var(--bg-surface);
+    }
+
     /* TELEMETRY OVERLAY BADGE */
     .telemetry-badge {
       position: fixed;
@@ -448,7 +535,7 @@
     }
     @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
 
-    /* CUSTOM LUXURY NOTIFICATION MODAL (Zero Native Alert) */
+    /* CUSTOM LUXURY NOTIFICATION MODAL */
     .alo-modal-overlay {
       position: fixed;
       inset: 0;
@@ -462,10 +549,7 @@
       pointer-events: none;
       transition: opacity 0.25s ease;
     }
-    .alo-modal-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
+    .alo-modal-overlay.active { opacity: 1; pointer-events: auto; }
     .alo-modal-card {
       background: var(--bg-base);
       border: 1px solid var(--border-subtle);
@@ -478,9 +562,7 @@
       transform: translateY(16px) scale(0.97);
       transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .alo-modal-overlay.active .alo-modal-card {
-      transform: translateY(0) scale(1);
-    }
+    .alo-modal-overlay.active .alo-modal-card { transform: translateY(0) scale(1); }
     .alo-modal-icon {
       width: 48px;
       height: 48px;
@@ -521,9 +603,7 @@
       cursor: pointer;
       transition: background 0.2s;
     }
-    .alo-modal-btn:hover {
-      background: var(--brand-terracotta);
-    }
+    .alo-modal-btn:hover { background: var(--brand-terracotta); }
   </style>
 </head>
 <body>
@@ -598,14 +678,107 @@
       <div class="summary-row" style="color: var(--brand-terracotta);"><span>Discount</span><span id="cart-discount">-₹0.00</span></div>
       <div class="summary-row"><span>Express Shipping</span><span id="cart-shipping">₹0.00</span></div>
       <div class="summary-row summary-total"><span>Total</span><span id="cart-grandtotal">₹0.00</span></div>
-      <button class="btn-checkout" id="checkout-btn" data-track="checkout_cta">Proceed to UPI Checkout</button>
+      <button class="btn-checkout" id="checkout-btn" data-track="checkout_cta">Proceed to Checkout</button>
     </div>
   </aside>
 
-  <!-- Live Telemetry Clickstream Indicator -->
-  <div class="telemetry-badge">
-    <div class="pulse-dot"></div>
-    <span>Live Clickstream Telemetry Active</span>
+  <!-- Multi-Step Localized Checkout Modal (Global-e / Alo Style) -->
+  <div class="checkout-modal-overlay" id="checkout-modal-overlay">
+    <div class="checkout-modal-card">
+      <div class="checkout-header">
+        <h3 class="drawer-title" id="checkout-modal-title">Secure Checkout (India)</h3>
+        <button class="close-drawer-btn" id="close-checkout-modal-btn">&times;</button>
+      </div>
+      <div class="checkout-body">
+        <div class="step-indicator">
+          <span class="step-item active" id="indicator-step-1">1. Delivery</span>
+          <span class="step-item" id="indicator-step-2">2. Shipping</span>
+          <span class="step-item" id="indicator-step-3">3. Payment</span>
+        </div>
+
+        <!-- Step 1: Address & Contact -->
+        <div id="checkout-step-1">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" class="form-control" id="cust-name" value="Ananya Sharma" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" class="form-control" id="cust-email" value="sameeramaq@gmail.com" />
+            </div>
+            <div class="form-group">
+              <label>Phone (+91)</label>
+              <input type="tel" class="form-control" id="cust-phone" value="9876543210" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Street Address</label>
+            <input type="text" class="form-control" id="cust-address" value="402, Pali Hill Residency" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>City</label>
+              <input type="text" class="form-control" id="cust-city" value="Mumbai" />
+            </div>
+            <div class="form-group">
+              <label>PIN Code</label>
+              <input type="text" class="form-control" id="cust-pin" value="400050" />
+            </div>
+          </div>
+          <button class="btn-checkout" id="btn-to-step-2" data-track="checkout_to_shipping_btn">Continue to Shipping Method</button>
+        </div>
+
+        <!-- Step 2: Shipping Method -->
+        <div id="checkout-step-2" style="display: none;">
+          <div class="form-group">
+            <label>Select Shipping Speed</label>
+            <div class="payment-options">
+              <div class="payment-option-label selected">
+                <input type="radio" name="shipping-speed" checked />
+                <div>
+                  <div>Express Courier (2-3 Business Days)</div>
+                  <div style="font-size: 11px; color: var(--text-muted);" id="checkout-shipping-desc">Complimentary on orders above ₹5,000</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 12px; margin-top: 24px;">
+            <button class="btn-checkout" style="background: var(--bg-surface); color: var(--text-main); flex: 1;" id="btn-back-to-1">Back</button>
+            <button class="btn-checkout" style="flex: 2;" id="btn-to-step-3" data-track="checkout_to_payment_btn">Continue to Payment</button>
+          </div>
+        </div>
+
+        <!-- Step 3: Payment Method (UPI, Netbanking, Cards) -->
+        <div id="checkout-step-3" style="display: none;">
+          <div class="form-group">
+            <label>Select Payment Option</label>
+            <div class="payment-options">
+              <label class="payment-option-label selected" onclick="selectPaymentMethod('upi', this)">
+                <input type="radio" name="pay-method" value="upi" checked />
+                <span>UPI (Google Pay, PhonePe, Paytm, BHIM)</span>
+              </label>
+              <label class="payment-option-label" onclick="selectPaymentMethod('card', this)">
+                <input type="radio" name="pay-method" value="card" />
+                <span>Credit / Debit Card (Visa, Mastercard, RuPay)</span>
+              </label>
+              <label class="payment-option-label" onclick="selectPaymentMethod('netbanking', this)">
+                <input type="radio" name="pay-method" value="netbanking" />
+                <span>Netbanking (HDFC, ICICI, SBI, Axis)</span>
+              </label>
+            </div>
+          </div>
+          <div style="background: var(--bg-surface); padding: 14px; margin-top: 18px; font-size: 12px; border-radius: 2px;">
+            <div style="display: flex; justify-content: space-between;"><span>Amount Payable:</span><strong id="checkout-final-amount">₹0.00</strong></div>
+            <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Includes all Indian GST & Customs Clearance</div>
+          </div>
+          <div style="display: flex; gap: 12px; margin-top: 24px;">
+            <button class="btn-checkout" style="background: var(--bg-surface); color: var(--text-main); flex: 1;" id="btn-back-to-2">Back</button>
+            <button class="btn-checkout" style="flex: 2;" id="btn-final-place-order" data-track="final_place_order_btn">Pay & Place Order</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Custom Luxury Themed Notification Modal -->
@@ -618,6 +791,12 @@
     </div>
   </div>
 
+  <!-- Live Telemetry Clickstream Indicator -->
+  <div class="telemetry-badge">
+    <div class="pulse-dot"></div>
+    <span>Live Clickstream Telemetry Active</span>
+  </div>
+
   <script>
     // =========================================================================
     // CLIENT STOREFRONT LOGIC & LIVE TELEMETRY DISPATCHER
@@ -625,6 +804,7 @@
     let currentCartId = localStorage.getItem('alo_cart_id') || null;
     let sessionId = sessionStorage.getItem('alo_session_id') || null;
     let visitorId = localStorage.getItem('alo_visitor_id') || null;
+    let selectedPayment = 'upi';
 
     // 1. Initialize Telemetry Session
     async function initTelemetrySession() {
@@ -657,7 +837,7 @@
 
     // 2. Clickstream Event Tracker (Every Click on the Website)
     document.addEventListener('click', (e) => {
-      const target = e.target.closest('[data-track], button, a, .swatch-pill');
+      const target = e.target.closest('[data-track], button, a, .swatch-pill, .payment-option-label');
       if (!target || !sessionId || !visitorId) return;
 
       const actionName = target.getAttribute('data-track') || target.className || 'generic_click';
@@ -776,6 +956,7 @@
       document.getElementById('cart-discount').innerText = '-₹' + Number(cart.discount_total || 0).toLocaleString('en-IN');
       document.getElementById('cart-shipping').innerText = Number(cart.shipping_fee) === 0 ? 'FREE' : ('₹' + Number(cart.shipping_fee));
       document.getElementById('cart-grandtotal').innerText = '₹' + Number(cart.grand_total).toLocaleString('en-IN');
+      document.getElementById('checkout-final-amount').innerText = '₹' + Number(cart.grand_total).toLocaleString('en-IN');
 
       // Free shipping progress meter
       const pct = Math.min(100, Math.round((Number(cart.subtotal) / 5000) * 100));
@@ -804,7 +985,7 @@
       }
     }
 
-    // 5. Drawer Toggles & Checkout
+    // 5. Drawer Toggles
     function openCartDrawer() {
       document.getElementById('cart-drawer').classList.add('open');
       document.getElementById('cart-overlay').classList.add('open');
@@ -847,26 +1028,71 @@
       }
     });
 
-    // Place Order CTA
-    document.getElementById('checkout-btn').addEventListener('click', async () => {
+    // 7. Multi-Step Checkout Workflow Engine
+    const checkoutModal = document.getElementById('checkout-modal-overlay');
+    function openCheckoutWorkflow() {
+      closeCartDrawer();
+      checkoutModal.classList.add('open');
+      goToStep(1);
+    }
+    function closeCheckoutWorkflow() {
+      checkoutModal.classList.remove('open');
+    }
+
+    document.getElementById('checkout-btn').addEventListener('click', openCheckoutWorkflow);
+    document.getElementById('close-checkout-modal-btn').addEventListener('click', closeCheckoutWorkflow);
+
+    function goToStep(step) {
+      document.getElementById('checkout-step-1').style.display = step === 1 ? 'block' : 'none';
+      document.getElementById('checkout-step-2').style.display = step === 2 ? 'block' : 'none';
+      document.getElementById('checkout-step-3').style.display = step === 3 ? 'block' : 'none';
+
+      document.getElementById('indicator-step-1').className = 'step-item ' + (step >= 1 ? 'active' : '');
+      document.getElementById('indicator-step-2').className = 'step-item ' + (step >= 2 ? 'active' : '');
+      document.getElementById('indicator-step-3').className = 'step-item ' + (step >= 3 ? 'active' : '');
+    }
+
+    document.getElementById('btn-to-step-2').addEventListener('click', () => goToStep(2));
+    document.getElementById('btn-back-to-1').addEventListener('click', () => goToStep(1));
+    document.getElementById('btn-to-step-3').addEventListener('click', () => goToStep(3));
+    document.getElementById('btn-back-to-2').addEventListener('click', () => goToStep(2));
+
+    function selectPaymentMethod(method, element) {
+      selectedPayment = method;
+      document.querySelectorAll('.payment-option-label').forEach(el => el.classList.remove('selected'));
+      element.classList.add('selected');
+    }
+
+    // Final Place Order CTA
+    document.getElementById('btn-final-place-order').addEventListener('click', async () => {
       if (!currentCartId) return;
+      const custName = document.getElementById('cust-name').value;
+      const custEmail = document.getElementById('cust-email').value;
+      const custPhone = document.getElementById('cust-phone').value;
+      const custCity = document.getElementById('cust-city').value;
+      const custPin = document.getElementById('cust-pin').value;
+
       const res = await (await fetch('/api/checkout/payments/place-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           cartId: currentCartId,
-          customerEmail: 'shopper@alo-india.com',
-          customerName: 'Ananya Sharma',
-          paymentMethod: 'upi',
-          shippingAddress: { country: 'India', city: 'Mumbai', pincode: '400050' }
+          customerEmail: custEmail,
+          customerName: custName,
+          customerPhone: custPhone,
+          paymentMethod: selectedPayment,
+          shippingAddress: { country: 'India', city: custCity, pincode: custPin }
         })
       })).json();
 
       if (res.success) {
-        showAloMessage('Order Confirmed', `Order placed successfully via UPI!\n\nOrder ID: ${res.orderId}\nTotal Amount Paid: ₹${Number(res.amountPaid).toLocaleString('en-IN')}\n\nA confirmation with tracking details has been dispatched to your email.`);
+        closeCheckoutWorkflow();
+        showAloMessage(
+          'Order Confirmed',
+          `Order placed successfully via ${selectedPayment.toUpperCase()}!\n\nOrder ID: ${res.orderId}\nTotal Amount Paid: ₹${Number(res.amountPaid).toLocaleString('en-IN')}\n\nA confirmation with Indian GST invoice & tracking details has been sent to ${custEmail}.`
+        );
         localStorage.removeItem('alo_cart_id');
         currentCartId = null;
-        closeCartDrawer();
         refreshCartDrawer();
       }
     });
