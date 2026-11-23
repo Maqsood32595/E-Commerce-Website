@@ -15,16 +15,35 @@ router.get('/lookbook', async (req, res) => {
 // GET /api/catalog/menu
 router.get('/menu', async (req, res) => {
     try {
-        const sectionsRes = await db.query('SELECT * FROM menu_sections WHERE is_active = true ORDER BY display_order ASC');
+        const { gender } = req.query;
+        let query = 'SELECT * FROM menu_sections WHERE is_active = true';
+        const params = [];
+        if (gender && gender !== 'all') {
+            params.push(gender);
+            query += ` AND gender = $${params.length}`;
+        }
+        query += ' ORDER BY display_order ASC';
+
+        const sectionsRes = await db.query(query, params);
         const categoriesRes = await db.query('SELECT * FROM categories WHERE is_active = true ORDER BY display_order ASC');
 
         const menu = sectionsRes.rows.map(sec => ({
             sectionId: sec.section_id,
             title: sec.title,
+            gender: sec.gender,
             categories: categoriesRes.rows.filter(c => c.section_id === sec.section_id)
         }));
 
-        res.json({ success: true, slice: 'catalog', menu });
+        // Featured footwear for Shoes mega menu
+        const shoesRes = await db.query(`
+            SELECT product_id, title, handle, mrp, sale_price, image_url, discount_label
+            FROM products
+            WHERE category_id LIKE 'shoes%' OR category_id = 'acc-shoes' OR title ILIKE '%sneaker%' OR title ILIKE '%boot%' OR title ILIKE '%runner%'
+            ORDER BY created_at DESC
+            LIMIT 3;
+        `);
+
+        res.json({ success: true, slice: 'catalog', menu, featuredShoes: shoesRes.rows });
     } catch (err) {
         res.status(500).json({ error: err.message, slice: 'catalog' });
     }

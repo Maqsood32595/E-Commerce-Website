@@ -724,7 +724,7 @@
 
   <!-- Top Announcement Bar -->
   <div class="top-bar">
-    30% OFF SITEWIDE ✨ <a onclick="showCatalogView()">SHOP NOW</a>
+    <span id="top-announcement-text">30% OFF SITEWIDE ✨ <a onclick="showCatalogView()">SHOP NOW</a></span>
   </div>
 
   <!-- Header -->
@@ -954,13 +954,24 @@
     const megaMenu = document.getElementById('mega-menu');
     const megaBackdrop = document.getElementById('mega-menu-backdrop');
     const navWomen = document.getElementById('nav-women');
+    const navMen = document.getElementById('nav-men');
+    const navShoes = document.getElementById('nav-shoes');
     let menuTimer = null;
+    let currentGender = 'women';
+    let allMenuData = [];
+    let featuredShoesData = [];
 
-    function openMegaMenu() {
+    function openMegaMenu(gender = 'women') {
       clearTimeout(menuTimer);
+      currentGender = gender;
+      renderMegaMenuContent(gender);
+
+      [navWomen, navMen, navShoes].forEach(el => el && el.classList.remove('active'));
+      const activeNav = document.getElementById(`nav-${gender}`);
+      if (activeNav) activeNav.classList.add('active');
+
       if (megaMenu) megaMenu.classList.add('open');
       if (megaBackdrop) megaBackdrop.classList.add('active');
-      if (navWomen) navWomen.classList.add('active');
     }
 
     function closeMegaMenu(immediate = false) {
@@ -968,22 +979,99 @@
       if (immediate) {
         if (megaMenu) megaMenu.classList.remove('open');
         if (megaBackdrop) megaBackdrop.classList.remove('active');
-        if (navWomen) navWomen.classList.remove('active');
+        [navWomen, navMen, navShoes].forEach(el => el && el.classList.remove('active'));
+        if (navWomen) navWomen.classList.add('active');
         return;
       }
       menuTimer = setTimeout(() => {
         if (megaMenu) megaMenu.classList.remove('open');
         if (megaBackdrop) megaBackdrop.classList.remove('active');
-        if (navWomen) navWomen.classList.remove('active');
+        [navWomen, navMen, navShoes].forEach(el => el && el.classList.remove('active'));
+        if (navWomen) navWomen.classList.add('active');
       }, 160);
     }
 
+    function renderMegaMenuContent(gender) {
+      const grid = document.getElementById('mega-menu-grid');
+      if (!grid) return;
+
+      if (gender === 'shoes') {
+        const shoesSec = allMenuData.find(s => s.gender === 'shoes') || { categories: [] };
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1; display: grid; grid-template-columns: 220px repeat(3, 1fr); gap: 28px;">
+            <div>
+              <div class="mega-col-title">Shop Shoes</div>
+              <ul class="mega-col-list">
+                ${shoesSec.categories.map(c => `
+                  <li>
+                    <a onclick="filterProducts('category', '${c.handle}', '${c.name.replace(/'/g, "\\'")}', 'Shoes')">
+                      ${c.name}
+                    </a>
+                  </li>
+                `).join('')}
+              </ul>
+            </div>
+            ${featuredShoesData.map(shoe => `
+              <div style="cursor: pointer; display: flex; flex-direction: column;" onclick="filterProducts('category', '${shoe.handle}', '${shoe.title.replace(/'/g, "\\'")}', 'Shoes')">
+                <img src="${shoe.image_url}" alt="${shoe.title}" style="width: 100%; height: 210px; object-fit: cover; border-radius: 2px; margin-bottom: 8px; background: var(--bg-surface);" />
+                <div style="font-size: 13px; font-weight: 600; color: var(--brand-espresso);">${shoe.title}</div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">₹${Number(shoe.sale_price).toLocaleString('en-IN')}</div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        return;
+      }
+
+      // Women or Men
+      const sections = allMenuData.filter(s => s.gender === gender);
+      grid.innerHTML = sections.map(sec => {
+        let filterType = 'category';
+        if (sec.sectionId.includes('color')) filterType = 'color';
+        else if (sec.sectionId.includes('activity')) filterType = 'activity';
+        else if (sec.sectionId.includes('trending') || sec.sectionId.includes('highlights')) filterType = 'trending';
+
+        return `
+          <div>
+            <div class="mega-col-title">${sec.title}</div>
+            <ul class="mega-col-list">
+              ${sec.categories.map(c => `
+                <li>
+                  <a onclick="filterProducts('${filterType}', '${c.handle}', '${c.name.replace(/'/g, "\\'")}', '${sec.title.replace(/'/g, "\\'")}')">
+                    ${c.name}
+                  </a>
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+        `;
+      }).join('');
+    }
+
     if (navWomen) {
-      navWomen.addEventListener('mouseenter', openMegaMenu);
+      navWomen.addEventListener('mouseenter', () => openMegaMenu('women'));
       navWomen.addEventListener('mouseleave', () => closeMegaMenu(false));
       navWomen.addEventListener('click', (e) => {
         e.preventDefault();
         filterProducts('all', null, 'Save 30% — All Products');
+      });
+    }
+
+    if (navMen) {
+      navMen.addEventListener('mouseenter', () => openMegaMenu('men'));
+      navMen.addEventListener('mouseleave', () => closeMegaMenu(false));
+      navMen.addEventListener('click', (e) => {
+        e.preventDefault();
+        filterProducts('category', 'men', 'Men\'s Studio & Streetwear');
+      });
+    }
+
+    if (navShoes) {
+      navShoes.addEventListener('mouseenter', () => openMegaMenu('shoes'));
+      navShoes.addEventListener('mouseleave', () => closeMegaMenu(false));
+      navShoes.addEventListener('click', (e) => {
+        e.preventDefault();
+        filterProducts('category', 'shoes', 'Shoes & Footwear');
       });
     }
 
@@ -1000,32 +1088,11 @@
     // 1. Fetch Dynamic Mega Menu from Supabase
     async function loadMegaMenu() {
       try {
-        const res = await (await fetch('/api/catalog/menu')).json();
-        const grid = document.getElementById('mega-menu-grid');
+        const res = await (await fetch('/api/catalog/menu?gender=all')).json();
         if (!res.menu || res.menu.length === 0) return;
-        currentMenuData = res.menu;
-
-        grid.innerHTML = res.menu.map(sec => {
-          let filterType = 'category';
-          if (sec.sectionId === 'shop-by-color') filterType = 'color';
-          else if (sec.sectionId === 'shop-by-activity') filterType = 'activity';
-          else if (sec.sectionId === 'new-trending') filterType = 'trending';
-
-          return `
-            <div>
-              <div class="mega-col-title">${sec.title}</div>
-              <ul class="mega-col-list">
-                ${sec.categories.map(c => `
-                  <li>
-                    <a onclick="filterProducts('${filterType}', '${c.handle}', '${c.name.replace(/'/g, "\\'")}', '${sec.title.replace(/'/g, "\\'")}')">
-                      ${c.name}
-                    </a>
-                  </li>
-                `).join('')}
-              </ul>
-            </div>
-          `;
-        }).join('');
+        allMenuData = res.menu;
+        featuredShoesData = res.featuredShoes || [];
+        renderMegaMenuContent('women');
       } catch (e) {
         console.error('Mega menu load error:', e);
       }
@@ -1470,6 +1537,18 @@
     document.getElementById('alo-modal-btn').addEventListener('click', () => {
       document.getElementById('alo-modal-overlay').classList.remove('active');
     });
+
+    // Rotating Announcement Bar
+    let announcementIdx = 0;
+    const announcements = [
+      '30% OFF SITEWIDE ✨ <a onclick="showCatalogView()">SHOP NOW</a>',
+      'EXTENDED RETURNS & EXCHANGES THROUGH JAN 10'
+    ];
+    setInterval(() => {
+      announcementIdx = (announcementIdx + 1) % announcements.length;
+      const el = document.getElementById('top-announcement-text');
+      if (el) el.innerHTML = announcements[announcementIdx];
+    }, 4500);
 
     // Bootstrap
     loadMegaMenu();

@@ -47,20 +47,20 @@ async function runAllClickableLinksPietSuite() {
 
     try {
         // ----------------------------------------------------------------------
-        // GROUP 1: Mega Menu Navigation (All 5 Columns, 43 Categories)
+        // GROUP 1: Mega Menu Navigation (WOMEN, MEN & SHOES Taxonomies)
         // ----------------------------------------------------------------------
-        console.log("\n--- [GROUP 1: Mega Menu 5-Column Taxonomy & 43 Categories] ---");
-        const menuRes = await (await fetch(`${baseUrl}/api/catalog/menu`)).json();
+        console.log("\n--- [GROUP 1: Mega Menu WOMEN, MEN & SHOES Taxonomies] ---");
+        const menuRes = await (await fetch(`${baseUrl}/api/catalog/menu?gender=all`)).json();
         
-        if (!menuRes.menu || menuRes.menu.length < 5) {
-            record('Mega Menu', 'Verify 5 Menu Sections Exist', false, 'Expected 5 menu sections');
+        if (!menuRes.menu || menuRes.menu.length < 10) {
+            record('Mega Menu', 'Verify 10 Menu Sections Exist Across Tabs', false, `Found ${menuRes.menu ? menuRes.menu.length : 0} sections`);
         } else {
-            record('Mega Menu', `Verify 5 Menu Sections Exist (${menuRes.menu.length} sections found)`, true);
+            record('Mega Menu', `Verify 10 Menu Sections Exist (${menuRes.menu.length} sections found)`, true);
         }
 
         let totalCategoriesTested = 0;
         for (const section of (menuRes.menu || [])) {
-            console.log(`   📂 Section: ${section.title} (${section.categories.length} categories)`);
+            console.log(`   📂 Section: [${(section.gender || 'all').toUpperCase()}] ${section.title} (${section.categories.length} categories)`);
             for (const cat of section.categories) {
                 totalCategoriesTested++;
                 try {
@@ -70,16 +70,26 @@ async function runAllClickableLinksPietSuite() {
                         [cat.category_id]
                     );
                     if (dbCheck.rows.length === 0) {
-                        record('Mega Menu Category', `${section.title} → ${cat.name} (${cat.handle})`, false, 'Not found in DB');
+                        record('Mega Menu Category', `[${(section.gender || 'all').toUpperCase()}] ${section.title} → ${cat.name} (${cat.handle})`, false, 'Not found in DB');
                     } else {
-                        record('Mega Menu Category', `${section.title} → ${cat.name} (${cat.handle})`, true);
+                        record('Mega Menu Category', `[${(section.gender || 'all').toUpperCase()}] ${section.title} → ${cat.name} (${cat.handle})`, true);
                     }
                 } catch (catErr) {
-                    record('Mega Menu Category', `${section.title} → ${cat.name}`, false, catErr.message);
+                    record('Mega Menu Category', `[${(section.gender || 'all').toUpperCase()}] ${section.title} → ${cat.name}`, false, catErr.message);
                 }
             }
         }
         console.log(`   ✓ Tested all ${totalCategoriesTested} mega-menu category links.`);
+
+        // Shoes Featured Footwear Cards
+        if (menuRes.featuredShoes && menuRes.featuredShoes.length === 3) {
+            record('Shoes Mega Menu', `Featured Footwear Cards (${menuRes.featuredShoes.length} styles)`, true);
+            for (const shoe of menuRes.featuredShoes) {
+                record('Shoes Featured Card', `Style: ${shoe.title} (₹${Number(shoe.sale_price).toLocaleString('en-IN')})`, true);
+            }
+        } else {
+            record('Shoes Mega Menu', 'Featured Footwear Cards', false, `Expected 3, found ${menuRes.featuredShoes ? menuRes.featuredShoes.length : 0}`);
+        }
 
         // ----------------------------------------------------------------------
         // GROUP 2: Top Navigation Links
