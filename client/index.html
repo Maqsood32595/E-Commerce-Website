@@ -447,6 +447,83 @@
       animation: pulse 1.5s infinite;
     }
     @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
+
+    /* CUSTOM LUXURY NOTIFICATION MODAL (Zero Native Alert) */
+    .alo-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(44, 30, 24, 0.55);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .alo-modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .alo-modal-card {
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      width: 90%;
+      max-width: 440px;
+      padding: 36px 32px;
+      box-shadow: 0 24px 64px rgba(44, 30, 24, 0.25);
+      text-align: center;
+      transform: translateY(16px) scale(0.97);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .alo-modal-overlay.active .alo-modal-card {
+      transform: translateY(0) scale(1);
+    }
+    .alo-modal-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--bg-surface);
+      color: var(--brand-terracotta);
+      border: 1px solid var(--border-subtle);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .alo-modal-title {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      color: var(--brand-espresso);
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+    .alo-modal-body {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 24px;
+      white-space: pre-line;
+    }
+    .alo-modal-btn {
+      background: var(--brand-espresso);
+      color: #FFF;
+      border: none;
+      padding: 13px 32px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .alo-modal-btn:hover {
+      background: var(--brand-terracotta);
+    }
   </style>
 </head>
 <body>
@@ -529,6 +606,16 @@
   <div class="telemetry-badge">
     <div class="pulse-dot"></div>
     <span>Live Clickstream Telemetry Active</span>
+  </div>
+
+  <!-- Custom Luxury Themed Notification Modal -->
+  <div class="alo-modal-overlay" id="alo-modal-overlay">
+    <div class="alo-modal-card">
+      <div class="alo-modal-icon" id="alo-modal-icon">✓</div>
+      <h3 class="alo-modal-title" id="alo-modal-title">Notification</h3>
+      <div class="alo-modal-body" id="alo-modal-body">Message details</div>
+      <button class="alo-modal-btn" id="alo-modal-btn" data-track="modal_confirm_cta">Continue Shopping</button>
+    </div>
   </div>
 
   <script>
@@ -731,6 +818,18 @@
     document.getElementById('close-cart-btn').addEventListener('click', closeCartDrawer);
     document.getElementById('cart-overlay').addEventListener('click', closeCartDrawer);
 
+    // 6. Custom Luxury Modal Notification Helper (Zero Native Alert)
+    function showAloMessage(title, message, isSuccess = true) {
+      document.getElementById('alo-modal-title').innerText = title;
+      document.getElementById('alo-modal-body').innerText = message;
+      document.getElementById('alo-modal-icon').innerText = isSuccess ? '✓' : '✕';
+      document.getElementById('alo-modal-icon').style.color = isSuccess ? 'var(--brand-terracotta)' : '#DC2626';
+      document.getElementById('alo-modal-overlay').classList.add('active');
+    }
+    document.getElementById('alo-modal-btn').addEventListener('click', () => {
+      document.getElementById('alo-modal-overlay').classList.remove('active');
+    });
+
     // Apply coupon
     document.getElementById('apply-coupon-btn').addEventListener('click', async () => {
       const code = document.getElementById('coupon-code-input').value.trim();
@@ -741,10 +840,10 @@
         body: JSON.stringify({ cartId: currentCartId, couponCode: code })
       })).json();
       if (res.success) {
-        alert(`Coupon ${code} applied successfully!`);
+        showAloMessage('Coupon Applied', `Promo code ${code} applied successfully!\nYou saved ₹${Number(res.discountApplied).toLocaleString('en-IN')}`);
         refreshCartDrawer();
       } else {
-        alert(res.error || 'Failed to apply coupon');
+        showAloMessage('Coupon Error', res.error || 'Failed to apply coupon', false);
       }
     });
 
@@ -764,7 +863,7 @@
       })).json();
 
       if (res.success) {
-        alert(`Order Placed Successfully via UPI!\nOrder ID: ${res.orderId}\nAmount Paid: ₹${Number(res.amountPaid).toLocaleString('en-IN')}`);
+        showAloMessage('Order Confirmed', `Order placed successfully via UPI!\n\nOrder ID: ${res.orderId}\nTotal Amount Paid: ₹${Number(res.amountPaid).toLocaleString('en-IN')}\n\nA confirmation with tracking details has been dispatched to your email.`);
         localStorage.removeItem('alo_cart_id');
         currentCartId = null;
         closeCartDrawer();
