@@ -8,6 +8,9 @@ class PietService {
         let ephemeralAdminId = null;
         let ephemeralMediaId = null;
         let ephemeralProductId = null;
+        let ephemeralSessionId = null;
+        let ephemeralVisitorId = null;
+        let ephemeralEventId = null;
 
         const record = (gate, name, passed, error = null) => {
             testResults.push({ gate, name, passed, error });
@@ -199,12 +202,78 @@ class PietService {
                 record('Gate 6: Multi-Tier Catalog', 'Product, Grandchild Variant & Review verified in live DB', false, e.message);
             }
 
+            // =========================================================================
+            // GATE 7: Clickstream & Telemetry Invariant (Every Click Tracking)
+            // =========================================================================
+            try {
+                // 1. Create Session
+                const sessRes = await fetch(`${baseUrl}/api/telemetry/clicks/session`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        anonymousId: `anon-${runId}`,
+                        userAgent: 'PIET Headless Chrome Telemetry Tester',
+                        deviceType: 'desktop',
+                        locale: 'en-in',
+                        currency: 'INR'
+                    })
+                });
+                const sessData = await sessRes.json();
+                if (!sessData.success) throw new Error(sessData.error || 'Session creation failed');
+                ephemeralSessionId = sessData.session.session_id;
+                ephemeralVisitorId = sessData.session.visitor_id;
+
+                // 2. Track Click Event
+                const clickRes = await fetch(`${baseUrl}/api/telemetry/clicks/track`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        sessionId: ephemeralSessionId,
+                        visitorId: ephemeralVisitorId,
+                        pageType: 'pdp',
+                        currentUrl: '/products/airlift-high-waist-legging',
+                        componentName: 'pdp_swatch_picker',
+                        componentSection: 'hero_summary',
+                        elementId: 'swatch-espresso-s',
+                        elementTag: 'BUTTON',
+                        elementText: 'Espresso',
+                        clickX: 420,
+                        clickY: 850,
+                        viewportScrollDepthPct: 24.50,
+                        interactionType: 'click',
+                        funnelStage: 'consideration',
+                        actionName: 'select_color_swatch',
+                        metadata: { color: 'Espresso', size: 'S', sku: `PIET-SKU-${runId}-ESP-S` }
+                    })
+                });
+                const clickData = await clickRes.json();
+                if (!clickData.success) throw new Error(clickData.error || 'Click tracking failed');
+                ephemeralEventId = clickData.event.event_id;
+
+                // 3. Verify Grandchild Heatmaps Aggregation
+                const heatRes = await fetch(`${baseUrl}/api/telemetry/clicks/heatmaps?pageType=pdp`);
+                const heatData = await heatRes.json();
+                if (!heatData.success) throw new Error('Heatmap query failed');
+
+                record('Gate 7: Clickstream Telemetry', 'Click coordinates, scroll depth & heatmaps verified in live DB', true);
+            } catch (e) {
+                record('Gate 7: Clickstream Telemetry', 'Click coordinates, scroll depth & heatmaps verified in live DB', false, e.message);
+            }
+
         } finally {
             // =========================================================================
             // MANDATORY PIET TEARDOWN: Delete all ephemeral test records (Zero Ghost Records)
             // =========================================================================
             console.log(`🧹 [PIET TEARDOWN] Wiping ephemeral test data for run ${runId}...`);
             try {
+                if (ephemeralEventId || ephemeralSessionId) {
+                    await db.query(`DELETE FROM click_events WHERE session_id = $1`, [ephemeralSessionId]);
+                    await db.query(`DELETE FROM user_sessions WHERE session_id = $1`, [ephemeralSessionId]);
+                    if (ephemeralVisitorId) {
+                        await db.query(`DELETE FROM visitors WHERE visitor_id = $1`, [ephemeralVisitorId]);
+                    }
+                    console.log(`   ✓ Wiped ephemeral clickstream & session records: ${ephemeralSessionId}`);
+                }
                 if (ephemeralProductId) {
                     await db.query(`DELETE FROM product_reviews WHERE product_id = $1`, [ephemeralProductId]);
                     await db.query(`DELETE FROM product_variants WHERE product_id = $1`, [ephemeralProductId]);

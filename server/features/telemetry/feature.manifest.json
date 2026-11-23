@@ -1,0 +1,9 @@
+{
+    "id": "telemetry",
+    "name": "Telemetry & Observability",
+    "description": "Parent slice ingesting and aggregating user interactions, performance metrics, and clickstream analytics.",
+    "version": "1.0.0",
+    "enabled": true,
+    "basePath": "/api/telemetry",
+    "routes": "./routes.js"
+}

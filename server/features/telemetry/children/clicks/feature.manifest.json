@@ -1,0 +1,9 @@
+{
+    "id": "clicks",
+    "name": "Clickstream Ingestion",
+    "description": "Child slice capturing every click event, coordinates, scroll depth, and session tracking.",
+    "version": "1.0.0",
+    "enabled": true,
+    "basePath": "/clicks",
+    "routes": "./routes.js"
+}
