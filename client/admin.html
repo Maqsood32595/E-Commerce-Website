@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YOGA — Control & Bulk Ingestion Admin Layer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #111116;
+      --surface: #181820;
+      --card: #1F1F2B;
+      --border: #2E2E3E;
+      --text: #F3F3F8;
+      --muted: #8E8EA0;
+      --accent: #9E4736;
+      --gold: #C5A880;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; display: flex; min-height: 100vh; }
+    
+    #sidebar { width: 240px; background: var(--surface); border-right: 1px solid var(--border); padding: 24px; }
+    .admin-logo { font-size: 18px; font-weight: 700; letter-spacing: 0.15em; color: var(--gold); margin-bottom: 32px; display: block; }
+    .nav-btn { display: block; width: 100%; text-align: left; background: none; border: none; color: var(--muted); padding: 10px 14px; font-size: 13px; font-weight: 600; border-radius: 6px; cursor: pointer; margin-bottom: 6px; }
+    .nav-btn.active, .nav-btn:hover { background: var(--card); color: #FFF; }
+    
+    #main { flex: 1; padding: 36px 48px; overflow-y: auto; }
+    .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+    .title { font-size: 24px; font-weight: 700; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin-bottom: 24px; }
+    .label { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    textarea { width: 100%; height: 160px; background: var(--card); border: 1px solid var(--border); color: #FFF; padding: 14px; border-radius: 6px; font-family: monospace; font-size: 13px; }
+    .btn { background: var(--accent); color: #FFF; border: none; padding: 12px 24px; font-size: 12px; font-weight: 700; text-transform: uppercase; border-radius: 4px; cursor: pointer; margin-top: 14px; }
+    .btn:hover { opacity: 0.9; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 16px; }
+    .stat-pill { background: var(--card); border: 1px solid var(--border); padding: 16px; border-radius: 6px; }
+    .stat-val { font-size: 20px; font-weight: 700; color: var(--gold); }
+    .stat-lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; margin-top: 4px; }
+  </style>
+</head>
+<body>
+
+  <aside id="sidebar">
+    <span class="admin-logo">YOGA CONTROL</span>
+    <button class="nav-btn active" onclick="showTab('categories')">📁 Categories Ingestion</button>
+    <button class="nav-btn" onclick="showTab('products')">🛍️ Products Ingestion</button>
+    <button class="nav-btn" onclick="showTab('status')">⚡ Live System Status</button>
+    <div style="margin-top: 40px;">
+      <a href="/" target="_blank" style="color: var(--gold); font-size: 12px; text-decoration: none; font-weight: 600;">↗ Open Storefront</a>
+    </div>
+  </aside>
+
+  <main id="main">
+    <div class="header-bar">
+      <div>
+        <h1 class="title" id="tab-title">Bulk Category Ingestion</h1>
+        <p style="color: var(--muted); font-size: 13px; margin-top: 4px;">Dynamic upload automatically updates mega-menus on the storefront</p>
+      </div>
+    </div>
+
+    <!-- Category Ingestion Tab -->
+    <div id="tab-categories" class="card">
+      <span class="label">JSON Bulk Categories Payload (Auto-populates Mega Menu)</span>
+      <textarea id="cat-json">[
+  { "sectionId": "clothing", "name": "Seamless Bodysuits", "handle": "seamless-bodysuits", "tagline": "Sculpting all-in-one" },
+  { "sectionId": "new-trending", "name": "Winter Palette 2026", "handle": "winter-palette-2026" },
+  { "sectionId": "shop-by-color", "name": "Spiced Cardamom", "handle": "spiced-cardamom" }
+]</textarea>
+      <button class="btn" onclick="bulkUploadCategories()">Ingest Categories to Supabase</button>
+      <div id="cat-status" style="margin-top: 14px; font-size: 13px; color: var(--gold);"></div>
+    </div>
+
+    <!-- Product Ingestion Tab -->
+    <div id="tab-products" class="card" style="display: none;">
+      <span class="label">JSON Bulk Products Payload</span>
+      <textarea id="prod-json">[
+  {
+    "title": "Airlift Intrigue Bra",
+    "handle": "airlift-intrigue-bra-bamboo",
+    "categoryId": "c-bras",
+    "colorFamily": "Bamboo Green",
+    "colorHex": "#4A583B",
+    "mrp": 11100,
+    "salePrice": 7650,
+    "discountLabel": "Save 30%",
+    "fabricTechnology": "Airlift",
+    "imageUrl": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80"
+  }
+]</textarea>
+      <button class="btn" onclick="bulkUploadProducts()">Ingest Products to Supabase</button>
+      <div id="prod-status" style="margin-top: 14px; font-size: 13px; color: var(--gold);"></div>
+    </div>
+
+    <!-- Live Status Tab -->
+    <div id="tab-status" style="display: none;">
+      <div class="card">
+        <h3 style="font-size: 16px; margin-bottom: 12px;">Active PostgreSQL Tables in Supabase</h3>
+        <div class="grid" id="status-grid">
+          <div class="stat-pill"><div class="stat-val" id="cat-count">...</div><div class="stat-lbl">Categories</div></div>
+          <div class="stat-pill"><div class="stat-val" id="prod-count">...</div><div class="stat-lbl">Products</div></div>
+          <div class="stat-pill"><div class="stat-val" id="click-count">...</div><div class="stat-lbl">Click Telemetry Events</div></div>
+          <div class="stat-pill"><div class="stat-val">100%</div><div class="stat-lbl">PIET Health</div></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function showTab(tab) {
+      document.getElementById('tab-categories').style.display = tab === 'categories' ? 'block' : 'none';
+      document.getElementById('tab-products').style.display = tab === 'products' ? 'block' : 'none';
+      document.getElementById('tab-status').style.display = tab === 'status' ? 'block' : 'none';
+
+      document.querySelectorAll('.nav-btn').forEach((b, i) => {
+        b.classList.toggle('active', (tab === 'categories' && i === 0) || (tab === 'products' && i === 1) || (tab === 'status' && i === 2));
+      });
+      document.getElementById('tab-title').innerText = 
+        tab === 'categories' ? 'Bulk Category Ingestion' : (tab === 'products' ? 'Bulk Product Ingestion' : 'Live System Telemetry');
+      if (tab === 'status') refreshStats();
+    }
+
+    async function bulkUploadCategories() {
+      try {
+        const payload = JSON.parse(document.getElementById('cat-json').value);
+        const res = await (await fetch('/api/admin/bulk/categories', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ categories: payload })
+        })).json();
+        document.getElementById('cat-status').innerText = `✓ Successfully ingested ${res.count} categories into Supabase!`;
+      } catch (e) {
+        document.getElementById('cat-status').innerText = `Error: ${e.message}`;
+      }
+    }
+
+    async function bulkUploadProducts() {
+      try {
+        const payload = JSON.parse(document.getElementById('prod-json').value);
+        const res = await (await fetch('/api/admin/bulk/products', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ products: payload })
+        })).json();
+        document.getElementById('prod-status').innerText = `✓ Successfully ingested ${res.count} products into Supabase!`;
+      } catch (e) {
+        document.getElementById('prod-status').innerText = `Error: ${e.message}`;
+      }
+    }
+
+    async function refreshStats() {
+      try {
+        const catRes = await (await fetch('/api/catalog/categories')).json();
+        const prodRes = await (await fetch('/api/catalog/products')).json();
+        const heatRes = await (await fetch('/api/telemetry/clicks/heatmaps')).json();
+        document.getElementById('cat-count').innerText = catRes.categories?.length || 0;
+        document.getElementById('prod-count').innerText = prodRes.products?.length || 0;
+        document.getElementById('click-count').innerText = heatRes.heatmaps?.reduce((a, b) => a + Number(b.click_count), 0) || 0;
+      } catch (e) {}
+    }
+  </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ALO | Luxury Athleisure & Studio Performance (India)</title>
+  <title>YOGA | Luxury Athleisure & Studio Performance</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -43,11 +43,11 @@
       text-transform: uppercase;
       font-weight: 600;
     }
-    .top-bar span { color: var(--brand-champagne); }
+    .top-bar a { color: var(--brand-champagne); text-decoration: none; margin-left: 8px; font-weight: 700; }
 
-    /* HEADER & NAVIGATION */
+    /* HEADER & MEGA NAVIGATION */
     header {
-      background: rgba(249, 248, 246, 0.95);
+      background: rgba(249, 248, 246, 0.98);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border-subtle);
       position: sticky;
@@ -55,24 +55,24 @@
       z-index: 100;
     }
     .nav-container {
-      max-width: 1400px;
+      max-width: 1440px;
       margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 16px 32px;
+      padding: 18px 32px;
     }
     .brand-logo {
       font-family: var(--font-heading);
-      font-size: 26px;
+      font-size: 28px;
       font-weight: 700;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.22em;
       text-decoration: none;
       color: var(--brand-espresso);
     }
     .nav-links {
       display: flex;
-      gap: 32px;
+      gap: 36px;
       list-style: none;
     }
     .nav-links a {
@@ -84,11 +84,27 @@
       text-transform: uppercase;
       transition: color 0.2s;
     }
-    .nav-links a:hover { color: var(--brand-terracotta); }
+    .nav-links a:hover, .nav-links a.active { color: var(--brand-terracotta); }
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 24px;
+      font-size: 13px;
+    }
+    .user-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.05em;
+    }
+    .user-pill span.points {
+      color: var(--brand-terracotta);
+      font-size: 11px;
+      border-left: 1px solid var(--border-subtle);
+      padding-left: 8px;
     }
     .cart-btn {
       background: none;
@@ -113,85 +129,64 @@
       border-radius: 10px;
     }
 
-    /* HERO SECTION */
-    .hero {
-      position: relative;
-      height: 65vh;
-      min-height: 480px;
-      background: linear-gradient(rgba(26, 26, 26, 0.35), rgba(26, 26, 26, 0.45)), url('https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1800&q=80') center/cover no-repeat;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: #FFF;
-      padding: 0 20px;
+    /* MEGA MENU DROPDOWN (Matches User's Screenshot Exactly) */
+    .mega-menu-drawer {
+      background: #FFF;
+      border-bottom: 1px solid var(--border-subtle);
+      box-shadow: 0 16px 32px rgba(0,0,0,0.06);
+      padding: 40px 32px 48px;
     }
-    .hero-content { max-width: 800px; }
-    .hero-tag {
-      font-size: 12px;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--brand-champagne);
-      font-weight: 600;
-      margin-bottom: 12px;
-      display: block;
+    .mega-menu-grid {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 32px;
     }
-    .hero-title {
-      font-family: var(--font-heading);
-      font-size: 48px;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      line-height: 1.15;
-      margin-bottom: 16px;
-    }
-    .hero-desc {
-      font-size: 15px;
-      color: #EAE6DF;
-      margin-bottom: 28px;
-      line-height: 1.6;
-    }
-    .btn-luxury {
-      display: inline-block;
-      background: var(--bg-base);
-      color: var(--brand-espresso);
-      padding: 14px 36px;
-      font-size: 12px;
+    .mega-col-title {
+      font-size: 13px;
       font-weight: 700;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      border: none;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.25s;
+      color: var(--text-main);
+      margin-bottom: 18px;
+      text-transform: capitalize;
     }
-    .btn-luxury:hover {
-      background: var(--brand-champagne);
-      color: #FFF;
+    .mega-col-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .mega-col-list a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 13px;
+      transition: color 0.2s, transform 0.2s;
+      display: inline-block;
+    }
+    .mega-col-list a:hover {
+      color: var(--brand-terracotta);
+      transform: translateX(3px);
     }
 
-    /* CATALOG / PLP SECTION */
+    /* CATALOG SECTION */
     .catalog-section {
       max-width: 1400px;
-      margin: 60px auto;
+      margin: 50px auto;
       padding: 0 32px;
     }
     .section-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
-      margin-bottom: 36px;
+      margin-bottom: 32px;
       border-bottom: 1px solid var(--border-subtle);
       padding-bottom: 16px;
     }
-    .section-title {
-      font-family: var(--font-heading);
-      font-size: 26px;
-      letter-spacing: 0.05em;
-    }
+    .section-title { font-family: var(--font-heading); font-size: 26px; }
     .product-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 36px;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 32px;
     }
     .product-card {
       background: var(--bg-card);
@@ -204,7 +199,7 @@
     }
     .product-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 16px 32px rgba(44, 30, 24, 0.06);
+      box-shadow: 0 16px 32px rgba(44, 30, 24, 0.08);
     }
     .card-img-wrap {
       position: relative;
@@ -220,81 +215,58 @@
       transition: transform 0.4s;
     }
     .product-card:hover .card-img { transform: scale(1.03); }
-    .card-badge {
+    .card-discount-badge {
       position: absolute;
       top: 14px;
       left: 14px;
-      background: rgba(249, 248, 246, 0.9);
-      padding: 4px 10px;
+      background: var(--brand-terracotta);
+      color: #FFF;
+      padding: 4px 8px;
       font-size: 10px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
       font-weight: 700;
+      text-transform: uppercase;
       border-radius: 2px;
     }
     .card-details {
-      padding: 20px;
+      padding: 18px;
       display: flex;
       flex-direction: column;
       flex: 1;
     }
-    .product-title {
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-    .product-fabric {
-      font-size: 11px;
-      color: var(--brand-champagne);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 12px;
-    }
-    .swatches-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-    .swatch-pill {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      border: 2px solid #FFF;
-      outline: 1px solid var(--border-subtle);
-      cursor: pointer;
-      transition: outline-color 0.2s, transform 0.2s;
-    }
-    .swatch-pill:hover, .swatch-pill.active {
-      outline-color: var(--brand-espresso);
-      transform: scale(1.15);
-    }
-    .card-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: auto;
-      padding-top: 14px;
-      border-top: 1px solid var(--border-subtle);
-    }
-    .price {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--brand-espresso);
-    }
+    .prod-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .prod-color { font-size: 11px; color: var(--text-muted); margin-bottom: 12px; }
+    .price-row { display: flex; align-items: baseline; gap: 8px; margin-top: auto; }
+    .sale-price { font-size: 15px; font-weight: 700; color: var(--brand-espresso); }
+    .mrp-price { font-size: 12px; text-decoration: line-through; color: #A09D98; }
     .btn-atc {
+      width: 100%;
       background: var(--brand-espresso);
       color: #FFF;
       border: none;
-      padding: 9px 18px;
+      padding: 10px;
       font-size: 11px;
       font-weight: 700;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       cursor: pointer;
+      margin-top: 14px;
       transition: background 0.2s;
     }
     .btn-atc:hover { background: var(--brand-terracotta); }
+
+    /* PLACEHOLDER CONTENT VIEW (For any clicked link) */
+    .content-view {
+      max-width: 900px;
+      margin: 60px auto;
+      padding: 40px;
+      background: #FFF;
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      display: none;
+    }
+    .content-view.active { display: block; }
+    .content-title { font-family: var(--font-heading); font-size: 32px; margin-bottom: 16px; color: var(--brand-espresso); }
+    .content-body { font-size: 14px; color: var(--text-muted); line-height: 1.8; }
 
     /* FLYOUT MINI-CART DRAWER */
     .cart-drawer-overlay {
@@ -336,77 +308,14 @@
       font-size: 12px;
       border-bottom: 1px solid var(--border-subtle);
     }
-    .meter-bar {
-      height: 4px;
-      background: var(--border-subtle);
-      margin-top: 8px;
-      border-radius: 2px;
-      overflow: hidden;
-    }
-    .meter-fill {
-      height: 100%;
-      background: var(--brand-terracotta);
-      width: 0%;
-      transition: width 0.3s;
-    }
-    .cart-items-wrap {
-      flex: 1;
-      overflow-y: auto;
-      padding: 20px 24px;
-    }
-    .cart-item {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 18px;
-      padding-bottom: 18px;
-      border-bottom: 1px solid var(--border-subtle);
-    }
-    .cart-item-img {
-      width: 70px;
-      height: 90px;
-      object-fit: cover;
-      background: var(--bg-surface);
-    }
-    .drawer-footer {
-      padding: 20px 24px;
-      border-top: 1px solid var(--border-subtle);
-      background: var(--bg-card);
-    }
-    .coupon-wrap {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-    .coupon-input {
-      flex: 1;
-      padding: 9px 12px;
-      border: 1px solid var(--border-subtle);
-      background: var(--bg-base);
-      font-size: 12px;
-      text-transform: uppercase;
-    }
-    .coupon-btn {
-      background: var(--brand-espresso);
-      color: #FFF;
-      border: none;
-      padding: 0 16px;
-      font-size: 11px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .summary-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 8px;
-      font-size: 13px;
-    }
-    .summary-total {
-      font-size: 16px;
-      font-weight: 700;
-      border-top: 1px solid var(--border-subtle);
-      padding-top: 10px;
-      margin-top: 10px;
-    }
+    .meter-bar { height: 4px; background: var(--border-subtle); margin-top: 8px; border-radius: 2px; overflow: hidden; }
+    .meter-fill { height: 100%; background: var(--brand-terracotta); width: 0%; transition: width 0.3s; }
+    .cart-items-wrap { flex: 1; overflow-y: auto; padding: 20px 24px; }
+    .cart-item { display: flex; gap: 16px; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid var(--border-subtle); }
+    .cart-item-img { width: 70px; height: 90px; object-fit: cover; background: var(--bg-surface); }
+    .drawer-footer { padding: 20px 24px; border-top: 1px solid var(--border-subtle); background: var(--bg-card); }
+    .summary-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
+    .summary-total { font-size: 16px; font-weight: 700; border-top: 1px solid var(--border-subtle); padding-top: 10px; margin-top: 10px; }
     .btn-checkout {
       width: 100%;
       background: var(--brand-espresso);
@@ -422,118 +331,6 @@
       transition: background 0.2s;
     }
     .btn-checkout:hover { background: var(--brand-terracotta); }
-
-    /* MULTI-STEP LOCALIZED CHECKOUT MODAL */
-    .checkout-modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(44, 30, 24, 0.6);
-      backdrop-filter: blur(8px);
-      z-index: 1500;
-      display: none;
-      align-items: center;
-      justify-content: center;
-    }
-    .checkout-modal-overlay.open { display: flex; }
-    .checkout-modal-card {
-      background: var(--bg-base);
-      border: 1px solid var(--border-subtle);
-      width: 92%;
-      max-width: 600px;
-      max-height: 90vh;
-      overflow-y: auto;
-      border-radius: 4px;
-      box-shadow: 0 32px 64px rgba(0,0,0,0.25);
-      display: flex;
-      flex-direction: column;
-    }
-    .checkout-header {
-      padding: 20px 28px;
-      border-bottom: 1px solid var(--border-subtle);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--bg-card);
-    }
-    .checkout-body { padding: 28px; }
-    .step-indicator {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 28px;
-      border-bottom: 1px solid var(--border-subtle);
-      padding-bottom: 14px;
-    }
-    .step-item {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-muted);
-    }
-    .step-item.active { color: var(--brand-terracotta); }
-    .form-group { margin-bottom: 16px; }
-    .form-group label {
-      display: block;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      margin-bottom: 6px;
-    }
-    .form-control {
-      width: 100%;
-      padding: 11px 14px;
-      border: 1px solid var(--border-subtle);
-      background: #FFF;
-      font-size: 13px;
-      font-family: inherit;
-    }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .payment-options {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 14px;
-    }
-    .payment-option-label {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px;
-      border: 1px solid var(--border-subtle);
-      background: #FFF;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 600;
-    }
-    .payment-option-label.selected {
-      border-color: var(--brand-espresso);
-      background: var(--bg-surface);
-    }
-
-    /* TELEMETRY OVERLAY BADGE */
-    .telemetry-badge {
-      position: fixed;
-      bottom: 16px;
-      left: 16px;
-      background: rgba(26, 26, 26, 0.9);
-      color: #FFF;
-      padding: 8px 14px;
-      border-radius: 20px;
-      font-size: 11px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      z-index: 500;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-    .pulse-dot {
-      width: 8px;
-      height: 8px;
-      background: #10B981;
-      border-radius: 50%;
-      animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
 
     /* CUSTOM LUXURY NOTIFICATION MODAL */
     .alo-modal-overlay {
@@ -559,72 +356,37 @@
       padding: 36px 32px;
       box-shadow: 0 24px 64px rgba(44, 30, 24, 0.25);
       text-align: center;
-      transform: translateY(16px) scale(0.97);
-      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .alo-modal-overlay.active .alo-modal-card { transform: translateY(0) scale(1); }
-    .alo-modal-icon {
-      width: 48px;
-      height: 48px;
-      background: var(--bg-surface);
-      color: var(--brand-terracotta);
-      border: 1px solid var(--border-subtle);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 16px;
-      font-size: 20px;
-      font-weight: 700;
-    }
-    .alo-modal-title {
-      font-family: var(--font-heading);
-      font-size: 20px;
-      color: var(--brand-espresso);
-      letter-spacing: 0.05em;
-      margin-bottom: 8px;
-    }
-    .alo-modal-body {
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.6;
-      margin-bottom: 24px;
-      white-space: pre-line;
-    }
-    .alo-modal-btn {
-      background: var(--brand-espresso);
-      color: #FFF;
-      border: none;
-      padding: 13px 32px;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .alo-modal-btn:hover { background: var(--brand-terracotta); }
+    .alo-modal-icon { width: 48px; height: 48px; background: var(--bg-surface); color: var(--brand-terracotta); border: 1px solid var(--border-subtle); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 20px; font-weight: 700; }
+    .alo-modal-title { font-family: var(--font-heading); font-size: 20px; color: var(--brand-espresso); margin-bottom: 8px; }
+    .alo-modal-body { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 24px; white-space: pre-line; }
+    .alo-modal-btn { background: var(--brand-espresso); color: #FFF; border: none; padding: 13px 32px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; }
   </style>
 </head>
 <body>
 
   <!-- Top Announcement Bar -->
   <div class="top-bar">
-    Complimentary Express Shipping in India on Orders Above <span>₹5,000</span> | All Duties & Taxes Included
+    30% OFF SITEWIDE ✨ <a href="#bestsellers" onclick="showCatalogView()">SHOP NOW</a>
   </div>
 
   <!-- Header -->
   <header>
     <div class="nav-container">
-      <a href="#" class="brand-logo" data-track="logo_click">ALO</a>
+      <a href="#" class="brand-logo" onclick="showCatalogView()">YOGA</a>
       <ul class="nav-links">
-        <li><a href="#women" data-track="nav_women">Women</a></li>
-        <li><a href="#men" data-track="nav_men">Men</a></li>
-        <li><a href="#fabrics" data-track="nav_fabrics">Fabrics (Airlift / Alosoft)</a></li>
-        <li><a href="#accessories" data-track="nav_accessories">Accessories</a></li>
+        <li><a href="#women" class="active" onclick="showCatalogView()">WOMEN</a></li>
+        <li><a href="#men" onclick="openPlaceholder('MEN Collection', 'Explore studio essentials and high-performance outerwear for Men.')">MEN</a></li>
+        <li><a href="#shoes" onclick="openPlaceholder('SHOES Collection', 'Recovery slides, sunset sneakers, and cushioned mules.')">SHOES</a></li>
+        <li><a href="#giftguide" onclick="openPlaceholder('GIFT GUIDE', 'Curated holiday gifts, wellness bundles, and sets.')">GIFT GUIDE <span style="color: var(--brand-terracotta); font-size: 10px;">NEW</span></a></li>
       </ul>
       <div class="nav-actions">
-        <button class="cart-btn" id="open-cart-btn" data-track="open_cart_drawer">
+        <!-- Customer Account Hi Sameera! -->
+        <div class="user-pill" id="user-account-btn" onclick="openCustomerAccount()">
+          <span>👤 HI SAMEERA!</span>
+          <span class="points">VIP | 1 PT</span>
+        </div>
+        <button class="cart-btn" id="open-cart-btn">
           <span>Bag</span>
           <span class="cart-badge" id="cart-item-count">0</span>
         </button>
@@ -632,22 +394,29 @@
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-content">
-      <span class="hero-tag">New Season Palette 2026</span>
-      <h1 class="hero-title">Studio Sculpt & Everyday Luxury</h1>
-      <p class="hero-desc">Engineered with double-knit Airlift fabric and breathable peach-finish Alosoft. Curated in grounded espresso, rich terracotta, and eucalyptus sage.</p>
-      <a href="#catalog" class="btn-luxury" data-track="hero_explore_cta">Explore The Collection</a>
+  <!-- Complete Mega Menu Drawer (Direct from Screenshot) -->
+  <div class="mega-menu-drawer" id="mega-menu">
+    <div class="mega-menu-grid" id="mega-menu-grid">
+      <!-- Dynamically populated from Supabase categories -->
+      <p style="color: var(--text-muted);">Loading category hierarchy...</p>
     </div>
-  </section>
+  </div>
 
-  <!-- Catalog PLP Section -->
-  <section class="catalog-section" id="catalog">
+  <!-- Dynamic Content View for Clicked Sections -->
+  <div class="content-view" id="content-view">
+    <h1 class="content-title" id="content-title">Section View</h1>
+    <div class="content-body" id="content-body">
+      This page is dynamically linked. Content will populate as products are added.
+    </div>
+    <button class="btn-checkout" style="max-width: 200px; margin-top: 24px;" onclick="showCatalogView()">Back to Store</button>
+  </div>
+
+  <!-- Main Catalog View -->
+  <section class="catalog-section" id="catalog-section">
     <div class="section-header">
       <div>
-        <h2 class="section-title">Essential Silhouettes</h2>
-        <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Optimized for Indian climates & studio performance</p>
+        <h2 class="section-title">Save 30% — Trending Now</h2>
+        <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Double-knit Airlift, Peach-finish Alosoft, and Accolade French Terry</p>
       </div>
     </div>
     <div class="product-grid" id="product-grid">
@@ -655,7 +424,7 @@
     </div>
   </section>
 
-  <!-- Flyout Mini-Cart Drawer -->
+  <!-- Mini-Cart Drawer -->
   <div class="cart-drawer-overlay" id="cart-overlay"></div>
   <aside class="cart-drawer" id="cart-drawer">
     <div class="drawer-header">
@@ -670,436 +439,196 @@
       <p style="color: var(--text-muted); text-align: center; margin-top: 40px;">Your bag is empty.</p>
     </div>
     <div class="drawer-footer">
-      <div class="coupon-wrap">
-        <input type="text" class="coupon-input" id="coupon-code-input" placeholder="Promo code (ALOINDIA15)" />
-        <button class="coupon-btn" id="apply-coupon-btn" data-track="apply_coupon_cta">Apply</button>
-      </div>
       <div class="summary-row"><span>Subtotal</span><span id="cart-subtotal">₹0.00</span></div>
       <div class="summary-row" style="color: var(--brand-terracotta);"><span>Discount</span><span id="cart-discount">-₹0.00</span></div>
-      <div class="summary-row"><span>Express Shipping</span><span id="cart-shipping">₹0.00</span></div>
+      <div class="summary-row"><span>Express Shipping</span><span id="cart-shipping">FREE</span></div>
       <div class="summary-row summary-total"><span>Total</span><span id="cart-grandtotal">₹0.00</span></div>
-      <button class="btn-checkout" id="checkout-btn" data-track="checkout_cta">Proceed to Checkout</button>
+      <button class="btn-checkout" id="checkout-btn">Proceed to UPI Checkout</button>
     </div>
   </aside>
 
-  <!-- Multi-Step Localized Checkout Modal (Global-e / Alo Style) -->
-  <div class="checkout-modal-overlay" id="checkout-modal-overlay">
-    <div class="checkout-modal-card">
-      <div class="checkout-header">
-        <h3 class="drawer-title" id="checkout-modal-title">Secure Checkout (India)</h3>
-        <button class="close-drawer-btn" id="close-checkout-modal-btn">&times;</button>
-      </div>
-      <div class="checkout-body">
-        <div class="step-indicator">
-          <span class="step-item active" id="indicator-step-1">1. Delivery</span>
-          <span class="step-item" id="indicator-step-2">2. Shipping</span>
-          <span class="step-item" id="indicator-step-3">3. Payment</span>
-        </div>
-
-        <!-- Step 1: Address & Contact -->
-        <div id="checkout-step-1">
-          <div class="form-group">
-            <label>Full Name</label>
-            <input type="text" class="form-control" id="cust-name" value="Ananya Sharma" />
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Email Address</label>
-              <input type="email" class="form-control" id="cust-email" value="sameeramaq@gmail.com" />
-            </div>
-            <div class="form-group">
-              <label>Phone (+91)</label>
-              <input type="tel" class="form-control" id="cust-phone" value="9876543210" />
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Street Address</label>
-            <input type="text" class="form-control" id="cust-address" value="402, Pali Hill Residency" />
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>City</label>
-              <input type="text" class="form-control" id="cust-city" value="Mumbai" />
-            </div>
-            <div class="form-group">
-              <label>PIN Code</label>
-              <input type="text" class="form-control" id="cust-pin" value="400050" />
-            </div>
-          </div>
-          <button class="btn-checkout" id="btn-to-step-2" data-track="checkout_to_shipping_btn">Continue to Shipping Method</button>
-        </div>
-
-        <!-- Step 2: Shipping Method -->
-        <div id="checkout-step-2" style="display: none;">
-          <div class="form-group">
-            <label>Select Shipping Speed</label>
-            <div class="payment-options">
-              <div class="payment-option-label selected">
-                <input type="radio" name="shipping-speed" checked />
-                <div>
-                  <div>Express Courier (2-3 Business Days)</div>
-                  <div style="font-size: 11px; color: var(--text-muted);" id="checkout-shipping-desc">Complimentary on orders above ₹5,000</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div style="display: flex; gap: 12px; margin-top: 24px;">
-            <button class="btn-checkout" style="background: var(--bg-surface); color: var(--text-main); flex: 1;" id="btn-back-to-1">Back</button>
-            <button class="btn-checkout" style="flex: 2;" id="btn-to-step-3" data-track="checkout_to_payment_btn">Continue to Payment</button>
-          </div>
-        </div>
-
-        <!-- Step 3: Payment Method (UPI, Netbanking, Cards) -->
-        <div id="checkout-step-3" style="display: none;">
-          <div class="form-group">
-            <label>Select Payment Option</label>
-            <div class="payment-options">
-              <label class="payment-option-label selected" onclick="selectPaymentMethod('upi', this)">
-                <input type="radio" name="pay-method" value="upi" checked />
-                <span>UPI (Google Pay, PhonePe, Paytm, BHIM)</span>
-              </label>
-              <label class="payment-option-label" onclick="selectPaymentMethod('card', this)">
-                <input type="radio" name="pay-method" value="card" />
-                <span>Credit / Debit Card (Visa, Mastercard, RuPay)</span>
-              </label>
-              <label class="payment-option-label" onclick="selectPaymentMethod('netbanking', this)">
-                <input type="radio" name="pay-method" value="netbanking" />
-                <span>Netbanking (HDFC, ICICI, SBI, Axis)</span>
-              </label>
-            </div>
-          </div>
-          <div style="background: var(--bg-surface); padding: 14px; margin-top: 18px; font-size: 12px; border-radius: 2px;">
-            <div style="display: flex; justify-content: space-between;"><span>Amount Payable:</span><strong id="checkout-final-amount">₹0.00</strong></div>
-            <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Includes all Indian GST & Customs Clearance</div>
-          </div>
-          <div style="display: flex; gap: 12px; margin-top: 24px;">
-            <button class="btn-checkout" style="background: var(--bg-surface); color: var(--text-main); flex: 1;" id="btn-back-to-2">Back</button>
-            <button class="btn-checkout" style="flex: 2;" id="btn-final-place-order" data-track="final_place_order_btn">Pay & Place Order</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Custom Luxury Themed Notification Modal -->
+  <!-- Custom Themed Modal Dialog -->
   <div class="alo-modal-overlay" id="alo-modal-overlay">
     <div class="alo-modal-card">
       <div class="alo-modal-icon" id="alo-modal-icon">✓</div>
       <h3 class="alo-modal-title" id="alo-modal-title">Notification</h3>
       <div class="alo-modal-body" id="alo-modal-body">Message details</div>
-      <button class="alo-modal-btn" id="alo-modal-btn" data-track="modal_confirm_cta">Continue Shopping</button>
+      <button class="alo-modal-btn" id="alo-modal-btn">Continue</button>
     </div>
   </div>
 
-  <!-- Live Telemetry Clickstream Indicator -->
-  <div class="telemetry-badge">
-    <div class="pulse-dot"></div>
-    <span>Live Clickstream Telemetry Active</span>
-  </div>
-
   <script>
-    // =========================================================================
-    // CLIENT STOREFRONT LOGIC & LIVE TELEMETRY DISPATCHER
-    // =========================================================================
-    let currentCartId = localStorage.getItem('alo_cart_id') || null;
-    let sessionId = sessionStorage.getItem('alo_session_id') || null;
-    let visitorId = localStorage.getItem('alo_visitor_id') || null;
-    let selectedPayment = 'upi';
+    let currentCartId = localStorage.getItem('yoga_cart_id') || null;
 
-    // 1. Initialize Telemetry Session
-    async function initTelemetrySession() {
-      if (sessionId && visitorId) return;
-      const anonymousId = localStorage.getItem('alo_anon_id') || ('anon_' + Math.random().toString(36).substring(2, 10));
-      localStorage.setItem('alo_anon_id', anonymousId);
-
+    // 1. Fetch Dynamic Mega Menu from Supabase
+    async function loadMegaMenu() {
       try {
-        const res = await fetch('/api/telemetry/clicks/session', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            anonymousId,
-            deviceType: window.innerWidth < 768 ? 'mobile' : 'desktop',
-            locale: 'en-in',
-            currency: 'INR'
-          })
-        });
-        const data = await res.json();
-        if (data.session) {
-          sessionId = data.session.session_id;
-          visitorId = data.session.visitor_id;
-          sessionStorage.setItem('alo_session_id', sessionId);
-          localStorage.setItem('alo_visitor_id', visitorId);
-        }
+        const res = await (await fetch('/api/catalog/menu')).json();
+        const grid = document.getElementById('mega-menu-grid');
+        if (!res.menu || res.menu.length === 0) return;
+
+        grid.innerHTML = res.menu.map(sec => `
+          <div>
+            <div class="mega-col-title">${sec.title}</div>
+            <ul class="mega-col-list">
+              ${sec.categories.map(c => `
+                <li><a href="#${c.handle}" onclick="openPlaceholder('${c.name}', 'Explore our curated ${c.name} collection in double-knit performance and studio fabrics.')">${c.name}</a></li>
+              `).join('')}
+            </ul>
+          </div>
+        `).join('');
       } catch (e) {
-        console.warn('Telemetry session error:', e);
+        console.error('Mega menu load error:', e);
       }
     }
 
-    // 2. Clickstream Event Tracker (Every Click on the Website)
-    document.addEventListener('click', (e) => {
-      const target = e.target.closest('[data-track], button, a, .swatch-pill, .payment-option-label');
-      if (!target || !sessionId || !visitorId) return;
-
-      const actionName = target.getAttribute('data-track') || target.className || 'generic_click';
-      const scrollDepth = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100) || 0;
-
-      fetch('/api/telemetry/clicks/track', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sessionId,
-          visitorId,
-          pageType: 'home',
-          currentUrl: window.location.pathname,
-          componentName: target.getAttribute('data-component') || 'storefront_ui',
-          elementId: target.id || null,
-          elementTag: target.tagName,
-          elementText: target.innerText?.slice(0, 50) || null,
-          clickX: e.clientX,
-          clickY: e.clientY,
-          viewportScrollDepthPct: Math.min(100, Math.max(0, scrollDepth)),
-          actionName
-        })
-      }).catch(() => {});
-    });
-
-    // 3. Load Catalog & Render Products
-    const productImages = {
-      'alo-airlift-legging': 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80',
-      'alo-airbrush-real-bra': 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80',
-      'alo-alosoft-lounge-set': 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80',
-      'alo-warrior-mat': 'https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?auto=format&fit=crop&w=800&q=80'
-    };
-
-    async function loadCatalog() {
+    // 2. Fetch Catalog Products from Supabase
+    async function loadProducts() {
       try {
-        const prodRes = await (await fetch('/api/catalog/products')).json();
-        const varRes = await (await fetch('/api/catalog/products/variants')).json();
+        const res = await (await fetch('/api/catalog/products')).json();
         const grid = document.getElementById('product-grid');
+        if (!res.products || res.products.length === 0) return;
 
-        if (!prodRes.products || prodRes.products.length === 0) {
-          grid.innerHTML = '<p>No products available.</p>';
-          return;
-        }
-
-        grid.innerHTML = prodRes.products.map(p => {
-          const variants = (varRes.variants || []).filter(v => v.product_id === p.product_id);
-          const firstVariant = variants[0] || { variant_id: 'default', color_name: 'Espresso', size: 'S' };
-          const imgUrl = productImages[p.product_id] || 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80';
-
-          return `
-            <div class="product-card" data-component="product_card">
-              <div class="card-img-wrap">
-                <span class="card-badge">${p.fabric_technology || 'Performance'}</span>
-                <img class="card-img" src="${imgUrl}" alt="${p.title}" />
-              </div>
-              <div class="card-details">
-                <div class="product-fabric">${p.fabric_technology || 'Signature Fabric'}</div>
-                <h3 class="product-title">${p.title}</h3>
-                <div class="swatches-row">
-                  ${variants.slice(0, 4).map((v, i) => `
-                    <div class="swatch-pill ${i === 0 ? 'active' : ''}" 
-                         style="background-color: ${v.color_hex || '#362B28'};" 
-                         title="${v.color_name}"
-                         data-track="swatch_${v.color_name.toLowerCase()}"></div>
-                  `).join('')}
-                </div>
-                <div class="card-footer">
-                  <div class="price">₹${Number(p.base_price).toLocaleString('en-IN')}</div>
-                  <button class="btn-atc" 
-                          data-track="add_to_bag_btn"
-                          onclick="addToCart('${p.product_id}', '${firstVariant.variant_id}', '${p.title.replace(/'/g, "\\'")}', '${firstVariant.color_name}', '${firstVariant.size}', ${p.base_price})">
-                    Add to Bag
-                  </button>
-                </div>
-              </div>
+        grid.innerHTML = res.products.map(p => `
+          <div class="product-card">
+            <div class="card-img-wrap">
+              <span class="card-discount-badge">${p.discount_label || 'Save 30%'}</span>
+              <img class="card-img" src="${p.image_url || 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80'}" alt="${p.title}" />
             </div>
-          `;
-        }).join('');
+            <div class="card-details">
+              <h3 class="prod-title">${p.title}</h3>
+              <div class="prod-color">${p.color_family || 'Studio Neutral'}</div>
+              <div class="price-row">
+                <span class="sale-price">₹${Number(p.sale_price).toLocaleString('en-IN')}</span>
+                <span class="mrp-price">₹${Number(p.mrp).toLocaleString('en-IN')}</span>
+              </div>
+              <button class="btn-atc" onclick="addToCart('${p.product_id}', '${p.title.replace(/'/g, "\\'")}', ${p.sale_price})">Add to Bag</button>
+            </div>
+          </div>
+        `).join('');
       } catch (e) {
-        console.error('Failed to load catalog:', e);
+        console.error('Product load error:', e);
       }
+    }
+
+    // 3. Navigation View Switching
+    function openPlaceholder(title, desc) {
+      document.getElementById('catalog-section').style.display = 'none';
+      const cv = document.getElementById('content-view');
+      cv.classList.add('active');
+      document.getElementById('content-title').innerText = title;
+      document.getElementById('content-body').innerHTML = `
+        <p>${desc}</p>
+        <p style="margin-top: 16px; color: var(--text-muted); font-size: 13px;">Currently viewing empty section. Connect via <strong>/admin.html</strong> bulk upload to populate this collection.</p>
+      `;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showCatalogView() {
+      document.getElementById('content-view').classList.remove('active');
+      document.getElementById('catalog-section').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openCustomerAccount() {
+      showAloMessage('Hi Sameera!', 'Welcome to YOGA Access VIP Lounge.\n\nYou have 1 Reward Point available for redemption.\nAccount Email: sameeramaq@gmail.com\nMembership Tier: VIP All-Access');
     }
 
     // 4. Cart Operations
-    async function getOrCreateCart() {
-      if (currentCartId) return currentCartId;
-      const res = await (await fetch('/api/checkout/cart/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionId, visitorId })
-      })).json();
-      currentCartId = res.cart.cart_id;
-      localStorage.setItem('alo_cart_id', currentCartId);
-      return currentCartId;
-    }
+    async function addToCart(productId, title, price) {
+      if (!currentCartId) {
+        const cRes = await (await fetch('/api/checkout/cart/create', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) })).json();
+        currentCartId = cRes.cart.cart_id;
+        localStorage.setItem('yoga_cart_id', currentCartId);
+      }
 
-    async function addToCart(productId, variantId, title, colorName, size, unitPrice) {
-      const cartId = await getOrCreateCart();
       await fetch('/api/checkout/cart/items', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ cartId, productId, variantId, title, colorName, size, unitPrice, quantity: 1 })
+        body: JSON.stringify({
+          cartId: currentCartId,
+          productId,
+          variantId: productId + '-s',
+          title,
+          colorName: 'Studio Color',
+          size: 'S',
+          unitPrice: price,
+          quantity: 1
+        })
       });
-      await refreshCartDrawer();
-      openCartDrawer();
+
+      refreshCart();
+      document.getElementById('cart-drawer').classList.add('open');
+      document.getElementById('cart-overlay').classList.add('open');
     }
 
-    async function refreshCartDrawer() {
+    async function refreshCart() {
       if (!currentCartId) return;
       const res = await (await fetch(`/api/checkout/cart/${currentCartId}`)).json();
       const cart = res.cart;
       if (!cart) return;
 
-      document.getElementById('cart-item-count').innerText = (cart.items || []).reduce((acc, i) => acc + i.quantity, 0);
+      document.getElementById('cart-item-count').innerText = (cart.items || []).reduce((a, b) => a + b.quantity, 0);
       document.getElementById('cart-subtotal').innerText = '₹' + Number(cart.subtotal).toLocaleString('en-IN');
-      document.getElementById('cart-discount').innerText = '-₹' + Number(cart.discount_total || 0).toLocaleString('en-IN');
-      document.getElementById('cart-shipping').innerText = Number(cart.shipping_fee) === 0 ? 'FREE' : ('₹' + Number(cart.shipping_fee));
       document.getElementById('cart-grandtotal').innerText = '₹' + Number(cart.grand_total).toLocaleString('en-IN');
-      document.getElementById('checkout-final-amount').innerText = '₹' + Number(cart.grand_total).toLocaleString('en-IN');
-
-      // Free shipping progress meter
-      const pct = Math.min(100, Math.round((Number(cart.subtotal) / 5000) * 100));
-      document.getElementById('meter-fill').style.width = pct + '%';
-      document.getElementById('meter-text').innerText = cart.freeShippingAchieved 
-        ? '🎉 You unlocked Complimentary Express Shipping!' 
-        : `Add ₹${Math.round(cart.remainingForFreeShipping).toLocaleString('en-IN')} more for Free Express Shipping`;
 
       const list = document.getElementById('cart-items-list');
       if (!cart.items || cart.items.length === 0) {
         list.innerHTML = '<p style="color: var(--text-muted); text-align: center; margin-top: 40px;">Your bag is empty.</p>';
       } else {
-        list.innerHTML = cart.items.map(item => `
+        list.innerHTML = cart.items.map(i => `
           <div class="cart-item">
-            <img class="cart-item-img" src="${productImages[item.product_id] || ''}" alt="${item.title}" />
             <div style="flex:1;">
-              <div style="font-weight: 600; font-size: 13px;">${item.title}</div>
-              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Color: ${item.color_name} | Size: ${item.size}</div>
-              <div style="display: flex; justify-content: space-between; margin-top: 8px;">
-                <span style="font-size: 12px; font-weight: 700;">₹${Number(item.unit_price).toLocaleString('en-IN')}</span>
-                <span style="font-size: 11px; color: var(--text-muted);">Qty: ${item.quantity}</span>
-              </div>
+              <div style="font-weight: 600; font-size: 13px;">${i.title}</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Size: ${i.size} | Qty: ${i.quantity}</div>
+              <div style="font-size: 12px; font-weight: 700; margin-top: 6px;">₹${Number(i.unit_price).toLocaleString('en-IN')}</div>
             </div>
           </div>
         `).join('');
       }
     }
 
-    // 5. Drawer Toggles
-    function openCartDrawer() {
-      document.getElementById('cart-drawer').classList.add('open');
-      document.getElementById('cart-overlay').classList.add('open');
-    }
-    function closeCartDrawer() {
-      document.getElementById('cart-drawer').classList.remove('open');
-      document.getElementById('cart-overlay').classList.remove('open');
-    }
+    document.getElementById('open-cart-btn').addEventListener('click', () => { refreshCart(); document.getElementById('cart-drawer').classList.add('open'); document.getElementById('cart-overlay').classList.add('open'); });
+    document.getElementById('close-cart-btn').addEventListener('click', () => { document.getElementById('cart-drawer').classList.remove('open'); document.getElementById('cart-overlay').classList.remove('open'); });
+    document.getElementById('cart-overlay').addEventListener('click', () => { document.getElementById('cart-drawer').classList.remove('open'); document.getElementById('cart-overlay').classList.remove('open'); });
 
-    document.getElementById('open-cart-btn').addEventListener('click', () => { refreshCartDrawer(); openCartDrawer(); });
-    document.getElementById('close-cart-btn').addEventListener('click', closeCartDrawer);
-    document.getElementById('cart-overlay').addEventListener('click', closeCartDrawer);
+    // Checkout
+    document.getElementById('checkout-btn').addEventListener('click', async () => {
+      if (!currentCartId) return;
+      const res = await (await fetch('/api/checkout/payments/place-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          cartId: currentCartId,
+          customerEmail: 'sameeramaq@gmail.com',
+          customerName: 'Sameera Maqsood',
+          paymentMethod: 'upi'
+        })
+      })).json();
 
-    // 6. Custom Luxury Modal Notification Helper (Zero Native Alert)
-    function showAloMessage(title, message, isSuccess = true) {
+      if (res.success) {
+        document.getElementById('cart-drawer').classList.remove('open');
+        document.getElementById('cart-overlay').classList.remove('open');
+        showAloMessage('Order Confirmed', `Order placed successfully via UPI!\n\nOrder ID: ${res.orderId}\nTotal Paid: ₹${Number(res.amountPaid).toLocaleString('en-IN')}\n\nGST invoice sent to sameeramaq@gmail.com.`);
+        localStorage.removeItem('yoga_cart_id');
+        currentCartId = null;
+        refreshCart();
+      }
+    });
+
+    // Themed Modal Helper
+    function showAloMessage(title, body) {
       document.getElementById('alo-modal-title').innerText = title;
-      document.getElementById('alo-modal-body').innerText = message;
-      document.getElementById('alo-modal-icon').innerText = isSuccess ? '✓' : '✕';
-      document.getElementById('alo-modal-icon').style.color = isSuccess ? 'var(--brand-terracotta)' : '#DC2626';
+      document.getElementById('alo-modal-body').innerText = body;
       document.getElementById('alo-modal-overlay').classList.add('active');
     }
     document.getElementById('alo-modal-btn').addEventListener('click', () => {
       document.getElementById('alo-modal-overlay').classList.remove('active');
     });
 
-    // Apply coupon
-    document.getElementById('apply-coupon-btn').addEventListener('click', async () => {
-      const code = document.getElementById('coupon-code-input').value.trim();
-      if (!code || !currentCartId) return;
-      const res = await (await fetch('/api/checkout/cart/coupons/apply', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ cartId: currentCartId, couponCode: code })
-      })).json();
-      if (res.success) {
-        showAloMessage('Coupon Applied', `Promo code ${code} applied successfully!\nYou saved ₹${Number(res.discountApplied).toLocaleString('en-IN')}`);
-        refreshCartDrawer();
-      } else {
-        showAloMessage('Coupon Error', res.error || 'Failed to apply coupon', false);
-      }
-    });
-
-    // 7. Multi-Step Checkout Workflow Engine
-    const checkoutModal = document.getElementById('checkout-modal-overlay');
-    function openCheckoutWorkflow() {
-      closeCartDrawer();
-      checkoutModal.classList.add('open');
-      goToStep(1);
-    }
-    function closeCheckoutWorkflow() {
-      checkoutModal.classList.remove('open');
-    }
-
-    document.getElementById('checkout-btn').addEventListener('click', openCheckoutWorkflow);
-    document.getElementById('close-checkout-modal-btn').addEventListener('click', closeCheckoutWorkflow);
-
-    function goToStep(step) {
-      document.getElementById('checkout-step-1').style.display = step === 1 ? 'block' : 'none';
-      document.getElementById('checkout-step-2').style.display = step === 2 ? 'block' : 'none';
-      document.getElementById('checkout-step-3').style.display = step === 3 ? 'block' : 'none';
-
-      document.getElementById('indicator-step-1').className = 'step-item ' + (step >= 1 ? 'active' : '');
-      document.getElementById('indicator-step-2').className = 'step-item ' + (step >= 2 ? 'active' : '');
-      document.getElementById('indicator-step-3').className = 'step-item ' + (step >= 3 ? 'active' : '');
-    }
-
-    document.getElementById('btn-to-step-2').addEventListener('click', () => goToStep(2));
-    document.getElementById('btn-back-to-1').addEventListener('click', () => goToStep(1));
-    document.getElementById('btn-to-step-3').addEventListener('click', () => goToStep(3));
-    document.getElementById('btn-back-to-2').addEventListener('click', () => goToStep(2));
-
-    function selectPaymentMethod(method, element) {
-      selectedPayment = method;
-      document.querySelectorAll('.payment-option-label').forEach(el => el.classList.remove('selected'));
-      element.classList.add('selected');
-    }
-
-    // Final Place Order CTA
-    document.getElementById('btn-final-place-order').addEventListener('click', async () => {
-      if (!currentCartId) return;
-      const custName = document.getElementById('cust-name').value;
-      const custEmail = document.getElementById('cust-email').value;
-      const custPhone = document.getElementById('cust-phone').value;
-      const custCity = document.getElementById('cust-city').value;
-      const custPin = document.getElementById('cust-pin').value;
-
-      const res = await (await fetch('/api/checkout/payments/place-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          cartId: currentCartId,
-          customerEmail: custEmail,
-          customerName: custName,
-          customerPhone: custPhone,
-          paymentMethod: selectedPayment,
-          shippingAddress: { country: 'India', city: custCity, pincode: custPin }
-        })
-      })).json();
-
-      if (res.success) {
-        closeCheckoutWorkflow();
-        showAloMessage(
-          'Order Confirmed',
-          `Order placed successfully via ${selectedPayment.toUpperCase()}!\n\nOrder ID: ${res.orderId}\nTotal Amount Paid: ₹${Number(res.amountPaid).toLocaleString('en-IN')}\n\nA confirmation with Indian GST invoice & tracking details has been sent to ${custEmail}.`
-        );
-        localStorage.removeItem('alo_cart_id');
-        currentCartId = null;
-        refreshCartDrawer();
-      }
-    });
-
     // Bootstrap
-    initTelemetrySession();
-    loadCatalog();
+    loadMegaMenu();
+    loadProducts();
   </script>
 </body>
 </html>

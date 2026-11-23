@@ -1,0 +1,9 @@
+{
+    "id": "bulk",
+    "name": "Bulk Catalog & Asset Ingestion",
+    "description": "Child slice for bulk category and product ingestion from admin CSV/JSON feeds.",
+    "version": "1.0.0",
+    "enabled": true,
+    "basePath": "/bulk",
+    "routes": "./routes.js"
+}

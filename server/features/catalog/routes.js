@@ -2,6 +2,24 @@ const express = require('express');
 const router = express.Router();
 const db = require('../../db');
 
+// GET /api/catalog/menu
+router.get('/menu', async (req, res) => {
+    try {
+        const sectionsRes = await db.query('SELECT * FROM menu_sections WHERE is_active = true ORDER BY display_order ASC');
+        const categoriesRes = await db.query('SELECT * FROM categories WHERE is_active = true ORDER BY display_order ASC');
+
+        const menu = sectionsRes.rows.map(sec => ({
+            sectionId: sec.section_id,
+            title: sec.title,
+            categories: categoriesRes.rows.filter(c => c.section_id === sec.section_id)
+        }));
+
+        res.json({ success: true, slice: 'catalog', menu });
+    } catch (err) {
+        res.status(500).json({ error: err.message, slice: 'catalog' });
+    }
+});
+
 // GET /api/catalog/categories
 router.get('/categories', async (req, res) => {
     try {
