@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>YOGA | Luxury Athleisure & Studio Performance</title>
+  <title>YOGA | Luxury Athleisure & Studio Performance (India)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -43,7 +43,7 @@
       text-transform: uppercase;
       font-weight: 600;
     }
-    .top-bar a { color: var(--brand-champagne); text-decoration: none; margin-left: 8px; font-weight: 700; }
+    .top-bar a { color: var(--brand-champagne); text-decoration: none; margin-left: 8px; font-weight: 700; cursor: pointer; }
 
     /* HEADER & MEGA NAVIGATION */
     header {
@@ -69,6 +69,7 @@
       letter-spacing: 0.22em;
       text-decoration: none;
       color: var(--brand-espresso);
+      cursor: pointer;
     }
     .nav-links {
       display: flex;
@@ -83,12 +84,13 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       transition: color 0.2s;
+      cursor: pointer;
     }
     .nav-links a:hover, .nav-links a.active { color: var(--brand-terracotta); }
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 24px;
+      gap: 20px;
       font-size: 13px;
     }
     .user-pill {
@@ -99,7 +101,12 @@
       font-weight: 600;
       font-size: 12px;
       letter-spacing: 0.05em;
+      padding: 6px 12px;
+      border-radius: 20px;
+      background: var(--bg-surface);
+      transition: background 0.2s;
     }
+    .user-pill:hover { background: #E5E0D8; }
     .user-pill span.points {
       color: var(--brand-terracotta);
       font-size: 11px;
@@ -129,7 +136,7 @@
       border-radius: 10px;
     }
 
-    /* MEGA MENU DROPDOWN (Matches User's Screenshot Exactly) */
+    /* MEGA MENU DROPDOWN */
     .mega-menu-drawer {
       background: #FFF;
       border-bottom: 1px solid var(--border-subtle);
@@ -162,16 +169,42 @@
       font-size: 13px;
       transition: color 0.2s, transform 0.2s;
       display: inline-block;
+      cursor: pointer;
     }
     .mega-col-list a:hover {
       color: var(--brand-terracotta);
       transform: translateX(3px);
     }
 
+    /* QUICK PILLS (Trending Now) */
+    .trending-pills-bar {
+      max-width: 1400px;
+      margin: 24px auto 0;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .trending-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--brand-terracotta); margin-right: 8px; }
+    .pill-link {
+      background: #FFF;
+      border: 1px solid var(--border-subtle);
+      padding: 6px 14px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-main);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .pill-link:hover { background: var(--brand-espresso); color: #FFF; border-color: var(--brand-espresso); }
+
     /* CATALOG SECTION */
     .catalog-section {
       max-width: 1400px;
-      margin: 50px auto;
+      margin: 40px auto 60px;
       padding: 0 32px;
     }
     .section-header {
@@ -254,7 +287,78 @@
     }
     .btn-atc:hover { background: var(--brand-terracotta); }
 
-    /* PLACEHOLDER CONTENT VIEW (For any clicked link) */
+    /* AS SEEN ON YOU LOOKBOOK SECTION */
+    .lookbook-section {
+      background: var(--bg-surface);
+      padding: 60px 32px;
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+      margin-top: 40px;
+    }
+    .lookbook-container { max-width: 1400px; margin: 0 auto; }
+    .lookbook-title { font-family: var(--font-heading); font-size: 24px; text-align: center; margin-bottom: 8px; }
+    .lookbook-subtitle { font-size: 13px; color: var(--text-muted); text-align: center; margin-bottom: 32px; }
+    .social-handles-scroll {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 14px;
+    }
+    .social-pill {
+      background: #FFF;
+      border: 1px solid var(--border-subtle);
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .social-pill:hover { background: var(--brand-espresso); color: #FFF; }
+
+    /* FOOTER */
+    footer {
+      background: var(--bg-card);
+      border-top: 1px solid var(--border-subtle);
+      padding: 60px 32px 40px;
+    }
+    .footer-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+    }
+    .footer-col h4 {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 18px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col a {
+      color: var(--text-muted);
+      font-size: 13px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--brand-terracotta); }
+    .footer-bottom {
+      max-width: 1400px;
+      margin: 40px auto 0;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* PLACEHOLDER / CMS DYNAMIC VIEW */
     .content-view {
       max-width: 900px;
       margin: 60px auto;
@@ -332,7 +436,7 @@
     }
     .btn-checkout:hover { background: var(--brand-terracotta); }
 
-    /* CUSTOM LUXURY NOTIFICATION MODAL */
+    /* CUSTOM LUXURY THEMED MODAL */
     .alo-modal-overlay {
       position: fixed;
       inset: 0;
@@ -361,27 +465,28 @@
     .alo-modal-title { font-family: var(--font-heading); font-size: 20px; color: var(--brand-espresso); margin-bottom: 8px; }
     .alo-modal-body { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 24px; white-space: pre-line; }
     .alo-modal-btn { background: var(--brand-espresso); color: #FFF; border: none; padding: 13px 32px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; }
+    .alo-modal-btn:hover { background: var(--brand-terracotta); }
   </style>
 </head>
 <body>
 
   <!-- Top Announcement Bar -->
   <div class="top-bar">
-    30% OFF SITEWIDE ✨ <a href="#bestsellers" onclick="showCatalogView()">SHOP NOW</a>
+    30% OFF SITEWIDE ✨ <a onclick="showCatalogView()">SHOP NOW</a>
   </div>
 
   <!-- Header -->
   <header>
     <div class="nav-container">
-      <a href="#" class="brand-logo" onclick="showCatalogView()">YOGA</a>
+      <a class="brand-logo" onclick="showCatalogView()">YOGA</a>
       <ul class="nav-links">
-        <li><a href="#women" class="active" onclick="showCatalogView()">WOMEN</a></li>
-        <li><a href="#men" onclick="openPlaceholder('MEN Collection', 'Explore studio essentials and high-performance outerwear for Men.')">MEN</a></li>
-        <li><a href="#shoes" onclick="openPlaceholder('SHOES Collection', 'Recovery slides, sunset sneakers, and cushioned mules.')">SHOES</a></li>
-        <li><a href="#giftguide" onclick="openPlaceholder('GIFT GUIDE', 'Curated holiday gifts, wellness bundles, and sets.')">GIFT GUIDE <span style="color: var(--brand-terracotta); font-size: 10px;">NEW</span></a></li>
+        <li><a class="active" onclick="showCatalogView()">WOMEN</a></li>
+        <li><a onclick="openPlaceholder('MEN Collection', 'Explore studio essentials and high-performance outerwear for Men.')">MEN</a></li>
+        <li><a onclick="openPlaceholder('SHOES Collection', 'Recovery slides, sunset sneakers, and cushioned mules.')">SHOES</a></li>
+        <li><a onclick="openPlaceholder('GIFT GUIDE', 'Curated holiday gifts, wellness bundles, and sets.')">GIFT GUIDE <span style="color: var(--brand-terracotta); font-size: 10px;">NEW</span></a></li>
       </ul>
       <div class="nav-actions">
-        <!-- Customer Account Hi Sameera! -->
+        <!-- User State (Hi Sameera! | 1 PT) -->
         <div class="user-pill" id="user-account-btn" onclick="openCustomerAccount()">
           <span>👤 HI SAMEERA!</span>
           <span class="points">VIP | 1 PT</span>
@@ -394,24 +499,33 @@
     </div>
   </header>
 
-  <!-- Complete Mega Menu Drawer (Direct from Screenshot) -->
+  <!-- Complete Mega Menu Drawer (Directly Matching Screenshot) -->
   <div class="mega-menu-drawer" id="mega-menu">
     <div class="mega-menu-grid" id="mega-menu-grid">
-      <!-- Dynamically populated from Supabase categories -->
-      <p style="color: var(--text-muted);">Loading category hierarchy...</p>
+      <p style="color: var(--text-muted);">Loading category hierarchy from Supabase...</p>
     </div>
   </div>
 
-  <!-- Dynamic Content View for Clicked Sections -->
+  <!-- Trending Now Filter Pills -->
+  <div class="trending-pills-bar">
+    <span class="trending-label">Trending Now:</span>
+    <a class="pill-link" onclick="openPlaceholder('New Arrivals', 'Explore our freshest drops and seasonal color releases.')">New Arrivals</a>
+    <a class="pill-link" onclick="openPlaceholder('Sweatshirts & Hoodies', 'Ultra-soft fleece, French Terry, and crewnecks.')">Sweatshirts</a>
+    <a class="pill-link" onclick="openPlaceholder('Outerwear Edit', 'Puffers, Sherpa jackets, and studio trenches.')">Outerwear</a>
+    <a class="pill-link" onclick="openPlaceholder('Pants & Trousers', 'Suit Up trousers, Dreamscape tailoring, and joggers.')">Pants</a>
+    <a class="pill-link" onclick="openPlaceholder('Last Few Pieces', 'Final sizes in limited-edition color palettes.')">Last Few Pieces</a>
+  </div>
+
+  <!-- Dynamic Content View for Any Clicked Link -->
   <div class="content-view" id="content-view">
     <h1 class="content-title" id="content-title">Section View</h1>
     <div class="content-body" id="content-body">
-      This page is dynamically linked. Content will populate as products are added.
+      This page is dynamically linked to Supabase.
     </div>
     <button class="btn-checkout" style="max-width: 200px; margin-top: 24px;" onclick="showCatalogView()">Back to Store</button>
   </div>
 
-  <!-- Main Catalog View -->
+  <!-- Main Catalog View (All 40+ Products) -->
   <section class="catalog-section" id="catalog-section">
     <div class="section-header">
       <div>
@@ -420,9 +534,78 @@
       </div>
     </div>
     <div class="product-grid" id="product-grid">
-      <p style="color: var(--text-muted);">Loading luxury catalog...</p>
+      <p style="color: var(--text-muted);">Loading catalog...</p>
     </div>
   </section>
+
+  <!-- AS SEEN ON YOU Lookbook (All User Handles) -->
+  <section class="lookbook-section">
+    <div class="lookbook-container">
+      <h3 class="lookbook-title">AS SEEN ON YOU</h3>
+      <p class="lookbook-subtitle">Shop our best looks, styled by you across Instagram and TikTok.</p>
+      <div class="social-handles-scroll" id="lookbook-handles">
+        <!-- Rendered from database -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Comprehensive Footer (All Clickable Links) -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-col">
+        <h4>Customer Service</h4>
+        <ul>
+          <li><a onclick="openCms('help-center')">Help Center</a></li>
+          <li><a onclick="openAuthGated('track-my-order')">Track My Order</a></li>
+          <li><a onclick="openCms('orders-and-shipping-support')">Shipping Support</a></li>
+          <li><a onclick="openCms('returns-support')">Returns & Exchanges</a></li>
+          <li><a onclick="openCms('gift-cards')">Gift Cards</a></li>
+          <li><a onclick="openCms('gift-card-balance')">Check Gift Card Balance</a></li>
+          <li><a onclick="openCms('size-chart')">Size Guide</a></li>
+          <li><a onclick="openCms('reviews')">Customer Reviews</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>My Account</h4>
+        <ul>
+          <li><a onclick="openCustomerAccount()">Login or Register</a></li>
+          <li><a onclick="openAuthGated('order-history')">Order History</a></li>
+          <li><a onclick="openAuthGated('addresses')">Shipping & Billing Addresses</a></li>
+          <li><a onclick="openCms('access')">YOGA Access VIP Rewards</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Information</h4>
+        <ul>
+          <li><a onclick="openCms('we-are-yoga')">We Are YOGA</a></li>
+          <li><a onclick="openCms('blogs/yoga-blog')">Wellness Blog</a></li>
+          <li><a onclick="openCms('studios')">Yoga Studios & Sanctuaries</a></li>
+          <li><a onclick="openCms('stores')">Flagship Stores</a></li>
+          <li><a onclick="openCms('events')">Community Events</a></li>
+          <li><a onclick="openCms('proprogram')">Pro Teacher Program</a></li>
+          <li><a onclick="openCms('careers')">Careers at YOGA</a></li>
+          <li><a onclick="openCms('wellness-club')">YOGA Wellness Club</a></li>
+          <li><a onclick="openCms('yoga-gives')">YOGA Gives Foundation</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Language & Region</h4>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">🇮🇳 India (INR ₹) | All Duties & Taxes Included</p>
+        <p style="font-size: 12px; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px;">
+          Delivery Duty Paid (DDP) automatically calculated for Indian addresses.
+        </p>
+        <a href="/admin.html" target="_blank" style="color: var(--brand-terracotta); font-weight: 700; font-size: 12px; text-decoration: none;">↗ Open YOGA Admin Ingestion Portal</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 YOGA, LLC. All Rights Reserved.</div>
+      <div style="display: flex; gap: 20px;">
+        <a onclick="openCms('terms-of-use')">Terms of Use</a>
+        <a onclick="openCms('privacy-policy')">Privacy Policy</a>
+        <a onclick="openCms('cookie-policy')">Cookie Preferences</a>
+      </div>
+    </div>
+  </footer>
 
   <!-- Mini-Cart Drawer -->
   <div class="cart-drawer-overlay" id="cart-overlay"></div>
@@ -447,7 +630,7 @@
     </div>
   </aside>
 
-  <!-- Custom Themed Modal Dialog -->
+  <!-- Themed Modal Dialog -->
   <div class="alo-modal-overlay" id="alo-modal-overlay">
     <div class="alo-modal-card">
       <div class="alo-modal-icon" id="alo-modal-icon">✓</div>
@@ -459,6 +642,7 @@
 
   <script>
     let currentCartId = localStorage.getItem('yoga_cart_id') || null;
+    let isLoggedIn = true; // Sameera Maqsood account active
 
     // 1. Fetch Dynamic Mega Menu from Supabase
     async function loadMegaMenu() {
@@ -472,7 +656,7 @@
             <div class="mega-col-title">${sec.title}</div>
             <ul class="mega-col-list">
               ${sec.categories.map(c => `
-                <li><a href="#${c.handle}" onclick="openPlaceholder('${c.name}', 'Explore our curated ${c.name} collection in double-knit performance and studio fabrics.')">${c.name}</a></li>
+                <li><a onclick="openPlaceholder('${c.name}', 'Explore our curated ${c.name} collection engineered for performance and studio aesthetics.')">${c.name}</a></li>
               `).join('')}
             </ul>
           </div>
@@ -493,7 +677,7 @@
           <div class="product-card">
             <div class="card-img-wrap">
               <span class="card-discount-badge">${p.discount_label || 'Save 30%'}</span>
-              <img class="card-img" src="${p.image_url || 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80'}" alt="${p.title}" />
+              <img class="card-img" src="${p.image_url}" alt="${p.title}" />
             </div>
             <div class="card-details">
               <h3 class="prod-title">${p.title}</h3>
@@ -511,7 +695,24 @@
       }
     }
 
-    // 3. Navigation View Switching
+    // 3. Fetch Social Lookbook Handles
+    async function loadLookbook() {
+      try {
+        const res = await (await fetch('/api/catalog/lookbook')).json();
+        const wrap = document.getElementById('lookbook-handles');
+        if (!res.lookbook || res.lookbook.length === 0) return;
+
+        wrap.innerHTML = res.lookbook.map(post => `
+          <div class="social-pill" onclick="openPlaceholder('${post.handle} Lookbook', 'Styled exclusively in YOGA by ${post.handle}.')">
+            ${post.handle}
+          </div>
+        `).join('');
+      } catch (e) {
+        console.error('Lookbook load error:', e);
+      }
+    }
+
+    // 4. View Switching & Auth Gating
     function openPlaceholder(title, desc) {
       document.getElementById('catalog-section').style.display = 'none';
       const cv = document.getElementById('content-view');
@@ -519,9 +720,70 @@
       document.getElementById('content-title').innerText = title;
       document.getElementById('content-body').innerHTML = `
         <p>${desc}</p>
-        <p style="margin-top: 16px; color: var(--text-muted); font-size: 13px;">Currently viewing empty section. Connect via <strong>/admin.html</strong> bulk upload to populate this collection.</p>
+        <p style="margin-top: 18px; color: var(--text-muted); font-size: 13px;">
+          This category is live and indexed in Supabase. You can populate products or modify this view from the <a href="/admin.html" target="_blank" style="color: var(--brand-terracotta);">Admin Portal</a>.
+        </p>
       `;
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function openCms(slug) {
+      try {
+        const res = await (await fetch(`/api/catalog/cms/${slug}`)).json();
+        if (res.page) {
+          openPlaceholder(res.page.title, res.page.content_html);
+        } else {
+          openPlaceholder('Information', 'Page content is currently synchronizing with Supabase.');
+        }
+      } catch (e) {
+        openPlaceholder('Information', 'Page content is currently synchronizing with Supabase.');
+      }
+    }
+
+    function openAuthGated(destination) {
+      if (!isLoggedIn) {
+        showAloMessage('Sign In Required', 'Please sign in to access your order history and saved addresses.\n\nLogin with sameeramaq@gmail.com to proceed.');
+        return;
+      }
+      if (destination === 'track-my-order' || destination === 'order-history') {
+        openOrderHistory();
+      } else {
+        openPlaceholder('Saved Addresses', 'Active shipping address on file:\nSameera Maqsood\n402, Pali Hill Residency, Bandra West, Mumbai 400050, India');
+      }
+    }
+
+    async function openCustomerAccount() {
+      if (!isLoggedIn) {
+        showAloMessage('Account Login', 'Sign in to access YOGA Access Rewards & Orders.');
+        return;
+      }
+      try {
+        const res = await (await fetch('/api/account/customer?email=sameeramaq@gmail.com')).json();
+        const c = res.customer;
+        showAloMessage(
+          `Hi ${c.first_name}!`,
+          `Welcome to your YOGA Access VIP Lounge.\n\n• Email: ${c.email}\n• Tier: ${c.vip_status} Member\n• Available Points: ${c.reward_points} PT\n• Registered Phone: ${c.phone}\n\nComplimentary Express Shipping is activated on your account.`
+        );
+      } catch (e) {
+        showAloMessage('Hi Sameera!', 'Welcome to YOGA Access VIP. 1 Reward Point available.');
+      }
+    }
+
+    async function openOrderHistory() {
+      try {
+        const res = await (await fetch('/api/account/orders?email=sameeramaq@gmail.com')).json();
+        if (!res.orders || res.orders.length === 0) {
+          showAloMessage('Order History', 'You have no past orders. Place an order today to earn 10 reward points!');
+          return;
+        }
+        const o = res.orders[0];
+        showAloMessage(
+          'Latest Order Status',
+          `Order ID: #${o.order_id}\nStatus: ${o.status.toUpperCase()}\nTotal Paid: ₹${Number(o.grand_total).toLocaleString('en-IN')}\nPayment: ${o.payment_method.toUpperCase()}\n\nDispatched via Express Courier to Mumbai.`
+        );
+      } catch (e) {
+        showAloMessage('Order History', 'Failed to retrieve orders.');
+      }
     }
 
     function showCatalogView() {
@@ -530,11 +792,7 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function openCustomerAccount() {
-      showAloMessage('Hi Sameera!', 'Welcome to YOGA Access VIP Lounge.\n\nYou have 1 Reward Point available for redemption.\nAccount Email: sameeramaq@gmail.com\nMembership Tier: VIP All-Access');
-    }
-
-    // 4. Cart Operations
+    // 5. Cart & Checkout Operations
     async function addToCart(productId, title, price) {
       if (!currentCartId) {
         const cRes = await (await fetch('/api/checkout/cart/create', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) })).json();
@@ -550,7 +808,7 @@
           productId,
           variantId: productId + '-s',
           title,
-          colorName: 'Studio Color',
+          colorName: 'Studio Neutral',
           size: 'S',
           unitPrice: price,
           quantity: 1
@@ -609,7 +867,7 @@
       if (res.success) {
         document.getElementById('cart-drawer').classList.remove('open');
         document.getElementById('cart-overlay').classList.remove('open');
-        showAloMessage('Order Confirmed', `Order placed successfully via UPI!\n\nOrder ID: ${res.orderId}\nTotal Paid: ₹${Number(res.amountPaid).toLocaleString('en-IN')}\n\nGST invoice sent to sameeramaq@gmail.com.`);
+        showAloMessage('Order Confirmed', `Order placed successfully via UPI!\n\nOrder ID: #${res.orderId}\nTotal Paid: ₹${Number(res.amountPaid).toLocaleString('en-IN')}\n\nGST invoice and tracking details dispatched to sameeramaq@gmail.com.`);
         localStorage.removeItem('yoga_cart_id');
         currentCartId = null;
         refreshCart();
@@ -629,6 +887,7 @@
     // Bootstrap
     loadMegaMenu();
     loadProducts();
+    loadLookbook();
   </script>
 </body>
 </html>

@@ -1,0 +1,9 @@
+{
+    "id": "cms",
+    "name": "CMS & Content Pages",
+    "description": "Child slice delivering dynamic customer service, policy, and information views.",
+    "version": "1.0.0",
+    "enabled": true,
+    "basePath": "/cms",
+    "routes": "./routes.js"
+}

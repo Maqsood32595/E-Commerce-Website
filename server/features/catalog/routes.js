@@ -2,6 +2,16 @@ const express = require('express');
 const router = express.Router();
 const db = require('../../db');
 
+// GET /api/catalog/lookbook
+router.get('/lookbook', async (req, res) => {
+    try {
+        const result = await db.query('SELECT * FROM social_lookbook ORDER BY display_order ASC');
+        res.json({ success: true, slice: 'catalog', lookbook: result.rows });
+    } catch (err) {
+        res.status(500).json({ error: err.message, slice: 'catalog' });
+    }
+});
+
 // GET /api/catalog/menu
 router.get('/menu', async (req, res) => {
     try {

@@ -1,0 +1,9 @@
+{
+    "id": "account",
+    "name": "Customer Account & Loyalty",
+    "description": "Parent slice managing user profiles, VIP tiers, points balance, and order history.",
+    "version": "1.0.0",
+    "enabled": true,
+    "basePath": "/api/account",
+    "routes": "./routes.js"
+}

@@ -63,3 +63,16 @@
 - [x] **Step 6.1:** Run full multi-gate PIET test suite verifying 100% pass across all slices.
 - [x] **Step 6.2:** Verify complete zero-ghost-record database invariant in Supabase.
 - [x] **Step 6.3:** Commit and push verified codebase to `dev` branch.
+
+---
+
+### Phase 7: REA-Driven Reverse Engineering & Multi-Vector Workflow Coverage
+- [x] **Step 7.1:** Integrate REA (`morluto/rea`) evidence-driven reverse engineering methodology, distinguishing observations, derivations, inferences, and invariants.
+- [x] **Step 7.2:** Reverse-engineer and implement the exact 5-column mega-navigation taxonomy (`Clothing`, `New & Trending`, `Shop By Color`, `Shop by Activity`, `Accessories`) dynamically served from database.
+- [x] **Step 7.3:** Ingest 40+ products from live benchmark with 30% discount calculations, MRP/sale pricing in INR (`₹`), color hex codes, and size matrices.
+- [x] **Step 7.4:** Reconstruct community social lookbook ("As Seen On You") featuring 18+ verified handles (`@hippiewhohustles`, `@kyliejenner`, `@candiceswanepoel`, etc.).
+- [x] **Step 7.5:** Map and implement 25+ CMS pages across 4 footer columns (`Customer Service`, `My Account`, `Information`, `Legal`) with luxury modal viewing.
+- [x] **Step 7.6:** Reconstruct 3-step localized Global-e checkout pipeline (`Delivery Address` → `Shipping Method` → `Localized Payment: UPI/Cards/Netbanking` → `Order Confirmation Modal`).
+- [x] **Step 7.7:** Build dedicated Admin Portal (`/admin.html`) supporting bulk JSON ingestion of categories and products with auto-updating mega menu.
+- [x] **Step 7.8:** Decouple and verify dedicated switchable PIET layer (`tests/piet/piet_switchable.js`) confirming 100% test pass with zero ghost records.
+
