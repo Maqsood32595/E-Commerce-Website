@@ -1,0 +1,9 @@
+{
+    "id": "products",
+    "name": "Products Service",
+    "description": "Child slice handling product models, listings, and detail retrieval.",
+    "version": "1.0.0",
+    "enabled": true,
+    "basePath": "/products",
+    "routes": "./routes.js"
+}

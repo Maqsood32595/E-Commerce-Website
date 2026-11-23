@@ -1,0 +1,9 @@
+{
+    "id": "variants",
+    "name": "Product Variants & Swatches",
+    "description": "Grandchild slice controlling SKUs, color swatches, size inventory, and price overrides.",
+    "version": "1.0.0",
+    "enabled": true,
+    "basePath": "/variants",
+    "routes": "./routes.js"
+}

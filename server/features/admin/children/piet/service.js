@@ -7,6 +7,7 @@ class PietService {
         const testResults = [];
         let ephemeralAdminId = null;
         let ephemeralMediaId = null;
+        let ephemeralProductId = null;
 
         const record = (gate, name, passed, error = null) => {
             testResults.push({ gate, name, passed, error });
@@ -139,12 +140,77 @@ class PietService {
                 record('Gate 5: Grandchild Domain', 'Media transformations generated WebP responsive presets', false, e.message);
             }
 
+            // =========================================================================
+            // GATE 6: Multi-Tier Catalog & Product Grandchild Slices
+            // =========================================================================
+            ephemeralProductId = `piet-prod-${runId}`;
+            let ephemeralVariantId = `piet-var-${runId}`;
+            try {
+                // 1. Create Product
+                const prodRes = await fetch(`${baseUrl}/api/catalog/products`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        productId: ephemeralProductId,
+                        title: `PIET Test Airlift Legging ${runId}`,
+                        handle: `piet-airlift-${runId}`,
+                        fabricTechnology: 'Airlift',
+                        basePrice: 11800.00
+                    })
+                });
+                const prodData = await prodRes.json();
+                if (!prodData.success) throw new Error(prodData.error || 'Product creation failed');
+
+                // 2. Create Grandchild Variant
+                const varRes = await fetch(`${baseUrl}/api/catalog/products/variants`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        variantId: ephemeralVariantId,
+                        productId: ephemeralProductId,
+                        sku: `PIET-SKU-${runId}-ESP-S`,
+                        colorName: 'Espresso',
+                        colorHex: '#362B28',
+                        size: 'S',
+                        inventoryQuantity: 50,
+                        price: 11800.00
+                    })
+                });
+                const varData = await varRes.json();
+                if (!varData.success) throw new Error(varData.error || 'Variant creation failed');
+
+                // 3. Create Grandchild Review
+                const revRes = await fetch(`${baseUrl}/api/catalog/products/reviews`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        productId: ephemeralProductId,
+                        authorName: 'PIET Evaluator',
+                        rating: 5,
+                        headline: 'Exceptional Fabric Quality',
+                        comment: 'Sculpts perfectly and buttery soft.'
+                    })
+                });
+                const revData = await revRes.json();
+                if (!revData.success) throw new Error(revData.error || 'Review creation failed');
+
+                record('Gate 6: Multi-Tier Catalog', 'Product, Grandchild Variant & Review verified in live DB', true);
+            } catch (e) {
+                record('Gate 6: Multi-Tier Catalog', 'Product, Grandchild Variant & Review verified in live DB', false, e.message);
+            }
+
         } finally {
             // =========================================================================
             // MANDATORY PIET TEARDOWN: Delete all ephemeral test records (Zero Ghost Records)
             // =========================================================================
             console.log(`🧹 [PIET TEARDOWN] Wiping ephemeral test data for run ${runId}...`);
             try {
+                if (ephemeralProductId) {
+                    await db.query(`DELETE FROM product_reviews WHERE product_id = $1`, [ephemeralProductId]);
+                    await db.query(`DELETE FROM product_variants WHERE product_id = $1`, [ephemeralProductId]);
+                    await db.query(`DELETE FROM products WHERE product_id = $1`, [ephemeralProductId]);
+                    console.log(`   ✓ Wiped ephemeral product, variant & review: ${ephemeralProductId}`);
+                }
                 if (ephemeralMediaId) {
                     await db.query(`DELETE FROM product_variant_media_mapping WHERE media_id = $1`, [ephemeralMediaId]);
                     await db.query(`DELETE FROM product_media WHERE media_id = $1`, [ephemeralMediaId]);

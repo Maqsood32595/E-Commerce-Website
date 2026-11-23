@@ -1,0 +1,9 @@
+{
+    "id": "catalog",
+    "name": "Catalog Management",
+    "description": "Parent slice managing product taxonomy, categories, search facets, and merchandising.",
+    "version": "1.0.0",
+    "enabled": true,
+    "basePath": "/api/catalog",
+    "routes": "./routes.js"
+}
