@@ -59,6 +59,8 @@ async function runAllClickableLinksPietSuite() {
     let addedBagCartId = null;
     let securityPietEmail = null;
     let lockoutPietEmail = null;
+    let ephemeralGcsMediaId = null;
+    let ephemeralCouponPietCode = null;
 
     try {
         // ----------------------------------------------------------------------
@@ -1789,6 +1791,73 @@ async function runAllClickableLinksPietSuite() {
             record('Auth Security: Secure Sign Out', 'Action: Execute Secure Logout & Session Invalidation (POST /api/account/auth/logout)',
                 logoutRes.success && logoutRes.message.includes('Signed out'));
 
+            // ======================================================================
+            // GROUP 20: Connected Storefront Optimization & Intuitive Admin Studio
+            // ======================================================================
+            console.log("\n--- [GROUP 20: Connected Pipelines, Live GCS Media Upload & Intuitive Admin Studio] ---");
+
+            // Action 1: Verify Zero-Native-Alert Optimized Storefront DOM Contracts
+            record('Storefront Optimization Contracts', 'Verify Express Checkout Modal, Promo Widget, Review Form, Telemetry & Zero alert()',
+                homeHtml.includes('id="checkout-modal-overlay"') &&
+                homeHtml.includes('function openCheckoutModal') &&
+                homeHtml.includes('function formatInr') &&
+                homeHtml.includes('function addToWishlist') &&
+                homeHtml.includes('id="cart-promo-input"') &&
+                homeHtml.includes('id="pdp-write-review-box"') &&
+                homeHtml.includes('initTelemetrySession') &&
+                !homeHtml.includes('alert('));
+
+            // Action 2: Verify Intuitive Admin Studio UI Contracts
+            const adminHtmlRes = await fetch(`${baseUrl}/admin.html`);
+            const adminHtml = await adminHtmlRes.text();
+            record('Admin Studio Intuitive UI', 'Verify Drag-and-Drop GCS Upload, Live Card Preview, CSV Bulk Importer & Zero alert()/confirm()',
+                adminHtmlRes.status === 200 &&
+                adminHtml.includes('id="sp-dropzone"') &&
+                adminHtml.includes('id="bulk-file-input"') &&
+                adminHtml.includes('id="prev-img"') &&
+                adminHtml.includes('loadCloudMediaLibrary') &&
+                !adminHtml.includes('alert(') &&
+                !adminHtml.includes('confirm('));
+
+            // Action 3: Direct Binary Upload to Google Cloud Storage & Proxy Stream Read
+            const tinyPngBase64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=';
+            const pngBuf = Buffer.from(tinyPngBase64, 'base64');
+            const gcsUpRes = await (await fetch(`${baseUrl}/api/admin/media/upload-file?filename=piet-probe-${runId}.png`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'image/png' },
+                body: pngBuf
+            })).json();
+            ephemeralGcsMediaId = gcsUpRes.media?.media_id;
+            const gcsFileFetch = ephemeralGcsMediaId ? await fetch(`${baseUrl}/api/admin/media/file/${ephemeralGcsMediaId}`) : null;
+            const libRes = await (await fetch(`${baseUrl}/api/admin/media/library`)).json();
+            record('Admin Media: Live GCS Upload & CDN Proxy', 'Upload PNG Directly to GCS Bucket, Stream via /api/admin/media/file/:id & List in Library',
+                gcsUpRes.success && ephemeralGcsMediaId && gcsFileFetch?.status === 200 &&
+                (libRes.assets || []).some(a => a.media_id === ephemeralGcsMediaId));
+
+            // Action 4: Admin Dashboard Overview KPIs, Categories Directory & Orders Feed
+            const [ovRes, catDirRes, ordFeedRes] = await Promise.all([
+                fetch(`${baseUrl}/api/admin/bulk/overview`).then(r => r.json()),
+                fetch(`${baseUrl}/api/admin/bulk/categories`).then(r => r.json()),
+                fetch(`${baseUrl}/api/admin/bulk/orders`).then(r => r.json())
+            ]);
+            record('Admin Overview & Connected Feeds', 'Verify Live Telemetry/Revenue KPIs, Grouped Categories & Orders Fulfillment Queue',
+                ovRes.success && Number(ovRes.metrics?.products) > 0 &&
+                catDirRes.success && Array.isArray(catDirRes.categories) &&
+                ordFeedRes.success && Array.isArray(ordFeedRes.orders));
+
+            // Action 5: Admin Coupon Studio Create & Delete Verification
+            ephemeralCouponPietCode = `PIETOPT${runId}`.toUpperCase();
+            const cpSave = await (await fetch(`${baseUrl}/api/admin/bulk/coupons`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code: ephemeralCouponPietCode, discountPercent: 15, minOrderValue: 3000 })
+            })).json();
+            const cpList = await (await fetch(`${baseUrl}/api/admin/bulk/coupons`)).json();
+            const cpDel = await (await fetch(`${baseUrl}/api/admin/bulk/coupons/${ephemeralCouponPietCode}`, { method: 'DELETE' })).json();
+            record('Admin Promo Coupons Studio', 'Create, List & Remove Promo Code in Live PostgreSQL',
+                cpSave.success && cpDel.success && (cpList.coupons || []).some(c => c.code === ephemeralCouponPietCode));
+            ephemeralCouponPietCode = null;
+
         } catch (pdpErr) {
             record('PDP Suite', 'PDP testing failed', false, pdpErr.message);
         }
@@ -1847,6 +1916,15 @@ async function runAllClickableLinksPietSuite() {
                 await db.query(`DELETE FROM cart_items WHERE cart_id = $1`, [addedBagCartId]);
                 await db.query(`DELETE FROM carts WHERE cart_id = $1`, [addedBagCartId]);
                 console.log(`   ✓ Wiped ephemeral Added To Bag modal cart: ${addedBagCartId}`);
+            }
+            if (ephemeralGcsMediaId) {
+                await fetch(`${baseUrl}/api/admin/media/${ephemeralGcsMediaId}`, { method: 'DELETE' }).catch(() => {});
+                await db.query(`DELETE FROM product_media WHERE media_id = $1`, [ephemeralGcsMediaId]);
+                console.log(`   ✓ Wiped ephemeral GCS media asset: ${ephemeralGcsMediaId}`);
+            }
+            if (ephemeralCouponPietCode) {
+                await db.query(`DELETE FROM discount_coupons WHERE code = $1`, [ephemeralCouponPietCode]);
+                console.log(`   ✓ Wiped ephemeral promo coupon: ${ephemeralCouponPietCode}`);
             }
         } catch (cleanupErr) {
             console.error(`   ❌ Cleanup error: ${cleanupErr.message}`);

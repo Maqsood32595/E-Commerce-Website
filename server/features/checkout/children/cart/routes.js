@@ -5,18 +5,37 @@ const db = require('../../../../db');
 const FREE_SHIPPING_THRESHOLD = 5000.00; // Free express shipping above ₹5,000 in India
 const STANDARD_SHIPPING_FEE = 499.00;
 
-// Helper to recalculate totals
+// Helper to recalculate totals while preserving any active valid coupon discount
 async function recalculateCart(cartId) {
     const sumRes = await db.query('SELECT COALESCE(SUM(line_total), 0) as subtotal FROM cart_items WHERE cart_id = $1', [cartId]);
     const subtotal = Number(sumRes.rows[0].subtotal);
     const shippingFee = subtotal >= FREE_SHIPPING_THRESHOLD ? 0.00 : (subtotal > 0 ? STANDARD_SHIPPING_FEE : 0.00);
-    const grandTotal = subtotal + shippingFee;
+
+    const existingCartRes = await db.query('SELECT applied_coupon_code FROM carts WHERE cart_id = $1', [cartId]);
+    const couponCode = existingCartRes.rows[0]?.applied_coupon_code;
+
+    let discountTotal = 0.00;
+    let activeCouponCode = null;
+    if (couponCode && subtotal > 0) {
+        const coupRes = await db.query('SELECT * FROM discount_coupons WHERE code = $1 AND is_active = true', [couponCode]);
+        if (coupRes.rows.length > 0 && subtotal >= Number(coupRes.rows[0].min_order_value || 0)) {
+            const coupon = coupRes.rows[0];
+            activeCouponCode = coupon.code;
+            if (Number(coupon.discount_percent) > 0) {
+                discountTotal = Number(((subtotal * Number(coupon.discount_percent)) / 100).toFixed(2));
+            } else if (Number(coupon.discount_amount) > 0) {
+                discountTotal = Math.min(subtotal, Number(coupon.discount_amount));
+            }
+        }
+    }
+
+    const grandTotal = Math.max(0, subtotal - discountTotal) + shippingFee;
 
     const updatedCart = await db.query(`
-        UPDATE carts SET subtotal = $2, shipping_fee = $3, grand_total = $4, updated_at = NOW()
+        UPDATE carts SET subtotal = $2, shipping_fee = $3, discount_total = $4, applied_coupon_code = $5, grand_total = $6, updated_at = NOW()
         WHERE cart_id = $1
         RETURNING *;
-    `, [cartId, subtotal, shippingFee, grandTotal]);
+    `, [cartId, subtotal, shippingFee, discountTotal, activeCouponCode, grandTotal]);
     return updatedCart.rows[0];
 }
 
@@ -262,6 +281,19 @@ router.post('/coupons/apply', async (req, res) => {
             cart: updated.rows[0],
             discountApplied: discountAmount
         });
+    } catch (err) {
+        res.status(500).json({ error: err.message, slice: 'checkout.cart' });
+    }
+});
+
+// POST /api/checkout/cart/coupons/remove
+router.post('/coupons/remove', async (req, res) => {
+    try {
+        const { cartId } = req.body;
+        if (!cartId) return res.status(400).json({ error: 'cartId is required' });
+        await db.query(`UPDATE carts SET applied_coupon_code = NULL, discount_total = 0.00 WHERE cart_id = $1`, [cartId]);
+        const cart = await recalculateCart(cartId);
+        res.json({ success: true, slice: 'checkout.cart', cart });
     } catch (err) {
         res.status(500).json({ error: err.message, slice: 'checkout.cart' });
     }

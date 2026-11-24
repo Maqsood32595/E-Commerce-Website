@@ -7,14 +7,16 @@ router.get('/', async (req, res) => {
     try {
         const query = `
             SELECT p.*, c.name as category_name,
-            COALESCE(json_agg(
-                json_build_object(
-                    'media_id', pm.media_id,
-                    'cdn_url', pm.cdn_url,
-                    'media_type', pvm.media_type,
-                    'display_order', pvm.display_order
-                )
-            ) FILTER (WHERE pm.media_id IS NOT NULL), '[]') as media
+            COALESCE(
+                (SELECT json_agg(DISTINCT pv.size) FROM product_variants pv WHERE pv.product_id = p.product_id AND pv.is_available = true),
+                '[]'::json
+            ) as available_sizes,
+            COALESCE(json_agg(DISTINCT jsonb_build_object(
+                'media_id', pm.media_id,
+                'cdn_url', pm.cdn_url,
+                'media_type', pvm.media_type,
+                'display_order', pvm.display_order
+            )) FILTER (WHERE pm.media_id IS NOT NULL), '[]') as media
             FROM products p
             LEFT JOIN categories c ON p.category_id = c.category_id
             LEFT JOIN product_variant_media_mapping pvm ON p.product_id = pvm.product_id
@@ -69,12 +71,18 @@ router.get('/detail/:handleOrId', async (req, res) => {
             LIMIT 6;
         `, [product.product_id, product.category_id]);
 
+        const reviewCount = reviewsRes.rows.length;
+        const avgRating = reviewCount > 0
+            ? Number((reviewsRes.rows.reduce((sum, r) => sum + Number(r.rating || 5), 0) / reviewCount).toFixed(1))
+            : 4.8;
+
         res.json({
             success: true,
             slice: 'catalog.products',
             product,
             variants: variantsRes.rows,
             reviews: reviewsRes.rows,
+            reviewStats: { count: reviewCount, avgRating },
             similarItems: similarRes.rows
         });
     } catch (err) {

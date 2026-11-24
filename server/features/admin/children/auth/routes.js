@@ -24,11 +24,25 @@ router.post('/login', async (req, res) => {
         if (!email || !password) {
             return res.status(400).json({ error: 'Email and password are required', slice: 'admin.auth' });
         }
-        const result = await authService.login(email, password);
+        const result = await authService.login(email, password, {
+            ip: req.headers['x-forwarded-for'] || req.socket.remoteAddress,
+            userAgent: req.headers['user-agent']
+        });
         res.json({ success: true, slice: 'admin.auth', ...result });
     } catch (err) {
         res.status(401).json({ error: err.message, slice: 'admin.auth' });
     }
+});
+
+// GET /api/admin/auth/verify
+router.get('/verify', (req, res) => {
+    const authHeader = req.headers['authorization'];
+    const token = (authHeader && authHeader.startsWith('Bearer ')) ? authHeader.slice(7) : req.query.token;
+    const payload = authService.verifyToken(token);
+    if (!payload) {
+        return res.status(401).json({ success: false, authenticated: false, error: 'Invalid or expired admin token' });
+    }
+    res.json({ success: true, slice: 'admin.auth', authenticated: true, admin: payload });
 });
 
 module.exports = router;

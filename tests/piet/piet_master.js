@@ -382,6 +382,12 @@ async function runPietMasterSuite() {
     if (gOrders === '0' && gCarts === '0' && gAdmin === '0') {
         console.log("  ✅ ZERO GHOST RECORDS CONFIRMED!");
     }
+    return passedCount === totalCount;
 }
 
-runPietMasterSuite();
+runPietMasterSuite()
+    .then(ok => db.pool.end().catch(() => {}).then(() => process.exit(ok ? 0 : 1)))
+    .catch(err => {
+        console.error(err);
+        process.exit(1);
+    });

@@ -6,9 +6,34 @@ const security = require('./security');
 // GET /api/account/customer
 router.get('/customer', async (req, res) => {
     try {
-        const email = req.query.email || 'sameeramaq@gmail.com';
-        const result = await db.query('SELECT customer_id, email, first_name, last_name, vip_status, reward_points, phone FROM customer_accounts WHERE email = $1', [email]);
+        const email = (req.query.email || 'sameeramaq@gmail.com').toLowerCase().trim();
+        const result = await db.query('SELECT customer_id, email, first_name, last_name, vip_status, reward_points, phone FROM customer_accounts WHERE LOWER(email) = $1', [email]);
         if (result.rows.length === 0) return res.status(404).json({ error: 'Customer not found' });
+        res.json({ success: true, slice: 'account', customer: result.rows[0] });
+    } catch (err) {
+        res.status(500).json({ error: err.message, slice: 'account' });
+    }
+});
+
+// PUT /api/account/customer (Update customer profile details)
+router.put('/customer', async (req, res) => {
+    try {
+        const { email, firstName, lastName, phone } = req.body;
+        if (!email) {
+            return res.status(400).json({ error: 'email is required', slice: 'account' });
+        }
+        const cleanEmail = email.toLowerCase().trim();
+        const result = await db.query(`
+            UPDATE customer_accounts
+            SET first_name = COALESCE($2, first_name),
+                last_name = COALESCE($3, last_name),
+                phone = COALESCE($4, phone)
+            WHERE LOWER(email) = $1
+            RETURNING customer_id, email, first_name, last_name, vip_status, reward_points, phone;
+        `, [cleanEmail, firstName ? firstName.trim() : null, lastName ? lastName.trim() : null, phone || null]);
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Customer account not found', slice: 'account' });
+        }
         res.json({ success: true, slice: 'account', customer: result.rows[0] });
     } catch (err) {
         res.status(500).json({ error: err.message, slice: 'account' });
@@ -18,8 +43,27 @@ router.get('/customer', async (req, res) => {
 // GET /api/account/orders
 router.get('/orders', async (req, res) => {
     try {
-        const email = req.query.email || 'sameeramaq@gmail.com';
-        const result = await db.query('SELECT * FROM orders WHERE customer_email = $1 ORDER BY created_at DESC', [email]);
+        const email = (req.query.email || 'sameeramaq@gmail.com').toLowerCase().trim();
+        const result = await db.query(`
+            SELECT o.*,
+                   COALESCE(
+                       json_agg(
+                           json_build_object(
+                               'title', oi.title,
+                               'color_name', oi.color_name,
+                               'size', oi.size,
+                               'quantity', oi.quantity,
+                               'unit_price', oi.unit_price
+                           )
+                       ) FILTER (WHERE oi.order_item_id IS NOT NULL),
+                       '[]'
+                   ) as items
+            FROM orders o
+            LEFT JOIN order_items oi ON o.order_id = oi.order_id
+            WHERE LOWER(o.customer_email) = $1
+            GROUP BY o.order_id
+            ORDER BY o.created_at DESC;
+        `, [email]);
         res.json({ success: true, slice: 'account', orders: result.rows });
     } catch (err) {
         res.status(500).json({ error: err.message, slice: 'account' });
@@ -103,25 +147,38 @@ router.post('/support/chat', async (req, res) => {
     try {
         const { message, customerEmail } = req.body;
         const msg = (message || '').toLowerCase();
-        const email = customerEmail || 'sameeramaq@gmail.com';
+        const email = (customerEmail || 'sameeramaq@gmail.com').toLowerCase().trim();
 
         let reply = '';
         if (msg.includes('return') || msg.includes('exchange')) {
             reply = "We gladly accept unworn, unwashed, unaltered merchandise in sellable condition for a refund or exchange through January 10, 2027. You can initiate a prepaid courier pickup right from your Order History tab.";
         } else if (msg.includes('order') || msg.includes('track') || msg.includes('delivery')) {
-            const orders = await db.query('SELECT * FROM orders WHERE customer_email = $1 ORDER BY created_at DESC LIMIT 1', [email]);
+            const orders = await db.query('SELECT * FROM orders WHERE LOWER(customer_email) = $1 ORDER BY created_at DESC LIMIT 1', [email]);
             if (orders.rows.length > 0) {
                 const o = orders.rows[0];
-                reply = `Your recent Order #${o.order_id.slice(0, 8)} for ₹${Number(o.total_amount).toLocaleString('en-IN')} is confirmed and scheduled for Express Delivery to Mumbai (400050) via BlueDart.`;
+                const addr = typeof o.shipping_address === 'string' ? JSON.parse(o.shipping_address || '{}') : (o.shipping_address || {});
+                const destCity = addr.city ? `${addr.city}${addr.pincode ? ` (${addr.pincode})` : ''}` : 'Mumbai (400050)';
+                reply = `Your recent Order #${o.order_id.slice(0, 8)} for ₹${Number(o.grand_total || 0).toLocaleString('en-IN')} is ${(o.status || 'confirmed').toUpperCase()} and scheduled for Express Delivery to ${destCity} via BlueDart.`;
             } else {
                 reply = "I don't see any active orders on your account yet. When you place an order, live tracking milestones will appear in your account dashboard.";
             }
         } else if (msg.includes('point') || msg.includes('reward') || msg.includes('access') || msg.includes('vip')) {
-            reply = "You are currently a YOGA Access VIP Member with 1 Reward Point. You earn 1 point for every ₹93 spent, plus complimentary express shipping across India.";
+            const custRes = await db.query('SELECT vip_status, reward_points FROM customer_accounts WHERE LOWER(email) = $1', [email]);
+            const pts = custRes.rows[0]?.reward_points ?? 1;
+            const tier = custRes.rows[0]?.vip_status || 'VIP';
+            reply = `You are currently a YOGA Access ${tier} Member with ${pts} Reward Point${pts === 1 ? '' : 's'}. You earn 1 point for every ₹93 spent, plus complimentary express shipping across India above ₹5,000.`;
         } else if (msg.includes('size') || msg.includes('fit')) {
-            reply = "Our signature Airlift fabric offers a sleek compression fit (true to size), while Alosoft provides ultra-plush, four-way stretch. Check our Size Guide in the footer for detailed measurements.";
+            reply = "Our signature Airlift fabric offers a sleek compression fit (true to size), while Alosoft provides ultra-plush, four-way stretch. Footwear is unisex; check our Size Guide in the footer for detailed measurements.";
+        } else if (msg.includes('coupon') || msg.includes('promo') || msg.includes('discount') || msg.includes('offer')) {
+            const coupRes = await db.query('SELECT code, discount_percent, min_order_value FROM discount_coupons WHERE is_active = true ORDER BY discount_percent DESC LIMIT 2');
+            if (coupRes.rows.length > 0) {
+                const list = coupRes.rows.map(c => `${c.code} (${Number(c.discount_percent)}% off above ₹${Number(c.min_order_value).toLocaleString('en-IN')})`).join(' or ');
+                reply = `Sitewide 30% Off is automatically applied on all YOGA collections! Plus, you can apply promo codes at checkout: ${list}.`;
+            } else {
+                reply = "Sitewide 30% Off is already active on every studio piece, plus complimentary express shipping on orders above ₹5,000.";
+            }
         } else {
-            reply = "Thank you for contacting YOGA Concierge. Our luxury support team is available Mon-Fri 6:00AM - 6:30PM PT. How else may I assist you with your wardrobe today?";
+            reply = "Thank you for contacting YOGA Concierge. Our luxury support team is available Mon-Fri 6:00AM - 6:30PM PT. Ask me about tracking your order, sizing guidance (Airlift/Alosoft), returns, or promo codes!";
         }
 
         res.json({

@@ -22,8 +22,22 @@ class AccountSecurityEngine {
         this.MAX_FAILED_ATTEMPTS = 5;
         this.LOCKOUT_DURATION_MS = 15 * 60 * 1000; // 15 minutes
         this.WINDOW_DURATION_MS = 15 * 60 * 1000;  // 15 minutes
-        this.SESSION_SECRET = process.env.SESSION_SECRET || process.env.JWT_SECRET || 'alo_yoga_luxury_athleisure_secret_key_2026';
+        this.SESSION_SECRET = process.env.SESSION_SECRET || process.env.JWT_SECRET || crypto.randomBytes(32).toString('hex');
         this._dummyHash = null;
+    }
+
+    /**
+     * Prunes expired brute-force records to keep memory bounded in long-lived processes.
+     */
+    pruneExpiredRateLimits() {
+        const now = Date.now();
+        for (const [key, rec] of this.loginAttempts.entries()) {
+            const lockExpired = !rec.lockedUntil || rec.lockedUntil <= now;
+            const windowExpired = (now - rec.firstAttemptAt) > this.WINDOW_DURATION_MS;
+            if (lockExpired && windowExpired) {
+                this.loginAttempts.delete(key);
+            }
+        }
     }
 
     /**
@@ -169,6 +183,9 @@ class AccountSecurityEngine {
      * Returns { isLocked: boolean, remainingAttempts: number, retryAfterSec: number }
      */
     recordFailedAttempt(key) {
+        if (this.loginAttempts.size > 500) {
+            this.pruneExpiredRateLimits();
+        }
         const cleanKey = (key || '').toLowerCase().trim();
         const now = Date.now();
         let record = this.loginAttempts.get(cleanKey);

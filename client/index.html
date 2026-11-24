@@ -355,19 +355,6 @@
       transform: scale(1.03);
     }
 
-    .card-discount-badge {
-      position: absolute;
-      top: 14px;
-      left: 14px;
-      background: var(--brand-terracotta);
-      color: #FFF;
-      padding: 4px 8px;
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      border-radius: 2px;
-    }
-
     .card-details {
       padding: 18px;
       display: flex;
@@ -2002,29 +1989,6 @@
       padding: 50px 20px 80px;
     }
 
-    .auth-security-badge {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      font-size: 11px;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: #4B5563;
-      background: #F9FAFB;
-      border: 1px solid #E5E7EB;
-      padding: 6px 14px;
-      border-radius: 20px;
-      margin-bottom: 20px;
-      font-weight: 500;
-      text-align: center;
-    }
-
-    .auth-security-badge strong {
-      color: #111827;
-      font-weight: 700;
-    }
-
     .auth-alert-banner {
       padding: 10px 14px;
       border-radius: 3px;
@@ -2073,35 +2037,6 @@
 
     .auth-pwd-req.met {
       color: #059669;
-      font-weight: 600;
-    }
-
-    .auth-trust-badges-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-top: 24px;
-      padding-top: 18px;
-      border-top: 1px solid #F3F4F6;
-      text-align: center;
-    }
-
-    .auth-trust-badge-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
-      font-size: 10px;
-      color: #6B7280;
-      line-height: 1.25;
-    }
-
-    .auth-trust-badge-icon {
-      font-size: 14px;
-    }
-
-    .auth-trust-badge-item strong {
-      color: #111827;
       font-weight: 600;
     }
 
@@ -3308,25 +3243,26 @@
             <h3 style="font-size: 18px; margin-bottom: 20px; color: var(--brand-espresso);">Personal Details</h3>
             <div class="account-form-row">
               <label>First Name</label>
-              <input type="text" id="acc-fname" value="Sameera" readonly />
+              <input type="text" id="acc-fname" value="Sameera" />
             </div>
             <div class="account-form-row">
               <label>Last Name</label>
-              <input type="text" id="acc-lname" value="Maqsood" readonly />
+              <input type="text" id="acc-lname" value="Maqsood" />
             </div>
             <div class="account-form-row">
               <label>Email Address</label>
-              <input type="email" id="acc-email" value="sameeramaq@gmail.com" readonly />
+              <input type="email" id="acc-email" value="sameeramaq@gmail.com" readonly style="background: #F7F5F2;" />
             </div>
             <div class="account-form-row">
               <label>Phone Number</label>
-              <input type="text" id="acc-phone" value="+91 98200 12345" readonly />
+              <input type="text" id="acc-phone" value="+91 98200 12345" />
             </div>
             <div class="account-form-row">
               <label>VIP Membership Tier</label>
-              <div style="font-size: 13px; font-weight: 700; color: var(--brand-terracotta);">VIP Tier 1 (1 Reward Point
-                Available)</div>
+              <div id="acc-tier-badge" style="font-size: 13px; font-weight: 700; color: var(--brand-terracotta);">VIP Tier 1 (1 Reward Point Available)</div>
             </div>
+            <button class="btn-start-shopping" style="margin-top: 10px; padding: 10px 24px;" onclick="saveCustomerProfile()">Save Profile Details</button>
+            <div id="acc-profile-status" style="margin-top: 10px; font-size: 12px; color: #265431;"></div>
           </div>
         </div>
 
@@ -3571,18 +3507,33 @@
         <!-- Order Summary Card -->
         <div class="order-summary-card">
           <div class="order-summary-title">ORDER SUMMARY</div>
+          <div style="display: flex; gap: 8px; margin-bottom: 14px;">
+            <input type="text" id="cart-promo-input" placeholder="Promo Code (e.g. ALOINDIA15)"
+              style="flex: 1; padding: 9px 12px; border: 1px solid var(--border-subtle); font-size: 12px; border-radius: 2px; text-transform: uppercase;" />
+            <button onclick="applyCartCoupon()"
+              style="background: var(--brand-espresso); color: #FFF; border: none; padding: 0 14px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; cursor: pointer; border-radius: 2px;">APPLY</button>
+          </div>
+          <div id="cart-promo-status" style="font-size: 11px; margin-bottom: 10px; display: none;"></div>
           <div class="order-summary-row">
             <span>Subtotal:</span>
             <span id="cart-page-subtotal" style="font-weight: 700;">₹13,600</span>
           </div>
+          <div class="order-summary-row" id="cart-page-discount-row" style="display: none; color: #265431;">
+            <span>Promo Discount (<span id="cart-page-coupon-label"></span>):</span>
+            <span id="cart-page-discount-val" style="font-weight: 700;">-₹0</span>
+          </div>
           <div class="order-summary-row">
             <span>Shipping:</span>
-            <span style="font-size: 11px; text-transform: uppercase; font-weight: 600;">CALCULATED AT CHECKOUT</span>
+            <span id="cart-page-shipping-val" style="font-size: 11px; text-transform: uppercase; font-weight: 600;">FREE EXPRESS</span>
+          </div>
+          <div class="order-summary-row" style="border-top: 1px solid var(--border-subtle); padding-top: 10px; margin-top: 6px; font-weight: 800;">
+            <span>Estimated Total:</span>
+            <span id="cart-page-grandtotal">₹13,600</span>
           </div>
           <div class="order-summary-savings" id="cart-page-savings-text">
             You're saving ₹5,900 on this order!
           </div>
-          <button class="btn-checkout-primary" id="btn-cart-page-checkout" onclick="executeCartPageCheckout()">
+          <button class="btn-checkout-primary" id="btn-cart-page-checkout" onclick="openCheckoutModal()">
             CHECKOUT
           </button>
         </div>
@@ -3754,16 +3705,41 @@
       <p style="color: var(--text-muted); font-size: 13px; margin-top: -16px; margin-bottom: 20px;">Shop our best looks,
         styled by you</p>
       <div id="pdp-lookbook-row" style="display: flex; gap: 12px; flex-wrap: wrap;">
-        <span class="social-pill">@meliniseri</span>
-        <span class="social-pill">@giizeleoliveira</span>
-        <span class="social-pill">@lissyroddyy</span>
-        <span class="social-pill">@cydrrose</span>
+        <span class="social-pill" onclick="filterProducts('trending', 'lookbook', 'Lookbook: @meliniseri', 'As Seen On You')">@meliniseri</span>
+        <span class="social-pill" onclick="filterProducts('trending', 'lookbook', 'Lookbook: @giizeleoliveira', 'As Seen On You')">@giizeleoliveira</span>
+        <span class="social-pill" onclick="filterProducts('trending', 'lookbook', 'Lookbook: @lissyroddyy', 'As Seen On You')">@lissyroddyy</span>
+        <span class="social-pill" onclick="filterProducts('trending', 'lookbook', 'Lookbook: @cydrrose', 'As Seen On You')">@cydrrose</span>
       </div>
     </div>
 
     <!-- CUSTOMER REVIEWS Section -->
     <div class="pdp-reviews-section" id="pdp-reviews-section">
-      <h2 class="pdp-section-heading" style="margin-bottom: 12px;">REVIEWS</h2>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 12px;">
+        <h2 class="pdp-section-heading" style="margin-bottom: 0;">REVIEWS</h2>
+        <button class="filter-pill" onclick="toggleWriteReviewForm()" style="background: var(--brand-espresso); color: #FFF; border-color: var(--brand-espresso);">+ WRITE A REVIEW</button>
+      </div>
+      <div id="pdp-write-review-box" style="display: none; background: #FFF; border: 1px solid var(--border-subtle); border-radius: 4px; padding: 20px; margin-bottom: 24px;">
+        <h4 style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; color: var(--brand-espresso);">Share Your Experience</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 12px;">
+          <input type="text" id="rev-author" placeholder="Your Name" style="padding: 10px 12px; border: 1px solid var(--border-subtle); font-size: 12px;" />
+          <select id="rev-rating" style="padding: 10px 12px; border: 1px solid var(--border-subtle); font-size: 12px;">
+            <option value="5">★★★★★ (5/5)</option>
+            <option value="4">★★★★☆ (4/5)</option>
+            <option value="3">★★★☆☆ (3/5)</option>
+          </select>
+          <select id="rev-fit" style="padding: 10px 12px; border: 1px solid var(--border-subtle); font-size: 12px;">
+            <option value="True to Size">Fit: True to Size</option>
+            <option value="Runs Small">Fit: Runs Small</option>
+            <option value="Runs Large">Fit: Runs Large</option>
+          </select>
+        </div>
+        <input type="text" id="rev-headline" placeholder="Review Headline" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-subtle); font-size: 12px; margin-bottom: 10px;" />
+        <textarea id="rev-comment" placeholder="How was the fit, fabric feel, and performance?" style="width: 100%; height: 70px; padding: 10px 12px; border: 1px solid var(--border-subtle); font-size: 12px; margin-bottom: 12px;"></textarea>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <button class="alo-modal-btn" onclick="submitPdpReview()">Submit Review</button>
+          <button class="filter-pill" onclick="toggleWriteReviewForm()">Cancel</button>
+        </div>
+      </div>
       <div class="pdp-reviews-summary">
         <div class="pdp-stars-box">
           <span class="pdp-rating-num" id="pdp-reviews-rating">4.6</span>
@@ -4352,6 +4328,83 @@
     </div>
   </div>
 
+  <!-- Express Localized India Checkout Modal (UPI / Cards / COD + DDP Duties) -->
+  <div class="alo-modal-overlay" id="checkout-modal-overlay" onclick="if(event.target===this) closeCheckoutModal()">
+    <div class="alo-modal-card" style="max-width: 540px; text-align: left; padding: 28px 32px; max-height: 92vh; overflow-y: auto;" onclick="event.stopPropagation()">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 12px;">
+        <div>
+          <h3 class="alo-modal-title" style="margin-bottom: 2px; font-size: 18px;">YOGA Express Checkout</h3>
+          <span style="font-size: 11px; color: var(--text-muted);">India Delivery Duty Paid (DDP) • GST Included</span>
+        </div>
+        <button onclick="closeCheckoutModal()" style="background: none; border: none; font-size: 22px; cursor: pointer; color: var(--brand-espresso);">&times;</button>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+        <div>
+          <label style="display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">Full Name</label>
+          <input type="text" id="co-name" value="Sameera Maqsood" style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 3px; font-size: 13px;" />
+        </div>
+        <div>
+          <label style="display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">Email</label>
+          <input type="email" id="co-email" value="sameeramaq@gmail.com" style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 3px; font-size: 13px;" />
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+        <div>
+          <label style="display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">Phone (+91)</label>
+          <input type="text" id="co-phone" value="+91 98200 12345" style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 3px; font-size: 13px;" />
+        </div>
+        <div>
+          <label style="display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">PIN Code</label>
+          <input type="text" id="co-pin" value="400050" style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 3px; font-size: 13px;" />
+        </div>
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">Street Address & City</label>
+        <input type="text" id="co-street" value="402, Pali Hill Residency, Bandra West, Mumbai" style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 3px; font-size: 13px;" />
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;">Payment Method</label>
+        <select id="co-payment-method" onchange="document.getElementById('co-upi-wrap').style.display = this.value === 'upi' ? 'block' : 'none';"
+          style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 3px; font-size: 13px; background: #FFF;">
+          <option value="upi">UPI Instant Pay (GPay / PhonePe / Paytm)</option>
+          <option value="card">Credit / Debit Card (Visa / Mastercard / RuPay)</option>
+          <option value="netbanking">NetBanking (HDFC / ICICI / SBI)</option>
+          <option value="cod">Cash / Pay on Delivery (COD)</option>
+        </select>
+      </div>
+
+      <div id="co-upi-wrap" style="margin-bottom: 18px;">
+        <label style="display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">UPI ID / VPA</label>
+        <input type="text" id="co-upi-id" value="sameera@oksbi" placeholder="yourname@okaxis" style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 3px; font-size: 13px;" />
+      </div>
+
+      <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 4px; padding: 14px 16px; margin-bottom: 18px; font-size: 13px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <span>Bag Subtotal (<span id="co-summary-count">0</span> items):</span>
+          <strong id="co-summary-subtotal">₹0</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: #265431;">
+          <span>Express Shipping & Duties:</span>
+          <strong id="co-summary-shipping">FREE</strong>
+        </div>
+        <div id="co-summary-discount-row" style="display: none; justify-content: space-between; margin-bottom: 6px; color: #265431;">
+          <span>Promo Discount:</span>
+          <strong id="co-summary-discount">-₹0</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; border-top: 1px solid var(--border-subtle); padding-top: 8px; margin-top: 6px; font-size: 15px; font-weight: 800; color: var(--brand-espresso);">
+          <span>Total Payable:</span>
+          <span id="co-summary-total">₹0</span>
+        </div>
+      </div>
+
+      <button id="btn-confirm-checkout" class="btn-checkout-primary" onclick="submitCheckoutOrder()" style="width: 100%; height: 46px; letter-spacing: 0.12em;">COMPLETE PURCHASE</button>
+    </div>
+  </div>
+
   <!-- ADDED TO BAG POPUP MODAL (Exact Alo Workflow Spec from User Image) -->
   <div class="alo-modal-overlay" id="added-to-bag-modal" onclick="closeAddedToBagModal(event)">
     <div class="added-to-bag-card" onclick="event.stopPropagation()">
@@ -4456,10 +4509,23 @@
 
   <script>
     let currentCartId = localStorage.getItem('yoga_cart_id') || null;
-    let isLoggedIn = true; // Sameera Maqsood account active
+    let currentCart = null;
+    let currentCustomer = {
+      email: 'sameeramaq@gmail.com',
+      first_name: 'Sameera',
+      last_name: 'Maqsood',
+      vip_status: 'VIP',
+      reward_points: 1,
+      phone: '+91 98200 12345'
+    };
+    let isLoggedIn = true; // Active account synced with /api/account/auth/verify on boot
     let allProducts = [];
     let currentMenuData = [];
     let currentFilter = { type: 'all', key: null, label: 'Save 30% — All Products' };
+
+    function formatInr(amount) {
+      return Number(amount || 0).toLocaleString('en-IN');
+    }
 
     // Mega Menu Hover Logic
     const megaMenu = document.getElementById('mega-menu');
@@ -4839,6 +4905,28 @@
         }).join('');
       }
 
+      // 4. Product Types sync dynamically from categories
+      const ptList = document.getElementById('filter-product-types-list');
+      if (ptList && availableFiltersData.productTypes) {
+        const seenNames = new Set();
+        const uniqueTypes = availableFiltersData.productTypes.filter(pt => {
+          const key = (pt.name || '').trim().toLowerCase();
+          if (!key || seenNames.has(key) || key === 'shop all') return false;
+          seenNames.add(key);
+          return true;
+        }).slice(0, 24);
+        ptList.innerHTML = uniqueTypes.map(pt => {
+          const isChecked = drawerFilters.productTypes.includes(pt.name);
+          const safeSlug = pt.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+          return `
+            <label class="filter-checkbox-item">
+              <input type="checkbox" id="chk-pt-${safeSlug}" ${isChecked ? 'checked' : ''} onchange="toggleProductTypeFilter('${pt.name.replace(/'/g, "\\'")}', this.checked)">
+              <span>${pt.name}</span>
+            </label>
+          `;
+        }).join('');
+      }
+
       updateFilterHeader();
     }
 
@@ -4900,10 +4988,6 @@
         const secEl = document.getElementById(`filter-sec-${targetId}`);
         if (secEl) secEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 50);
-    }
-
-    function toggleFilterPopover(section) {
-      openFilterDrawerToSection(section);
     }
 
     function closeFilterDrawer() {
@@ -5049,11 +5133,15 @@
 
       if (drawerFilters.sizes.length > 0) {
         filtered = filtered.filter(p => {
+          const availSizes = Array.isArray(p.available_sizes) ? p.available_sizes.map(s => String(s).toLowerCase()) : [];
           const title = (p.title || '').toLowerCase();
           const cat = (p.category_id || '').toLowerCase();
           const isShoe = cat.includes('shoes') || cat === 'acc-shoes' || title.includes('runner') || title.includes('sneaker') || title.includes('boot') || title.includes('mule');
           return drawerFilters.sizes.some(sz => {
             const szL = sz.toLowerCase();
+            if (availSizes.length > 0) {
+              return availSizes.some(as => as === szL || as.includes(szL));
+            }
             if (isShoe) {
               return szL.includes('m/') || szL.includes('w');
             } else {
@@ -5102,20 +5190,8 @@
       if (closeAfter) closeFilterDrawer();
     }
 
-    function applyFacetFilter(type, value) {
-      const popover = document.getElementById('filter-popover');
-      if (popover) popover.style.display = 'none';
-      if (type === 'size') {
-        filterProducts('all', null, `Size: ${value}`);
-      } else if (type === 'color') {
-        filterProducts('color', value.toLowerCase(), `Color: ${value}`);
-      } else if (type === 'fabric') {
-        const filtered = allProducts.filter(p => (p.fabric_technology || '').toLowerCase().includes(value.toLowerCase()) || (p.title || '').toLowerCase().includes(value.toLowerCase()));
-        renderProducts(filtered, `Fabric: ${value}`, `Double-knit performance fabrics`, true);
-      }
-    }
-
-    function selectCardSwatch(productId, colorName, hexCode) {
+    function selectCardSwatch(event, productId, colorName, hexCode) {
+      if (event) event.stopPropagation();
       const colorLabel = document.getElementById(`prod-color-${productId}`);
       if (colorLabel) colorLabel.innerText = colorName;
       const swatchContainer = document.getElementById(`swatches-${productId}`);
@@ -5126,6 +5202,21 @@
       if (activeEl) activeEl.classList.add('active');
     }
 
+    async function addToWishlist(productId, title, price) {
+      try {
+        await fetch('/api/account/wishlist/add', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            productId,
+            title,
+            unitPrice: price,
+            customerEmail: currentCustomer?.email || 'sameeramaq@gmail.com'
+          })
+        });
+      } catch (e) { }
+    }
+
     async function toggleCardWishlist(btnEl, productId, title, price) {
       if (!btnEl) return;
       const isFilled = btnEl.innerText === '♥';
@@ -5133,18 +5224,7 @@
       btnEl.style.color = isFilled ? 'var(--brand-espresso)' : '#C93B2B';
 
       if (!isFilled) {
-        try {
-          await fetch('/api/account/wishlist/add', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              productId,
-              title,
-              unitPrice: price,
-              customerEmail: 'sameeramaq@gmail.com'
-            })
-          });
-        } catch (e) { }
+        await addToWishlist(productId, title, price);
         showAloMessage('Saved to Wishlist', `"${title}" has been added to your YOGA Wishlist.`);
       }
     }
@@ -5200,7 +5280,7 @@
             <!-- Swatches row -->
             <div class="swatches-row" id="swatches-${p.product_id}" style="display: flex; align-items: center; gap: 6px; margin: 10px 0 6px;">
               ${defaultSwatches.map((sw, idx) => `
-                <span class="swatch-circle ${idx === 0 ? 'active' : ''}" id="swatch-${p.product_id}-${sw.name.replace(/\s+/g, '-').toLowerCase()}" onclick="selectCardSwatch('${p.product_id}', '${sw.name}', '${sw.hex}')" style="width: 14px; height: 14px; border-radius: 50%; background: ${sw.hex}; border: 1px solid rgba(0,0,0,0.2); cursor: pointer; display: inline-block;"></span>
+                <span class="swatch-circle ${idx === 0 ? 'active' : ''}" id="swatch-${p.product_id}-${sw.name.replace(/\s+/g, '-').toLowerCase()}" onclick="selectCardSwatch(event, '${p.product_id}', '${sw.name}', '${sw.hex}')" style="width: 14px; height: 14px; border-radius: 50%; background: ${sw.hex}; border: 1px solid rgba(0,0,0,0.2); cursor: pointer; display: inline-block;"></span>
               `).join('')}
               <span style="font-size: 10px; color: var(--text-muted); font-weight: 600; margin-left: 2px;">+6</span>
             </div>
@@ -5216,7 +5296,7 @@
               <span class="sale-price">₹${Number(p.sale_price).toLocaleString('en-IN')}</span>
               <span class="mrp-price">₹${Number(p.mrp).toLocaleString('en-IN')}</span>
             </div>
-            <button class="btn-atc" onclick="addToCart('${p.product_id}', '${p.title.replace(/'/g, "\\'")}', ${p.sale_price})">Add to Bag</button>
+            <button class="btn-atc" onclick="event.stopPropagation(); addToCart('${p.product_id}', '${p.title.replace(/'/g, "\\'")}', ${p.sale_price}, document.getElementById('prod-color-${p.product_id}')?.innerText || '${(p.color_family || 'Studio Neutral').replace(/'/g, "\\'")}', 'S')">Add to Bag</button>
           </div>
         </div>
       `).join('');
@@ -5275,13 +5355,14 @@
 
     function openAuthGated(destination) {
       if (!isLoggedIn) {
-        showAloMessage('Sign In Required', 'Please sign in to access your order history and saved addresses.\n\nLogin with sameeramaq@gmail.com to proceed.');
+        showAloMessage('Sign In Required', 'Please sign in to access your order history and saved addresses.');
+        openAuthPage('/account');
         return;
       }
       if (destination === 'track-my-order' || destination === 'order-history') {
-        openOrderHistory();
+        openCustomerAccount('orders');
       } else {
-        openPlaceholder('Saved Addresses', 'Active shipping address on file:\nSameera Maqsood\n402, Pali Hill Residency, Bandra West, Mumbai 400050, India');
+        openCustomerAccount('shipping');
       }
     }
 
@@ -5368,6 +5449,7 @@
         await loadWishlistItems();
       } else if (tabName === 'signout') {
         isLoggedIn = false;
+        localStorage.removeItem('yoga_session_token');
         const userBtn = document.getElementById('user-account-btn');
         if (userBtn) {
           userBtn.innerHTML = '<span>👤 SIGN IN TO GET REWARDS</span>';
@@ -5377,9 +5459,52 @@
       }
     }
 
+    function syncCustomerUI(customer) {
+      if (!customer) return;
+      currentCustomer = { ...currentCustomer, ...customer };
+      const userBtn = document.getElementById('user-account-btn');
+      if (userBtn) {
+        userBtn.innerHTML = `<span>👤 HI ${(customer.first_name || 'GUEST').toUpperCase()}!</span><span class="points">${customer.vip_status || 'VIP'} | ${customer.reward_points ?? 1} PT</span>`;
+      }
+      const f = document.getElementById('acc-fname'); if (f) f.value = customer.first_name || '';
+      const l = document.getElementById('acc-lname'); if (l) l.value = customer.last_name || '';
+      const em = document.getElementById('acc-email'); if (em) em.value = customer.email || '';
+      const ph = document.getElementById('acc-phone'); if (ph) ph.value = customer.phone || '';
+      const tierEl = document.getElementById('acc-tier-badge');
+      if (tierEl) tierEl.innerText = `${customer.vip_status || 'VIP'} (${customer.reward_points ?? 1} Reward Points Available)`;
+      const ptsEl = document.getElementById('access-points-val');
+      if (ptsEl) ptsEl.innerText = `${customer.reward_points ?? 1} PT`;
+    }
+
+    async function saveCustomerProfile() {
+      const firstName = document.getElementById('acc-fname')?.value?.trim();
+      const lastName = document.getElementById('acc-lname')?.value?.trim();
+      const email = document.getElementById('acc-email')?.value?.trim() || currentCustomer.email;
+      const phone = document.getElementById('acc-phone')?.value?.trim();
+      const statusEl = document.getElementById('acc-profile-status');
+      try {
+        const res = await (await fetch('/api/account/customer', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, firstName, lastName, phone })
+        })).json();
+        if (res.success && res.customer) {
+          syncCustomerUI(res.customer);
+          if (statusEl) {
+            statusEl.style.color = '#265431';
+            statusEl.innerText = '✓ Profile updated in PostgreSQL.';
+            setTimeout(() => statusEl.innerText = '', 3500);
+          }
+        }
+      } catch (e) {
+        if (statusEl) { statusEl.style.color = '#991B1B'; statusEl.innerText = 'Failed to save profile.'; }
+      }
+    }
+
     async function loadCustomerOrders() {
       try {
-        const res = await (await fetch('/api/account/orders?email=sameeramaq@gmail.com')).json();
+        const email = encodeURIComponent(currentCustomer?.email || 'sameeramaq@gmail.com');
+        const res = await (await fetch(`/api/account/orders?email=${email}`)).json();
         const orders = res.orders || [];
         const emptyView = document.getElementById('empty-orders-view');
         const listEl = document.getElementById('orders-records-list');
@@ -5399,7 +5524,7 @@
                 <div style="font-size: 13px; line-height: 1.6; color: var(--text-muted);">
                   <div>Total: <strong>₹${Number(o.grand_total || 0).toLocaleString('en-IN')}</strong></div>
                   <div>Payment: ${(o.payment_method || 'UPI').toUpperCase()}</div>
-                  <div>Delivery: Express Courier to Mumbai (400050)</div>
+                  ${Array.isArray(o.items) && o.items.length > 0 ? `<div style="margin-top: 6px; font-size: 12px; color: var(--brand-espresso);">${o.items.map(it => `• ${it.title} (${it.color_name || ''}, ${it.size || ''}) × ${it.quantity}`).join('<br/>')}</div>` : ''}
                 </div>
               </div>
             `).join('');
@@ -5414,7 +5539,8 @@
       const container = document.getElementById('wishlist-items-container');
       if (!container) return;
       try {
-        const res = await (await fetch('/api/account/wishlist?email=sameeramaq@gmail.com')).json();
+        const email = encodeURIComponent(currentCustomer?.email || 'sameeramaq@gmail.com');
+        const res = await (await fetch(`/api/account/wishlist?email=${email}`)).json();
         const items = res.wishlist || [];
         if (items.length === 0) {
           container.innerHTML = '<p style="color: var(--text-muted); font-size: 13px;">Your wishlist is currently empty. Click the ♡ heart icon on any product to save it here.</p>';
@@ -5505,28 +5631,30 @@
     }
 
     // 5. Cart & Checkout Operations
-    async function ensureCartExists() {
+    async function ensureCartExists(seedDemo = false) {
       if (!currentCartId) {
         try {
           const cRes = await (await fetch('/api/checkout/cart/create', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) })).json();
           currentCartId = cRes.cart.cart_id;
           localStorage.setItem('yoga_cart_id', currentCartId);
 
-          // Seed with Alo Accolade Straight Leg Sweatpant (Deep Gravel, L, ₹13,600 / MRP ₹19,500)
-          await fetch('/api/checkout/cart/items', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              cartId: currentCartId,
-              productId: 'u5012rg-accolade-straight-leg-deep-gravel',
-              variantId: 'u5012rg-accolade-straight-leg-deep-gravel-l',
-              title: 'Accolade Straight Leg Sweatpant',
-              colorName: 'Deep Gravel',
-              size: 'L',
-              unitPrice: 13600.00,
-              quantity: 1
-            })
-          });
+          if (seedDemo && !localStorage.getItem('yoga_order_placed')) {
+            // Seed first-visit bag with Accolade Straight Leg Sweatpant (Deep Gravel, L, ₹13,600 / MRP ₹19,500)
+            await fetch('/api/checkout/cart/items', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                cartId: currentCartId,
+                productId: 'u5012rg-accolade-straight-leg-deep-gravel',
+                variantId: 'u5012rg-accolade-straight-leg-deep-gravel-l',
+                title: 'Accolade Straight Leg Sweatpant',
+                colorName: 'Deep Gravel',
+                size: 'L',
+                unitPrice: 13600.00,
+                quantity: 1
+              })
+            });
+          }
         } catch (e) {
           console.error('Cart initialization error:', e);
         }
@@ -5583,7 +5711,7 @@
         body: JSON.stringify({
           cartId: currentCartId,
           itemId,
-          customerEmail: 'sameeramaq@gmail.com'
+          customerEmail: currentCustomer?.email || 'sameeramaq@gmail.com'
         })
       });
       await refreshCart();
@@ -5596,6 +5724,8 @@
         const res = await (await fetch(`/api/checkout/cart/${currentCartId}`)).json();
         const cart = res.cart;
         if (!cart) return;
+        currentCart = cart;
+        currentCart = cart;
 
         const totalItems = (cart.items || []).reduce((a, b) => a + b.quantity, 0);
         document.getElementById('cart-item-count').innerText = totalItems;
@@ -5604,6 +5734,25 @@
 
         document.getElementById('cart-subtotal').innerText = '₹' + Number(cart.subtotal).toLocaleString('en-IN');
         document.getElementById('cart-grandtotal').innerText = '₹' + Number(cart.grand_total).toLocaleString('en-IN');
+
+        // Free Shipping Progress Bar (₹5,000 threshold)
+        const threshold = Number(cart.freeShippingThreshold || 5000);
+        const subtotalNum = Number(cart.subtotal || 0);
+        const pct = Math.min(100, Math.round((subtotalNum / threshold) * 100));
+        const meterFill = document.getElementById('meter-fill');
+        const meterText = document.getElementById('meter-text');
+        const cartShipEl = document.getElementById('cart-shipping');
+        if (meterFill) meterFill.style.width = `${pct}%`;
+        if (meterText) {
+          meterText.innerText = subtotalNum >= threshold
+            ? '✓ You unlocked FREE Express Shipping (DDP India)!'
+            : `Add ₹${formatInr(threshold - subtotalNum)} more for FREE Express Shipping`;
+        }
+        if (cartShipEl) {
+          cartShipEl.innerText = subtotalNum === 0
+            ? 'Calculated at Checkout'
+            : (subtotalNum >= threshold ? 'FREE' : `₹${formatInr(cart.shipping_fee || 499)}`);
+        }
 
         // Loyalty points banner
         const loyaltyBanner = document.getElementById('loyalty-banner');
@@ -5736,7 +5885,7 @@
         const res = await (await fetch('/api/account/support/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: text, customerEmail: 'sameeramaq@gmail.com' })
+          body: JSON.stringify({ message: text, customerEmail: currentCustomer?.email || 'sameeramaq@gmail.com' })
         })).json();
 
         const indicator = document.getElementById('chat-typing-indicator');
@@ -5818,6 +5967,7 @@
         const res = await (await fetch(`/api/checkout/cart/${currentCartId}`)).json();
         const cart = res.cart;
         if (!cart) return;
+        currentCart = cart;
 
         const totalItems = (cart.items || []).reduce((a, b) => a + b.quantity, 0);
         const countEl = document.getElementById('cart-page-item-count');
@@ -5872,16 +6022,36 @@
           vipPointsEl.innerText = `Earn ${points} points with this purchase!`;
         }
 
-        // Subtotal & Savings
+        // Subtotal, Discount, Shipping & Grand Total
         const subtotalEl = document.getElementById('cart-page-subtotal');
-        if (subtotalEl) {
-          subtotalEl.innerText = '₹' + Number(cart.subtotal).toLocaleString('en-IN');
+        if (subtotalEl) subtotalEl.innerText = '₹' + Number(cart.subtotal).toLocaleString('en-IN');
+
+        const discRow = document.getElementById('cart-page-discount-row');
+        if (discRow) {
+          if (Number(cart.discount_total) > 0 && cart.applied_coupon_code) {
+            discRow.style.display = 'flex';
+            const lbl = document.getElementById('cart-page-coupon-label');
+            const val = document.getElementById('cart-page-discount-val');
+            if (lbl) lbl.innerText = cart.applied_coupon_code;
+            if (val) val.innerText = `-₹${formatInr(cart.discount_total)}`;
+          } else {
+            discRow.style.display = 'none';
+          }
         }
+
+        const shipEl = document.getElementById('cart-page-shipping-val');
+        if (shipEl) {
+          shipEl.innerText = Number(cart.subtotal) >= 5000 ? 'FREE EXPRESS' : (Number(cart.subtotal) > 0 ? `₹${formatInr(cart.shipping_fee || 499)}` : 'CALCULATED AT CHECKOUT');
+        }
+
+        const gtEl = document.getElementById('cart-page-grandtotal');
+        if (gtEl) gtEl.innerText = '₹' + formatInr(cart.grand_total);
 
         const savingsEl = document.getElementById('cart-page-savings-text');
         if (savingsEl) {
-          if (cart.totalSavings > 0) {
-            savingsEl.innerText = `You're saving ₹${Number(cart.totalSavings).toLocaleString('en-IN')} on this order!`;
+          const combinedSavings = Number(cart.totalSavings || 0) + Number(cart.discount_total || 0);
+          if (combinedSavings > 0) {
+            savingsEl.innerText = `You're saving ₹${Number(combinedSavings).toLocaleString('en-IN')} on this order!`;
             savingsEl.style.display = 'block';
           } else {
             savingsEl.style.display = 'none';
@@ -5890,6 +6060,49 @@
       } catch (err) {
         console.error('Failed to render cart page:', err);
       }
+    }
+
+    async function applyCartCoupon() {
+      await ensureCartExists();
+      const input = document.getElementById('cart-promo-input');
+      const statusEl = document.getElementById('cart-promo-status');
+      const code = input?.value?.trim().toUpperCase();
+      if (!code || !currentCartId) return;
+      try {
+        const res = await (await fetch('/api/checkout/cart/coupons/apply', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ cartId: currentCartId, couponCode: code })
+        })).json();
+        if (res.success) {
+          if (statusEl) {
+            statusEl.style.display = 'block';
+            statusEl.style.color = '#265431';
+            statusEl.innerHTML = `✓ Coupon <strong>${code}</strong> applied (-₹${formatInr(res.discountApplied)}) <a onclick="removeCartCoupon()" style="text-decoration:underline; cursor:pointer; margin-left:6px; color:#9E4736;">Remove</a>`;
+          }
+          await renderCartPage();
+          await refreshCart();
+        } else {
+          if (statusEl) {
+            statusEl.style.display = 'block';
+            statusEl.style.color = '#991B1B';
+            statusEl.innerText = res.error || 'Invalid coupon code.';
+          }
+        }
+      } catch (e) { }
+    }
+
+    async function removeCartCoupon() {
+      if (!currentCartId) return;
+      await fetch('/api/checkout/cart/coupons/remove', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cartId: currentCartId })
+      });
+      const statusEl = document.getElementById('cart-promo-status');
+      if (statusEl) statusEl.style.display = 'none';
+      await renderCartPage();
+      await refreshCart();
     }
 
     async function updateCartPageQty(itemId, newQty) {
@@ -5933,7 +6146,7 @@
         body: JSON.stringify({
           cartId: currentCartId,
           itemId,
-          customerEmail: 'sameeramaq@gmail.com'
+          customerEmail: currentCustomer?.email || 'sameeramaq@gmail.com'
         })
       });
       await renderCartPage();
@@ -5969,30 +6182,98 @@
       }
     }
 
-    async function executeCartPageCheckout() {
+    async function openCheckoutModal() {
+      await ensureCartExists();
+      await refreshCart();
+      const overlay = document.getElementById('checkout-modal-overlay');
+      if (!overlay) return;
+
+      const nameEl = document.getElementById('co-name');
+      const emailEl = document.getElementById('co-email');
+      const phoneEl = document.getElementById('co-phone');
+      if (nameEl && currentCustomer) nameEl.value = `${currentCustomer.first_name || ''} ${currentCustomer.last_name || ''}`.trim() || 'Sameera Maqsood';
+      if (emailEl && currentCustomer) emailEl.value = currentCustomer.email || 'sameeramaq@gmail.com';
+      if (phoneEl && currentCustomer) phoneEl.value = currentCustomer.phone || '+91 98200 12345';
+
+      if (currentCart) {
+        const count = (currentCart.items || []).reduce((s, i) => s + (i.quantity || 1), 0);
+        const setTxt = (id, v) => { const el = document.getElementById(id); if (el) el.innerText = v; };
+        setTxt('co-summary-count', count);
+        setTxt('co-summary-subtotal', '₹' + formatInr(currentCart.subtotal));
+        setTxt('co-summary-shipping', Number(currentCart.shipping_fee || 0) === 0 ? 'FREE' : '₹' + formatInr(currentCart.shipping_fee));
+        const dRow = document.getElementById('co-summary-discount-row');
+        if (dRow) {
+          if (Number(currentCart.discount_total) > 0) {
+            dRow.style.display = 'flex';
+            setTxt('co-summary-discount', '-₹' + formatInr(currentCart.discount_total));
+          } else {
+            dRow.style.display = 'none';
+          }
+        }
+        setTxt('co-summary-total', '₹' + formatInr(currentCart.grand_total));
+      }
+
+      overlay.classList.add('active');
+    }
+
+    function closeCheckoutModal() {
+      const overlay = document.getElementById('checkout-modal-overlay');
+      if (overlay) overlay.classList.remove('active');
+    }
+
+    async function submitCheckoutOrder() {
       if (!currentCartId) return;
+      const customerName = document.getElementById('co-name')?.value?.trim() || 'Sameera Maqsood';
+      const customerEmail = document.getElementById('co-email')?.value?.trim() || 'sameeramaq@gmail.com';
+      const customerPhone = document.getElementById('co-phone')?.value?.trim();
+      const pincode = document.getElementById('co-pin')?.value?.trim() || '400050';
+      const street = document.getElementById('co-street')?.value?.trim() || 'Mumbai, India';
+      const paymentMethod = document.getElementById('co-payment-method')?.value || 'upi';
+      const upiId = paymentMethod === 'upi' ? document.getElementById('co-upi-id')?.value?.trim() : null;
       const giftMessage = document.getElementById('gift-message-checkbox')?.checked
         ? (document.getElementById('gift-message-textarea')?.value || '')
         : null;
+
+      await executeCartPageCheckout({
+        customerName, customerEmail, customerPhone, paymentMethod, upiId, giftMessage,
+        shippingAddress: { street, city: street.split(',').slice(-1)[0]?.trim() || 'Mumbai', pincode, country: 'India' }
+      });
+      closeCheckoutModal();
+    }
+
+    async function executeCartPageCheckout(overrides = {}) {
+      if (!currentCartId) return;
+      const giftMessage = overrides.giftMessage ?? (document.getElementById('gift-message-checkbox')?.checked
+        ? (document.getElementById('gift-message-textarea')?.value || '')
+        : null);
 
       const res = await (await fetch('/api/checkout/payments/place-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           cartId: currentCartId,
-          customerEmail: 'sameeramaq@gmail.com',
-          customerName: 'Sameera Maqsood',
-          paymentMethod: 'upi',
+          customerEmail: overrides.customerEmail || currentCustomer?.email || 'sameeramaq@gmail.com',
+          customerName: overrides.customerName || `${currentCustomer?.first_name || 'Sameera'} ${currentCustomer?.last_name || 'Maqsood'}`.trim(),
+          customerPhone: overrides.customerPhone || currentCustomer?.phone,
+          paymentMethod: overrides.paymentMethod || 'upi',
+          upiId: overrides.upiId || null,
+          shippingAddress: overrides.shippingAddress || { country: 'India', city: 'Mumbai', pincode: '400050' },
           giftMessage
         })
       })).json();
 
       if (res.success) {
-        showAloMessage('Order Confirmed', `Order placed successfully via UPI!\n\nOrder ID: #${res.orderId}\nTotal Paid: ₹${Number(res.amountPaid).toLocaleString('en-IN')}\n\nGST invoice and tracking details dispatched to sameeramaq@gmail.com.`);
+        const payLbl = (res.paymentMethod || 'UPI').toUpperCase();
+        showAloMessage('Order Confirmed', `Order placed successfully via ${payLbl}!\n\nOrder ID: #${res.orderId}\nTotal Paid: ₹${Number(res.amountPaid).toLocaleString('en-IN')}\n\nGST invoice and tracking details dispatched to ${overrides.customerEmail || currentCustomer?.email || 'sameeramaq@gmail.com'}.`);
+        localStorage.setItem('yoga_order_placed', 'true');
         localStorage.removeItem('yoga_cart_id');
         currentCartId = null;
+        currentCart = null;
+        await ensureCartExists(false);
         await renderCartPage();
         await refreshCart();
+      } else {
+        showAloMessage('Checkout Notice', res.error || 'Could not complete order.');
       }
     }
 
@@ -6130,10 +6411,7 @@
           if (res.token) {
             localStorage.setItem('yoga_session_token', res.token);
           }
-          const userBtn = document.getElementById('user-account-btn');
-          if (userBtn) {
-            userBtn.innerHTML = `<span>👤 HI ${res.customer.first_name.toUpperCase()}!</span><span class="points">VIP | ${res.customer.reward_points || 1} PT</span>`;
-          }
+          syncCustomerUI(res.customer);
           showAloMessage('Welcome to YOGA Access', `Welcome, ${res.customer.first_name}!\n\nYour YOGA Access VIP membership is now active. Enjoy 1 Point on every purchase & sitewide member privileges.`);
           openCustomerAccount('orders');
         } else {
@@ -6169,10 +6447,7 @@
           if (res.token) {
             localStorage.setItem('yoga_session_token', res.token);
           }
-          const userBtn = document.getElementById('user-account-btn');
-          if (userBtn) {
-            userBtn.innerHTML = `<span>👤 HI ${res.customer.first_name.toUpperCase()}!</span><span class="points">VIP | ${res.customer.reward_points || 1} PT</span>`;
-          }
+          syncCustomerUI(res.customer);
           openCustomerAccount('orders');
         } else {
           const errMsg = res.error || 'Invalid email or password.';
@@ -6184,8 +6459,18 @@
       }
     }
 
-    function showForgotPasswordPrompt() {
-      showAloMessage('Reset Password', 'Please check your registered email address.\n\nA secure password reset link has been dispatched to your inbox.');
+    async function showForgotPasswordPrompt() {
+      const email = document.getElementById('auth-signin-email')?.value?.trim() || currentCustomer?.email || 'sameeramaq@gmail.com';
+      try {
+        const res = await (await fetch('/api/account/auth/forgot-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        })).json();
+        showAloMessage('Reset Password', res.message || `Password reset instructions dispatched to ${email}.`);
+      } catch (e) {
+        showAloMessage('Reset Password', `Password reset instructions dispatched to ${email}.`);
+      }
     }
 
     function handleUserAccountClick() {
@@ -6422,13 +6707,13 @@
         currentPdpVariants = res.variants || [];
         currentPdpReviews = res.reviews || [];
 
-        renderPdpUI(currentPdpProduct, currentPdpVariants, currentPdpReviews, res.similarItems || []);
+        renderPdpUI(currentPdpProduct, currentPdpVariants, currentPdpReviews, res.similarItems || [], res.reviewStats);
       } catch (err) {
         console.error('Failed to load PDP data:', err);
       }
     }
 
-    function renderPdpUI(product, variants, reviews, similarItems) {
+    function renderPdpUI(product, variants, reviews, similarItems, reviewStats = null) {
       // Titles, prices & badges
       document.getElementById('pdp-title').innerText = product.title;
       document.getElementById('pdp-sale-price').innerText = '₹' + Number(product.sale_price).toLocaleString('en-IN');
@@ -6576,14 +6861,64 @@
                 <span class="sale-price" style="font-size: 14px;">₹${Number(si.sale_price).toLocaleString('en-IN')}</span>
                 <span class="mrp-price" style="font-size: 11px;">₹${Number(si.mrp).toLocaleString('en-IN')}</span>
               </div>
-              <button class="btn-quick-add" onclick="event.stopPropagation(); addToCart('${si.product_id}', '${si.title.replace(/'/g, "\'")}', ${si.sale_price})">Quick Add</button>
+              <button class="btn-quick-add" onclick="event.stopPropagation(); addToCart('${si.product_id}', '${si.title.replace(/'/g, "\\'")}', ${si.sale_price})">Quick Add</button>
             </div>
           </div>
         `).join('');
       }
 
-      // Customer Reviews Section
+      // Customer Reviews Section & Live Rating Aggregation
+      const ratingEl = document.getElementById('pdp-reviews-rating');
+      const countEl = document.getElementById('pdp-reviews-count');
+      if (reviewStats && reviewStats.count > 0) {
+        if (ratingEl) ratingEl.innerText = reviewStats.avgRating;
+        if (countEl) countEl.innerText = `${reviewStats.count} Review${reviewStats.count === 1 ? '' : 's'}`;
+      } else {
+        if (ratingEl) ratingEl.innerText = '4.8';
+        if (countEl) countEl.innerText = `${(reviews || []).length || 0} Reviews`;
+      }
       renderPdpReviews(reviews);
+    }
+
+    function toggleWriteReviewForm() {
+      const box = document.getElementById('pdp-write-review-box');
+      if (!box) return;
+      const isHidden = box.style.display === 'none';
+      box.style.display = isHidden ? 'block' : 'none';
+      if (isHidden) {
+        const authorIn = document.getElementById('rev-author');
+        if (authorIn && !authorIn.value && currentCustomer) {
+          authorIn.value = `${currentCustomer.first_name || ''} ${currentCustomer.last_name || ''}`.trim();
+        }
+      }
+    }
+
+    async function submitPdpReview() {
+      if (!currentPdpProduct) return;
+      const authorName = document.getElementById('rev-author')?.value?.trim() || 'Verified Customer';
+      const rating = Number(document.getElementById('rev-rating')?.value || 5);
+      const fitFeedback = document.getElementById('rev-fit')?.value || 'True to Size';
+      const headline = document.getElementById('rev-headline')?.value?.trim();
+      const comment = document.getElementById('rev-comment')?.value?.trim();
+      if (!headline && !comment) {
+        showAloMessage('Review Details', 'Please enter a headline or review comment before submitting.');
+        return;
+      }
+      try {
+        const res = await (await fetch('/api/catalog/products/reviews', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ productId: currentPdpProduct.product_id, authorName, rating, headline, comment, fitFeedback })
+        })).json();
+        if (res.success && res.review) {
+          currentPdpReviews.unshift(res.review);
+          renderPdpReviews(currentPdpReviews);
+          document.getElementById('pdp-write-review-box').style.display = 'none';
+          const countEl = document.getElementById('pdp-reviews-count');
+          if (countEl) countEl.innerText = `${currentPdpReviews.length} Reviews`;
+          showAloMessage('Review Published', 'Thank you! Your verified review has been published to this product.');
+        }
+      } catch (e) { }
     }
 
     function selectPdpThumbnail(imgUrl, el) {
@@ -6612,10 +6947,10 @@
       await addToCart(currentPdpProduct.product_id, currentPdpProduct.title, currentPdpProduct.sale_price, color, size);
     }
 
-    function executePdpWishlist() {
+    async function executePdpWishlist() {
       if (!currentPdpProduct) return;
-      addToWishlist(currentPdpProduct.product_id, currentPdpProduct.title, currentPdpProduct.sale_price);
-      alert(`✓ Added ${currentPdpProduct.title} to your Wishlist!`);
+      await addToWishlist(currentPdpProduct.product_id, currentPdpProduct.title, currentPdpProduct.sale_price);
+      showAloMessage('Saved to Wishlist', `✓ Added "${currentPdpProduct.title}" to your YOGA Wishlist.`);
     }
 
     function togglePdpAccordion(section) {
@@ -6779,11 +7114,90 @@
       }
     });
 
+    // Clickstream Telemetry & Auth Token Verification
+    let telemetrySessionId = null;
+    let telemetryVisitorId = null;
+
+    async function initTelemetrySession() {
+      try {
+        let anonId = localStorage.getItem('yoga_visitor_anon_id');
+        if (!anonId) {
+          anonId = 'vis-' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+          localStorage.setItem('yoga_visitor_anon_id', anonId);
+        }
+        const res = await (await fetch('/api/telemetry/clicks/session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            anonymousId: anonId,
+            userAgent: navigator.userAgent,
+            deviceType: window.innerWidth <= 768 ? 'mobile' : 'desktop',
+            locale: 'en-in',
+            currency: 'INR'
+          })
+        })).json();
+        if (res.success && res.session) {
+          telemetrySessionId = res.session.session_id;
+          telemetryVisitorId = res.session.visitor_id;
+        }
+      } catch (e) { }
+    }
+
+    function trackClickEvent(componentName, actionName, elementId = null, elementText = null) {
+      if (!telemetrySessionId || !telemetryVisitorId) return;
+      try {
+        fetch('/api/telemetry/clicks/track', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sessionId: telemetrySessionId,
+            visitorId: telemetryVisitorId,
+            pageType: window.location.pathname.startsWith('/products/') ? 'pdp' : (window.location.pathname === '/cart' ? 'cart' : 'home'),
+            currentUrl: window.location.pathname,
+            componentName,
+            elementId,
+            elementText: (elementText || '').slice(0, 120),
+            actionName
+          })
+        }).catch(() => {});
+      } catch (e) { }
+    }
+
+    document.addEventListener('click', (e) => {
+      const target = e.target.closest('button, a, .product-card, .pill-link, .quick-add-pill');
+      if (!target) return;
+      const comp = target.className ? String(target.className).split(' ')[0] : target.tagName;
+      const action = target.id ? `click_${target.id}` : `click_${comp}`;
+      trackClickEvent(comp || 'ui', action, target.id || null, target.innerText || target.title || '');
+    });
+
+    async function verifyExistingSession() {
+      const token = localStorage.getItem('yoga_session_token');
+      if (!token) {
+        try {
+          const res = await (await fetch('/api/account/customer?email=sameeramaq@gmail.com')).json();
+          if (res.success && res.customer) syncCustomerUI(res.customer);
+        } catch (e) { }
+        return;
+      }
+      try {
+        const res = await (await fetch('/api/account/auth/verify', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })).json();
+        if (res.success && res.authenticated && res.customer) {
+          isLoggedIn = true;
+          syncCustomerUI(res.customer);
+        }
+      } catch (e) { }
+    }
+
     // Bootstrap
+    verifyExistingSession();
+    initTelemetrySession();
     loadMegaMenu();
     loadProducts();
     loadLookbook();
-    ensureCartExists().then(() => {
+    ensureCartExists(true).then(() => {
       refreshCart();
       handleInitialRoute();
     });
