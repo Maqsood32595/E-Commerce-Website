@@ -66,11 +66,17 @@ router.post('/items/update', async (req, res) => {
         if (Number(quantity) <= 0) {
             await db.query('DELETE FROM cart_items WHERE item_id = $1 AND cart_id = $2', [itemId, cartId]);
         } else {
+            const itemRes = await db.query('SELECT unit_price FROM cart_items WHERE item_id = $1 AND cart_id = $2', [itemId, cartId]);
+            if (itemRes.rows.length === 0) {
+                return res.status(404).json({ error: 'Item not found in cart' });
+            }
+            const unitPrice = Number(itemRes.rows[0].unit_price);
+            const qty = Number(quantity);
             await db.query(`
                 UPDATE cart_items 
-                SET quantity = $3, line_total = $3 * unit_price
+                SET quantity = $3, line_total = $4
                 WHERE item_id = $1 AND cart_id = $2
-            `, [itemId, cartId, Number(quantity)]);
+            `, [itemId, cartId, qty, qty * unitPrice]);
         }
         const cart = await recalculateCart(cartId);
         res.json({ success: true, slice: 'checkout.cart', cart });

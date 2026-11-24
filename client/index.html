@@ -1191,6 +1191,255 @@
       padding: 4px;
     }
     .chat-send-btn:hover { color: var(--brand-terracotta); }
+
+    /* FULL CART / CHECKOUT REVIEW PAGE (Exact Alo Yoga Spec) */
+    .cart-page-container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+      min-height: 70vh;
+    }
+    .cart-page-grid {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 60px;
+      align-items: flex-start;
+    }
+    @media (max-width: 860px) {
+      .cart-page-grid { grid-template-columns: 1fr; gap: 40px; }
+    }
+    .cart-page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+    .cart-page-title {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--brand-espresso);
+    }
+    .cart-page-count {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .cart-page-item {
+      display: grid;
+      grid-template-columns: 130px 1fr auto auto auto;
+      gap: 20px;
+      align-items: center;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    @media (max-width: 600px) {
+      .cart-page-item { grid-template-columns: 90px 1fr; }
+    }
+    .cart-page-img {
+      width: 130px;
+      height: 160px;
+      object-fit: cover;
+      background: var(--bg-surface);
+      border-radius: 2px;
+    }
+    .cart-page-item-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .cart-page-item-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--brand-espresso);
+      text-decoration: none;
+      line-height: 1.4;
+    }
+    .cart-page-item-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .cart-page-move-wishlist {
+      font-size: 12px;
+      color: var(--brand-espresso);
+      text-decoration: underline;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+      text-align: left;
+      margin-top: 8px;
+    }
+    .cart-page-move-wishlist:hover { color: var(--brand-terracotta); }
+    .cart-page-stepper {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--border-subtle);
+      border-radius: 2px;
+      background: #FFF;
+    }
+    .cart-page-stepper-btn {
+      background: none;
+      border: none;
+      width: 32px;
+      height: 32px;
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--brand-espresso);
+    }
+    .cart-page-stepper-btn:hover { background: var(--bg-surface); }
+    .cart-page-stepper-val {
+      width: 28px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .cart-page-prices {
+      display: flex;
+      gap: 8px;
+      align-items: baseline;
+      font-size: 14px;
+    }
+    .cart-page-price { font-weight: 700; color: var(--brand-espresso); }
+    .cart-page-mrp { font-size: 12px; color: var(--text-muted); text-decoration: line-through; }
+    .cart-page-remove-btn {
+      background: none;
+      border: none;
+      font-size: 18px;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px;
+    }
+    .cart-page-remove-btn:hover { color: var(--brand-espresso); }
+    .cart-page-vip-box {
+      margin-top: 28px;
+      padding: 20px 0;
+    }
+    .cart-page-vip-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--brand-espresso);
+      margin-bottom: 4px;
+    }
+    .cart-page-vip-points {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .cart-page-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .gift-message-box {
+      padding: 16px 20px;
+      border: 1px solid var(--border-subtle);
+      background: #FFF;
+      border-radius: 2px;
+    }
+    .gift-message-toggle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--brand-espresso);
+      cursor: pointer;
+    }
+    .gift-message-textarea {
+      width: 100%;
+      height: 70px;
+      margin-top: 12px;
+      padding: 10px;
+      font-size: 12px;
+      border: 1px solid var(--border-subtle);
+      border-radius: 2px;
+      outline: none;
+      box-sizing: border-box;
+      font-family: inherit;
+      display: none;
+    }
+    .order-summary-card {
+      border: 1px solid var(--border-subtle);
+      padding: 24px;
+      background: #FFF;
+      border-radius: 2px;
+    }
+    .order-summary-title {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--brand-espresso);
+      margin-bottom: 20px;
+    }
+    .order-summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      margin-bottom: 12px;
+      color: var(--brand-espresso);
+    }
+    .order-summary-savings {
+      color: #8A3324;
+      font-size: 13px;
+      font-weight: 600;
+      margin: 16px 0;
+      text-align: center;
+    }
+    .btn-checkout-primary {
+      width: 100%;
+      background: #111111;
+      color: #FFF;
+      border: none;
+      padding: 15px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: background 0.2s;
+    }
+    .btn-checkout-primary:hover { background: var(--brand-terracotta); }
+    .cart-help-accordion {
+      border: 1px solid var(--border-subtle);
+      background: #FFF;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .cart-help-header {
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--brand-espresso);
+    }
+    .cart-help-content {
+      padding: 0 20px 18px;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .cart-help-content a {
+      color: var(--brand-espresso);
+      text-decoration: underline;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -1403,6 +1652,88 @@
             </div>
             <button class="btn-start-shopping" style="padding: 10px 24px;" onclick="checkGiftCardBalance()">Check Balance</button>
             <div id="gift-card-result" style="margin-top: 16px; font-size: 13px; font-weight: 600;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dedicated Full Cart & Checkout Review Page (Matching Alo Yoga Cart Spec) -->
+  <section class="cart-page-container" id="cart-page-section" style="display: none;">
+    <div class="cart-page-header">
+      <h1 class="cart-page-title">SHOPPING BAG</h1>
+      <span class="cart-page-count" id="cart-page-item-count">1 ITEM</span>
+    </div>
+
+    <div class="cart-page-grid">
+      <!-- Left Column: Items List & VIP Points Notice -->
+      <div class="cart-page-items-col">
+        <div id="cart-page-items-list">
+          <!-- Dynamically populated from active cart -->
+        </div>
+
+        <div class="cart-page-vip-box" id="cart-page-vip-box">
+          <div class="cart-page-vip-title">vip</div>
+          <div class="cart-page-vip-points" id="cart-page-vip-points-text">Earn 146 points with this purchase!</div>
+        </div>
+      </div>
+
+      <!-- Right Column: Gift Message, Order Summary & Support -->
+      <div class="cart-page-sidebar">
+        <!-- Gift Message Option -->
+        <div class="gift-message-box">
+          <label class="gift-message-toggle">
+            <input type="checkbox" id="gift-message-checkbox" onchange="toggleGiftMessageTextarea(this.checked)" />
+            <span>Add a Gift Message</span>
+          </label>
+          <textarea class="gift-message-textarea" id="gift-message-textarea" placeholder="Enter your personalized gift message (complimentary embossed card included)..."></textarea>
+        </div>
+
+        <!-- Order Summary Card -->
+        <div class="order-summary-card">
+          <div class="order-summary-title">ORDER SUMMARY</div>
+          <div class="order-summary-row">
+            <span>Subtotal:</span>
+            <span id="cart-page-subtotal" style="font-weight: 700;">₹13,600</span>
+          </div>
+          <div class="order-summary-row">
+            <span>Shipping:</span>
+            <span style="font-size: 11px; text-transform: uppercase; font-weight: 600;">CALCULATED AT CHECKOUT</span>
+          </div>
+          <div class="order-summary-savings" id="cart-page-savings-text">
+            You're saving ₹5,900 on this order!
+          </div>
+          <button class="btn-checkout-primary" id="btn-cart-page-checkout" onclick="executeCartPageCheckout()">
+            CHECKOUT
+          </button>
+        </div>
+
+        <!-- Need Help Collapsible -->
+        <div class="cart-help-accordion">
+          <div class="cart-help-header" onclick="toggleHelpAccordion('need-help')">
+            <span>NEED HELP?</span>
+            <span id="help-toggle-icon">▲</span>
+          </div>
+          <div class="cart-help-content" id="help-content-box">
+            <p>Visit our <a onclick="openCms('faq')">FAQ page</a>, call us at <a href="tel:855-793-3100">855-793-3100</a>, or <a onclick="openLiveSupport()">chat us</a> using our live support:</p>
+            <p style="margin-top: 8px;">
+              Mon-Fri: 6:00AM - 6:30PM PT<br/>
+              Sat-Sun: 8:00AM - 4:30PM PT
+            </p>
+            <p style="margin-top: 8px;">
+              <a href="mailto:support@yoga.com">Email us</a> anytime. If you contact us after business hours, we will get back to you the following business day.
+            </p>
+          </div>
+        </div>
+
+        <!-- Free Returns Collapsible -->
+        <div class="cart-help-accordion">
+          <div class="cart-help-header" onclick="toggleHelpAccordion('returns')">
+            <span>FREE RETURNS</span>
+            <span id="returns-toggle-icon">▼</span>
+          </div>
+          <div class="cart-help-content" id="returns-content-box" style="display: none;">
+            <p>We will gladly accept unworn, unwashed, unaltered or unused merchandise in sellable condition for a refund through January 10, 2027.</p>
           </div>
         </div>
       </div>
@@ -2474,6 +2805,8 @@
     // 5. View Switching & Auth Gating
     function openPlaceholder(title, desc) {
       document.getElementById('catalog-section').style.display = 'none';
+      const cartSec = document.getElementById('cart-page-section');
+      if (cartSec) cartSec.style.display = 'none';
       const cv = document.getElementById('content-view');
       cv.classList.add('active');
       document.getElementById('content-title').innerText = title;
@@ -2515,9 +2848,12 @@
       const catSec = document.getElementById('catalog-section');
       const contentSec = document.getElementById('content-view');
       const accSec = document.getElementById('account-section');
+      const cartSec = document.getElementById('cart-page-section');
       if (catSec) catSec.style.display = 'none';
+      if (cartSec) cartSec.style.display = 'none';
       if (contentSec) contentSec.classList.remove('active');
       if (accSec) accSec.style.display = 'block';
+      if (window.location.pathname !== '/account') history.pushState(null, '', '/account');
       openAccountTab(tab);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -2530,9 +2866,12 @@
       const catSec = document.getElementById('catalog-section');
       const contentSec = document.getElementById('content-view');
       const accSec = document.getElementById('account-section');
+      const cartSec = document.getElementById('cart-page-section');
       if (accSec) accSec.style.display = 'none';
+      if (cartSec) cartSec.style.display = 'none';
       if (contentSec) contentSec.classList.remove('active');
       if (catSec) catSec.style.display = 'block';
+      if (window.location.pathname !== '/') history.pushState(null, '', '/');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -2987,9 +3326,201 @@
     document.getElementById('close-cart-btn').addEventListener('click', () => { document.getElementById('cart-drawer').classList.remove('open'); document.getElementById('cart-overlay').classList.remove('open'); });
     document.getElementById('cart-overlay').addEventListener('click', () => { document.getElementById('cart-drawer').classList.remove('open'); document.getElementById('cart-overlay').classList.remove('open'); });
 
-    // Checkout
-    document.getElementById('checkout-btn').addEventListener('click', async () => {
+    // Drawer Checkout Button -> Opens Full Shopping Bag & Checkout Review Page (/cart)
+    document.getElementById('checkout-btn').addEventListener('click', () => {
+      openCartPage();
+    });
+
+    // 6. Dedicated Full Cart / Checkout Review Page (/cart)
+    function openCartPage() {
+      // Close drawer if open
+      document.getElementById('cart-drawer').classList.remove('open');
+      document.getElementById('cart-overlay').classList.remove('open');
+
+      // Hide other views
+      const catSec = document.getElementById('catalog-section');
+      const contentSec = document.getElementById('content-view');
+      const accSec = document.getElementById('account-section');
+      const cartSec = document.getElementById('cart-page-section');
+
+      if (catSec) catSec.style.display = 'none';
+      if (contentSec) contentSec.classList.remove('active');
+      if (accSec) accSec.style.display = 'none';
+      if (cartSec) cartSec.style.display = 'block';
+
+      if (window.location.pathname !== '/cart') {
+        history.pushState(null, '', '/cart');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      renderCartPage();
+    }
+
+    async function renderCartPage() {
+      await ensureCartExists();
       if (!currentCartId) return;
+
+      try {
+        const res = await (await fetch(`/api/checkout/cart/${currentCartId}`)).json();
+        const cart = res.cart;
+        if (!cart) return;
+
+        const totalItems = (cart.items || []).reduce((a, b) => a + b.quantity, 0);
+        const countEl = document.getElementById('cart-page-item-count');
+        if (countEl) {
+          countEl.innerText = `${totalItems} ${totalItems === 1 ? 'ITEM' : 'ITEMS'}`;
+        }
+
+        // Render Cart Page Items
+        const listEl = document.getElementById('cart-page-items-list');
+        if (!listEl) return;
+
+        if (!cart.items || cart.items.length === 0) {
+          listEl.innerHTML = `
+            <div style="padding: 48px 16px; text-align: center; color: var(--text-muted); background: #FFF; border: 1px solid var(--border-subtle); border-radius: 2px;">
+              <p style="font-size: 15px; margin-bottom: 20px;">Your shopping bag is empty.</p>
+              <button class="btn-checkout-primary" style="max-width: 200px; margin: 0 auto;" onclick="showCatalogView()">START SHOPPING</button>
+            </div>
+          `;
+          const vipBox = document.getElementById('cart-page-vip-box');
+          if (vipBox) vipBox.style.display = 'none';
+        } else {
+          const vipBox = document.getElementById('cart-page-vip-box');
+          if (vipBox) vipBox.style.display = 'block';
+
+          listEl.innerHTML = cart.items.map(item => `
+            <div class="cart-page-item" id="cart-page-item-${item.item_id}">
+              <img class="cart-page-img" src="${item.image_url || 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80'}" alt="${item.title}" />
+              <div class="cart-page-item-info">
+                <a class="cart-page-item-title" onclick="filterProducts('all', null, '${item.title.replace(/'/g, "\\'")}')">${item.title}</a>
+                <div class="cart-page-item-meta">Color: ${item.color_name || 'Deep Gravel'}</div>
+                <div class="cart-page-item-meta">Size: ${item.size || 'L'}</div>
+                <button class="cart-page-move-wishlist" onclick="moveCartPageItemToWishlist('${item.item_id}', '${item.title.replace(/'/g, "\\'")}')">Move to Wishlist</button>
+              </div>
+              <div class="cart-page-stepper">
+                <button class="cart-page-stepper-btn" onclick="updateCartPageQty('${item.item_id}', ${item.quantity - 1})">−</button>
+                <span class="cart-page-stepper-val">${item.quantity}</span>
+                <button class="cart-page-stepper-btn" onclick="updateCartPageQty('${item.item_id}', ${item.quantity + 1})">+</button>
+              </div>
+              <div class="cart-page-prices">
+                <span class="cart-page-price">₹${Number(item.unit_price).toLocaleString('en-IN')}</span>
+                <span class="cart-page-mrp">₹${Number(item.mrp || Math.round(item.unit_price * 1.4338)).toLocaleString('en-IN')}</span>
+              </div>
+              <button class="cart-page-remove-btn" onclick="removeCartPageItem('${item.item_id}')" title="Remove Item">✕</button>
+            </div>
+          `).join('');
+        }
+
+        // VIP Points
+        const points = cart.rewardPoints || Math.round(Number(cart.subtotal) / 93);
+        const vipPointsEl = document.getElementById('cart-page-vip-points-text');
+        if (vipPointsEl) {
+          vipPointsEl.innerText = `Earn ${points} points with this purchase!`;
+        }
+
+        // Subtotal & Savings
+        const subtotalEl = document.getElementById('cart-page-subtotal');
+        if (subtotalEl) {
+          subtotalEl.innerText = '₹' + Number(cart.subtotal).toLocaleString('en-IN');
+        }
+
+        const savingsEl = document.getElementById('cart-page-savings-text');
+        if (savingsEl) {
+          if (cart.totalSavings > 0) {
+            savingsEl.innerText = `You're saving ₹${Number(cart.totalSavings).toLocaleString('en-IN')} on this order!`;
+            savingsEl.style.display = 'block';
+          } else {
+            savingsEl.style.display = 'none';
+          }
+        }
+      } catch (err) {
+        console.error('Failed to render cart page:', err);
+      }
+    }
+
+    async function updateCartPageQty(itemId, newQty) {
+      if (!currentCartId) return;
+      if (newQty <= 0) {
+        await removeCartPageItem(itemId);
+        return;
+      }
+      await fetch('/api/checkout/cart/items/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          cartId: currentCartId,
+          itemId,
+          quantity: newQty
+        })
+      });
+      await renderCartPage();
+      await refreshCart();
+    }
+
+    async function removeCartPageItem(itemId) {
+      if (!currentCartId) return;
+      await fetch('/api/checkout/cart/items/remove', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          cartId: currentCartId,
+          itemId
+        })
+      });
+      await renderCartPage();
+      await refreshCart();
+    }
+
+    async function moveCartPageItemToWishlist(itemId, title) {
+      if (!currentCartId) return;
+      await fetch('/api/checkout/cart/items/wishlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          cartId: currentCartId,
+          itemId,
+          customerEmail: 'sameeramaq@gmail.com'
+        })
+      });
+      await renderCartPage();
+      await refreshCart();
+      showAloMessage('Saved to Wishlist', `"${title}" has been moved to your Wishlist.\n\nYou can access your saved favorites anytime from My Account.`);
+    }
+
+    function toggleGiftMessageTextarea(isChecked) {
+      const textarea = document.getElementById('gift-message-textarea');
+      if (textarea) {
+        textarea.style.display = isChecked ? 'block' : 'none';
+        if (isChecked) textarea.focus();
+      }
+    }
+
+    function toggleHelpAccordion(accId) {
+      if (accId === 'need-help') {
+        const box = document.getElementById('help-content-box');
+        const icon = document.getElementById('help-toggle-icon');
+        if (box) {
+          const isOpen = box.style.display !== 'none';
+          box.style.display = isOpen ? 'none' : 'block';
+          if (icon) icon.innerText = isOpen ? '▼' : '▲';
+        }
+      } else if (accId === 'returns') {
+        const box = document.getElementById('returns-content-box');
+        const icon = document.getElementById('returns-toggle-icon');
+        if (box) {
+          const isOpen = box.style.display !== 'none';
+          box.style.display = isOpen ? 'none' : 'block';
+          if (icon) icon.innerText = isOpen ? '▼' : '▲';
+        }
+      }
+    }
+
+    async function executeCartPageCheckout() {
+      if (!currentCartId) return;
+      const giftMessage = document.getElementById('gift-message-checkbox')?.checked 
+        ? (document.getElementById('gift-message-textarea')?.value || '') 
+        : null;
+
       const res = await (await fetch('/api/checkout/payments/place-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -2997,19 +3528,19 @@
           cartId: currentCartId,
           customerEmail: 'sameeramaq@gmail.com',
           customerName: 'Sameera Maqsood',
-          paymentMethod: 'upi'
+          paymentMethod: 'upi',
+          giftMessage
         })
       })).json();
 
       if (res.success) {
-        document.getElementById('cart-drawer').classList.remove('open');
-        document.getElementById('cart-overlay').classList.remove('open');
         showAloMessage('Order Confirmed', `Order placed successfully via UPI!\n\nOrder ID: #${res.orderId}\nTotal Paid: ₹${Number(res.amountPaid).toLocaleString('en-IN')}\n\nGST invoice and tracking details dispatched to sameeramaq@gmail.com.`);
         localStorage.removeItem('yoga_cart_id');
         currentCartId = null;
-        refreshCart();
+        await renderCartPage();
+        await refreshCart();
       }
-    });
+    }
 
     // Themed Modal Helper
     function showAloMessage(title, body) {
@@ -3033,11 +3564,43 @@
       if (el) el.innerHTML = announcements[announcementIdx];
     }, 4500);
 
+    // Initial Routing & History Traversal
+    function handleInitialRoute() {
+      const path = window.location.pathname;
+      if (path === '/cart' || path === '/checkout') {
+        openCartPage();
+      } else if (path === '/account') {
+        openCustomerAccount();
+      } else if (path === '/pages/in-access') {
+        openAloAccessPage();
+      } else if (path === '/pages/gift-guide') {
+        openGiftGuidePage();
+      }
+    }
+
+    window.addEventListener('popstate', () => {
+      const path = window.location.pathname;
+      if (path === '/cart' || path === '/checkout') {
+        openCartPage();
+      } else if (path === '/account') {
+        openCustomerAccount();
+      } else if (path === '/pages/in-access') {
+        openAloAccessPage();
+      } else if (path === '/pages/gift-guide') {
+        openGiftGuidePage();
+      } else {
+        showCatalogView();
+      }
+    });
+
     // Bootstrap
     loadMegaMenu();
     loadProducts();
     loadLookbook();
-    ensureCartExists().then(() => refreshCart());
+    ensureCartExists().then(() => {
+      refreshCart();
+      handleInitialRoute();
+    });
   </script>
 </body>
 </html>
