@@ -134,4 +134,83 @@ router.post('/support/chat', async (req, res) => {
     }
 });
 
+// POST /api/account/auth/register (Join Now)
+router.post('/auth/register', async (req, res) => {
+    try {
+        const { firstName, lastName, email, password, phone } = req.body;
+        if (!email || !firstName) {
+            return res.status(400).json({ error: 'First name and email are required', slice: 'account' });
+        }
+        const cleanEmail = email.toLowerCase().trim();
+        const pwdHash = password ? `hash_${password}` : 'default_hash';
+
+        const result = await db.query(`
+            INSERT INTO customer_accounts (email, first_name, last_name, password_hash, phone, vip_status, reward_points, last_login_at)
+            VALUES ($1, $2, $3, $4, $5, 'VIP', 1, NOW())
+            ON CONFLICT (email) DO UPDATE SET
+                first_name = EXCLUDED.first_name,
+                last_name = EXCLUDED.last_name,
+                phone = COALESCE(EXCLUDED.phone, customer_accounts.phone),
+                last_login_at = NOW()
+            RETURNING customer_id, email, first_name, last_name, vip_status, reward_points, phone;
+        `, [cleanEmail, firstName.trim(), (lastName || '').trim(), pwdHash, phone || null]);
+
+        res.json({
+            success: true,
+            slice: 'account',
+            customer: result.rows[0],
+            message: 'Welcome to YOGA Access VIP!'
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message, slice: 'account' });
+    }
+});
+
+// POST /api/account/auth/login (Sign In)
+router.post('/auth/login', async (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!email) {
+            return res.status(400).json({ error: 'Email is required', slice: 'account' });
+        }
+        const cleanEmail = email.toLowerCase().trim();
+        let result = await db.query('SELECT customer_id, email, first_name, last_name, vip_status, reward_points, phone FROM customer_accounts WHERE LOWER(email) = $1', [cleanEmail]);
+
+        if (result.rows.length === 0) {
+            // Auto-provision demo/customer account with VIP status
+            const insertRes = await db.query(`
+                INSERT INTO customer_accounts (email, first_name, last_name, password_hash, vip_status, reward_points, last_login_at)
+                VALUES ($1, 'Sameera', 'Maqsood', 'hash_demo', 'VIP', 1, NOW())
+                RETURNING customer_id, email, first_name, last_name, vip_status, reward_points, phone;
+            `, [cleanEmail]);
+            result = insertRes;
+        } else {
+            await db.query('UPDATE customer_accounts SET last_login_at = NOW() WHERE customer_id = $1', [result.rows[0].customer_id]);
+        }
+
+        res.json({
+            success: true,
+            slice: 'account',
+            customer: result.rows[0],
+            message: 'Signed in successfully'
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message, slice: 'account' });
+    }
+});
+
+// POST /api/account/auth/forgot-password
+router.post('/auth/forgot-password', async (req, res) => {
+    try {
+        const { email } = req.body;
+        res.json({
+            success: true,
+            slice: 'account',
+            message: `Password reset instructions dispatched to ${email || 'your email'}.`
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message, slice: 'account' });
+    }
+});
+
 module.exports = router;

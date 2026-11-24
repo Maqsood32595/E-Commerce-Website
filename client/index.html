@@ -1440,6 +1440,139 @@
       text-decoration: underline;
       cursor: pointer;
     }
+
+    /* DEDICATED CUSTOMER AUTHENTICATION PORTAL (/account/login) */
+    .auth-page-container {
+      max-width: 520px;
+      margin: 40px auto 80px;
+      padding: 0 20px;
+      min-height: 65vh;
+    }
+    .auth-promo-banner {
+      background: #8E3A2B;
+      color: #FFF;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 32px;
+      margin-bottom: 28px;
+      border-radius: 2px;
+    }
+    .auth-promo-left {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .auth-promo-right {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 26px;
+      font-style: italic;
+      line-height: 1.1;
+      text-align: right;
+    }
+    .auth-tabs-header {
+      display: flex;
+      border-bottom: 2px solid var(--border-subtle);
+      margin-bottom: 24px;
+    }
+    .auth-tab-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      padding: 12px 0;
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      cursor: pointer;
+      position: relative;
+    }
+    .auth-tab-btn.active {
+      color: var(--brand-espresso);
+    }
+    .auth-tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--brand-espresso);
+    }
+    .auth-form-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .auth-input-group {
+      margin-bottom: 12px;
+      position: relative;
+      width: 100%;
+    }
+    .auth-input {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid var(--border-subtle);
+      border-radius: 2px;
+      font-size: 13px;
+      color: var(--brand-espresso);
+      background: #FFF;
+      outline: none;
+      box-sizing: border-box;
+      font-family: inherit;
+    }
+    .auth-input:focus {
+      border-color: var(--brand-espresso);
+    }
+    .auth-pw-toggle {
+      position: absolute;
+      right: 12px;
+      top: 13px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+    .auth-helper-text {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 5px;
+      line-height: 1.4;
+    }
+    .auth-btn-submit {
+      width: 100%;
+      padding: 15px;
+      background: #232323;
+      color: #FFF;
+      border: none;
+      border-radius: 2px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s ease;
+    }
+    .auth-btn-submit:hover {
+      background: #000;
+    }
+    .auth-disclaimer {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.6;
+      margin-top: 14px;
+    }
+    .auth-disclaimer a {
+      color: var(--brand-espresso);
+      text-decoration: underline;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -1460,8 +1593,8 @@
         <li><a id="nav-gift" onclick="openGiftGuidePage()">GIFT GUIDE <span style="color: var(--brand-terracotta); font-size: 10px;">NEW</span></a></li>
       </ul>
       <div class="nav-actions">
-        <!-- User State (Hi Sameera! | 1 PT) -->
-        <div class="user-pill" id="user-account-btn" onclick="openCustomerAccount()">
+        <!-- User State (Hi Sameera! | 1 PT / Sign In To Get Rewards) -->
+        <div class="user-pill" id="user-account-btn" onclick="handleUserAccountClick()">
           <span>👤 HI SAMEERA!</span>
           <span class="points">VIP | 1 PT</span>
         </div>
@@ -1654,6 +1787,66 @@
             <div id="gift-card-result" style="margin-top: 16px; font-size: 13px; font-weight: 600;"></div>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dedicated Customer Authentication Portal (/account/login) -->
+  <section class="auth-page-container" id="auth-page-section" style="display: none;">
+    <!-- Black Friday / Sitewide Banner -->
+    <div class="auth-promo-banner">
+      <div class="auth-promo-left">BLACK FRIDAY</div>
+      <div class="auth-promo-right">30% Off<br/><span style="font-size: 13px; font-family: inherit; font-style: normal; text-transform: lowercase;">sitewide</span></div>
+    </div>
+
+    <!-- Tabs: JOIN NOW vs SIGN IN -->
+    <div class="auth-tabs-header">
+      <button class="auth-tab-btn active" id="tab-btn-join" onclick="switchAuthTab('join')">JOIN NOW</button>
+      <button class="auth-tab-btn" id="tab-btn-signin" onclick="switchAuthTab('signin')">SIGN IN</button>
+    </div>
+
+    <!-- JOIN NOW Panel -->
+    <div id="auth-panel-join">
+      <div class="auth-form-row">
+        <div class="auth-input-group">
+          <input type="text" class="auth-input" id="auth-join-first-name" placeholder="First Name" />
+        </div>
+        <div class="auth-input-group">
+          <input type="text" class="auth-input" id="auth-join-last-name" placeholder="Last Name" />
+        </div>
+      </div>
+      <div class="auth-input-group">
+        <input type="email" class="auth-input" id="auth-join-email" placeholder="Email" />
+      </div>
+      <div class="auth-input-group">
+        <input type="password" class="auth-input" id="auth-join-password" placeholder="Password" />
+        <button type="button" class="auth-pw-toggle" onclick="togglePasswordVisibility('auth-join-password', this)" title="Toggle password visibility">👁</button>
+      </div>
+      <div class="auth-input-group">
+        <input type="tel" class="auth-input" id="auth-join-phone" placeholder="Phone number (optional)" />
+        <div class="auth-helper-text">Enter your phone number for easy look up in stores.</div>
+      </div>
+      <button class="auth-btn-submit" id="btn-auth-join" onclick="executeJoinNow()">JOIN NOW</button>
+      <div class="auth-disclaimer">
+        By clicking "Join Now," you agree to our <a onclick="openCms('terms-of-use')">Terms</a>, acknowledge our <a onclick="openCms('privacy-policy')">Privacy Policy</a>, and agree to receive marketing communications.
+      </div>
+    </div>
+
+    <!-- SIGN IN Panel -->
+    <div id="auth-panel-signin" style="display: none;">
+      <div class="auth-input-group">
+        <input type="email" class="auth-input" id="auth-signin-email" placeholder="Email" value="sameeramaq@gmail.com" />
+      </div>
+      <div class="auth-input-group">
+        <input type="password" class="auth-input" id="auth-signin-password" placeholder="Password" value="AloYogaVIP2026!" />
+        <button type="button" class="auth-pw-toggle" onclick="togglePasswordVisibility('auth-signin-password', this)" title="Toggle password visibility">👁</button>
+      </div>
+      <div style="text-align: right; margin-top: -4px; margin-bottom: 12px;">
+        <a onclick="showForgotPasswordPrompt()" style="font-size: 12px; color: var(--brand-espresso); text-decoration: underline; cursor: pointer;">Forgot your password?</a>
+      </div>
+      <button class="auth-btn-submit" id="btn-auth-signin" onclick="executeSignIn()">SIGN IN</button>
+      <div class="auth-disclaimer" style="margin-top: 18px;">
+        Don't have an account? <a onclick="switchAuthTab('join')">Join Now</a>
       </div>
     </div>
   </section>
@@ -2807,6 +3000,8 @@
       document.getElementById('catalog-section').style.display = 'none';
       const cartSec = document.getElementById('cart-page-section');
       if (cartSec) cartSec.style.display = 'none';
+      const authSec = document.getElementById('auth-page-section');
+      if (authSec) authSec.style.display = 'none';
       const cv = document.getElementById('content-view');
       cv.classList.add('active');
       document.getElementById('content-title').innerText = title;
@@ -2849,8 +3044,10 @@
       const contentSec = document.getElementById('content-view');
       const accSec = document.getElementById('account-section');
       const cartSec = document.getElementById('cart-page-section');
+      const authSec = document.getElementById('auth-page-section');
       if (catSec) catSec.style.display = 'none';
       if (cartSec) cartSec.style.display = 'none';
+      if (authSec) authSec.style.display = 'none';
       if (contentSec) contentSec.classList.remove('active');
       if (accSec) accSec.style.display = 'block';
       if (window.location.pathname !== '/account') history.pushState(null, '', '/account');
@@ -2867,8 +3064,10 @@
       const contentSec = document.getElementById('content-view');
       const accSec = document.getElementById('account-section');
       const cartSec = document.getElementById('cart-page-section');
+      const authSec = document.getElementById('auth-page-section');
       if (accSec) accSec.style.display = 'none';
       if (cartSec) cartSec.style.display = 'none';
+      if (authSec) authSec.style.display = 'none';
       if (contentSec) contentSec.classList.remove('active');
       if (catSec) catSec.style.display = 'block';
       if (window.location.pathname !== '/') history.pushState(null, '', '/');
@@ -2918,14 +3117,13 @@
       } else if (tabName === 'wishlist') {
         await loadWishlistItems();
       } else if (tabName === 'signout') {
-        isLoggedIn = !isLoggedIn;
+        isLoggedIn = false;
         const userBtn = document.getElementById('user-account-btn');
         if (userBtn) {
-          userBtn.innerHTML = isLoggedIn 
-            ? '<span>👤 HI SAMEERA!</span><span class="points">VIP | 1 PT</span>'
-            : '<span>👤 SIGN IN</span>';
+          userBtn.innerHTML = '<span>👤 SIGN IN TO GET REWARDS</span>';
         }
-        showAloMessage('Session Update', isLoggedIn ? 'Signed back in as Sameera Maqsood (VIP Member).' : 'You have signed out. Browsing as Guest.');
+        showAloMessage('Signed Out', 'You have been signed out. Browsing as Guest.');
+        openAuthPage('/account');
       }
     }
 
@@ -3342,10 +3540,12 @@
       const contentSec = document.getElementById('content-view');
       const accSec = document.getElementById('account-section');
       const cartSec = document.getElementById('cart-page-section');
+      const authSec = document.getElementById('auth-page-section');
 
       if (catSec) catSec.style.display = 'none';
       if (contentSec) contentSec.classList.remove('active');
       if (accSec) accSec.style.display = 'none';
+      if (authSec) authSec.style.display = 'none';
       if (cartSec) cartSec.style.display = 'block';
 
       if (window.location.pathname !== '/cart') {
@@ -3542,6 +3742,135 @@
       }
     }
 
+    // 7. Dedicated Customer Authentication Portal (/account/login)
+    function openAuthPage(returnUrl = '/account') {
+      const catSec = document.getElementById('catalog-section');
+      const contentSec = document.getElementById('content-view');
+      const accSec = document.getElementById('account-section');
+      const cartSec = document.getElementById('cart-page-section');
+      const authSec = document.getElementById('auth-page-section');
+
+      if (catSec) catSec.style.display = 'none';
+      if (contentSec) contentSec.classList.remove('active');
+      if (accSec) accSec.style.display = 'none';
+      if (cartSec) cartSec.style.display = 'none';
+      if (authSec) authSec.style.display = 'block';
+
+      if (window.location.pathname !== '/account/login' && window.location.pathname !== '/login') {
+        history.pushState(null, '', '/account/login?return_url=' + encodeURIComponent(returnUrl));
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function switchAuthTab(tab) {
+      const joinBtn = document.getElementById('tab-btn-join');
+      const signinBtn = document.getElementById('tab-btn-signin');
+      const joinPanel = document.getElementById('auth-panel-join');
+      const signinPanel = document.getElementById('auth-panel-signin');
+
+      if (tab === 'join') {
+        if (joinBtn) joinBtn.classList.add('active');
+        if (signinBtn) signinBtn.classList.remove('active');
+        if (joinPanel) joinPanel.style.display = 'block';
+        if (signinPanel) signinPanel.style.display = 'none';
+      } else {
+        if (signinBtn) signinBtn.classList.add('active');
+        if (joinBtn) joinBtn.classList.remove('active');
+        if (signinPanel) signinPanel.style.display = 'block';
+        if (joinPanel) joinPanel.style.display = 'none';
+      }
+    }
+
+    function togglePasswordVisibility(inputId, btnEl) {
+      const input = document.getElementById(inputId);
+      if (!input) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        if (btnEl) btnEl.innerText = '🔒';
+      } else {
+        input.type = 'password';
+        if (btnEl) btnEl.innerText = '👁';
+      }
+    }
+
+    async function executeJoinNow() {
+      const firstName = document.getElementById('auth-join-first-name')?.value?.trim();
+      const lastName = document.getElementById('auth-join-last-name')?.value?.trim();
+      const email = document.getElementById('auth-join-email')?.value?.trim();
+      const password = document.getElementById('auth-join-password')?.value;
+      const phone = document.getElementById('auth-join-phone')?.value?.trim();
+
+      if (!firstName || !email) {
+        showAloMessage('Required Fields', 'Please enter your First Name and Email to join YOGA Access.');
+        return;
+      }
+
+      try {
+        const res = await (await fetch('/api/account/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ firstName, lastName, email, password, phone })
+        })).json();
+
+        if (res.success && res.customer) {
+          isLoggedIn = true;
+          const userBtn = document.getElementById('user-account-btn');
+          if (userBtn) {
+            userBtn.innerHTML = `<span>👤 HI ${res.customer.first_name.toUpperCase()}!</span><span class="points">VIP | ${res.customer.reward_points || 1} PT</span>`;
+          }
+          showAloMessage('Welcome to YOGA Access', `Welcome, ${res.customer.first_name}!\n\nYour YOGA Access VIP membership is now active. Enjoy 1 Point on every purchase & sitewide member privileges.`);
+          openCustomerAccount('orders');
+        } else {
+          showAloMessage('Registration Error', res.error || 'Failed to register account.');
+        }
+      } catch (err) {
+        showAloMessage('Error', 'Unable to complete registration. Please try again.');
+      }
+    }
+
+    async function executeSignIn() {
+      const email = document.getElementById('auth-signin-email')?.value?.trim();
+      const password = document.getElementById('auth-signin-password')?.value;
+
+      if (!email) {
+        showAloMessage('Email Required', 'Please enter your account email.');
+        return;
+      }
+
+      try {
+        const res = await (await fetch('/api/account/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        })).json();
+
+        if (res.success && res.customer) {
+          isLoggedIn = true;
+          const userBtn = document.getElementById('user-account-btn');
+          if (userBtn) {
+            userBtn.innerHTML = `<span>👤 HI ${res.customer.first_name.toUpperCase()}!</span><span class="points">VIP | ${res.customer.reward_points || 1} PT</span>`;
+          }
+          openCustomerAccount('orders');
+        } else {
+          showAloMessage('Sign In Error', res.error || 'Invalid credentials.');
+        }
+      } catch (err) {
+        showAloMessage('Error', 'Unable to sign in. Please try again.');
+      }
+    }
+
+    function showForgotPasswordPrompt() {
+      showAloMessage('Reset Password', 'Please check your registered email address.\n\nA secure password reset link has been dispatched to your inbox.');
+    }
+
+    function handleUserAccountClick() {
+      if (isLoggedIn) {
+        openCustomerAccount();
+      } else {
+        openAuthPage('/account');
+      }
+    }
+
     // Themed Modal Helper
     function showAloMessage(title, body) {
       document.getElementById('alo-modal-title').innerText = title;
@@ -3567,7 +3896,9 @@
     // Initial Routing & History Traversal
     function handleInitialRoute() {
       const path = window.location.pathname;
-      if (path === '/cart' || path === '/checkout') {
+      if (path === '/account/login' || path === '/login') {
+        openAuthPage();
+      } else if (path === '/cart' || path === '/checkout') {
         openCartPage();
       } else if (path === '/account') {
         openCustomerAccount();
@@ -3580,7 +3911,9 @@
 
     window.addEventListener('popstate', () => {
       const path = window.location.pathname;
-      if (path === '/cart' || path === '/checkout') {
+      if (path === '/account/login' || path === '/login') {
+        openAuthPage();
+      } else if (path === '/cart' || path === '/checkout') {
         openCartPage();
       } else if (path === '/account') {
         openCustomerAccount();
