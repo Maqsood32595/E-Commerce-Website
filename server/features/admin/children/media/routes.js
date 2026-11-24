@@ -30,4 +30,24 @@ router.post('/confirm', async (req, res) => {
     }
 });
 
+// POST /api/admin/media/transform/presets
+router.post('/transform/presets', (req, res) => {
+    const { url } = req.body;
+    if (!url) {
+        return res.status(400).json({ error: 'url is required', slice: 'admin.media' });
+    }
+    const presets = {
+        original: url,
+        hero: `${url}?w=1200&h=1600&fmt=webp&q=85`,
+        catalogCard: `${url}?w=600&h=800&fmt=webp&q=80`,
+        thumbnail: `${url}?w=120&h=160&fmt=webp&q=75`,
+        swatch: `${url}?w=64&h=64&fmt=webp&q=70`
+    };
+    res.json({
+        success: true,
+        slice: 'admin.media',
+        presets
+    });
+});
+
 module.exports = router;

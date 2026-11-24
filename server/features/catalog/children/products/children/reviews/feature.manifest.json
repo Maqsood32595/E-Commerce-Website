@@ -1,9 +1,0 @@
-{
-    "id": "reviews",
-    "name": "Product Reviews & Ratings",
-    "description": "Grandchild slice managing customer ratings, reviews, and fit feedback.",
-    "version": "1.0.0",
-    "enabled": true,
-    "basePath": "/reviews",
-    "routes": "./routes.js"
-}

@@ -2148,8 +2148,9 @@
 <body>
 
   <!-- Top Announcement Bar -->
-  <div class="top-bar">
-    <span id="top-announcement-text">30% OFF SITEWIDE ✨ <a onclick="showCatalogView()">SHOP NOW</a></span>
+  <div class="top-bar" style="position: relative; display: flex; justify-content: center; align-items: center; padding: 10px 24px;">
+    <span id="top-announcement-text">30% OFF SITEWIDE ✨ <a onclick="showCatalogView()" style="text-decoration: underline; cursor: pointer;">SHOP NOW</a></span>
+    <button id="ticker-pause-btn" onclick="toggleTickerPause()" style="position: absolute; right: 24px; background: none; border: none; color: #FFF; font-size: 13px; cursor: pointer; opacity: 0.85; padding: 4px 8px;" title="Pause / Play Announcement">❚❚</button>
   </div>
 
   <!-- Header -->
@@ -2163,11 +2164,16 @@
         <li><a id="nav-gift" onclick="openGiftGuidePage()">GIFT GUIDE <span style="color: var(--brand-terracotta); font-size: 10px;">NEW</span></a></li>
       </ul>
       <div class="nav-actions">
+        <!-- Search Button (Exact Alo Spec) -->
+        <button class="nav-icon-btn" id="nav-search-btn" onclick="openSearchModal()" title="Search catalog" style="background: none; border: none; cursor: pointer; font-size: 16px; color: var(--brand-espresso); padding: 6px 10px; display: flex; align-items: center;">🔍</button>
         <!-- User State (Hi Sameera! | 1 PT / Sign In To Get Rewards) -->
         <div class="user-pill" id="user-account-btn" onclick="handleUserAccountClick()">
           <span>👤 HI SAMEERA!</span>
           <span class="points">VIP | 1 PT</span>
         </div>
+        <!-- Wishlist Nav Icon (Exact Alo Spec) -->
+        <button class="nav-icon-btn" id="nav-wishlist-btn" onclick="openCustomerWishlist()" title="View Wishlist" style="background: none; border: none; cursor: pointer; font-size: 18px; color: var(--brand-espresso); padding: 6px 10px; display: flex; align-items: center;">♡</button>
+        <!-- Cart / Bag Button -->
         <button class="cart-btn" id="open-cart-btn">
           <span>Bag</span>
           <span class="cart-badge" id="cart-item-count">0</span>
@@ -2290,6 +2296,20 @@
               • Complimentary Express Shipping activated for all domestic orders across India.<br/>
               • Early 24-hour access to holiday limited edition drops.
             </p>
+            <div style="display: flex; gap: 12px; margin-top: 20px;">
+              <div class="tier-card active" style="flex: 1; border: 1px solid var(--brand-espresso); padding: 12px; text-align: center; border-radius: 4px; background: var(--bg-card);">
+                <div style="font-size: 11px; font-weight: 800; color: var(--brand-espresso);">VIP</div>
+                <div style="font-size: 10px; color: var(--text-muted);">0 - 299 PTS</div>
+              </div>
+              <div class="tier-card" style="flex: 1; border: 1px solid var(--border-subtle); padding: 12px; text-align: center; border-radius: 4px;">
+                <div style="font-size: 11px; font-weight: 800; color: var(--brand-espresso);">A-LIST</div>
+                <div style="font-size: 10px; color: var(--text-muted);">300 - 999 PTS</div>
+              </div>
+              <div class="tier-card" style="flex: 1; border: 1px solid var(--border-subtle); padding: 12px; text-align: center; border-radius: 4px;">
+                <div style="font-size: 11px; font-weight: 800; color: var(--brand-espresso);">ALL ACCESS</div>
+                <div style="font-size: 10px; color: var(--text-muted);">1,000+ PTS</div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -3016,6 +3036,23 @@
     </div>
   </aside>
 
+  <!-- Search Modal Overlay (Exact Alo Spec) -->
+  <div class="alo-modal-overlay" id="search-modal-overlay">
+    <div class="alo-modal-card" style="max-width: 640px; padding: 28px; width: 90%;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h3 style="font-size: 15px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;">Search Collection</h3>
+        <button id="close-search-btn" onclick="closeSearchModal()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: var(--brand-espresso);">✕</button>
+      </div>
+      <div style="position: relative; margin-bottom: 20px;">
+        <input type="text" id="global-search-input" placeholder="Search by style, category, fabric, color..." style="width: 100%; padding: 14px 44px 14px 16px; border: 1px solid var(--border-subtle); border-radius: 4px; font-size: 14px; outline: none;" oninput="handleGlobalSearchInput(this.value)" />
+        <button id="clear-search-btn" onclick="clearGlobalSearch()" style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 14px; cursor: pointer; color: var(--text-muted); display: none;">✕</button>
+      </div>
+      <div id="search-results-box" style="max-height: 380px; overflow-y: auto;">
+        <p style="font-size: 12px; color: var(--text-muted);">Try searching for "Runner", "Airlift", "Accolade", "Leggings", or "White".</p>
+      </div>
+    </div>
+  </div>
+
   <!-- Themed Modal Dialog -->
   <div class="alo-modal-overlay" id="alo-modal-overlay">
     <div class="alo-modal-card">
@@ -3252,6 +3289,10 @@
 
     function openGiftGuidePage() {
       filterProducts('category', 'gift', 'Gift Guide & Holiday Sets', 'Gift Guide');
+    }
+
+    function openAloAccessPage() {
+      openCustomerAccount('access');
     }
 
     // 1. Fetch Dynamic Mega Menu from Supabase
@@ -4683,11 +4724,87 @@
       '30% OFF SITEWIDE ✨ <a onclick="showCatalogView()">SHOP NOW</a>',
       'EXTENDED RETURNS & EXCHANGES THROUGH JAN 10'
     ];
-    setInterval(() => {
+    let isTickerPaused = false;
+    let tickerInterval = setInterval(() => {
+      if (isTickerPaused) return;
       announcementIdx = (announcementIdx + 1) % announcements.length;
       const el = document.getElementById('top-announcement-text');
       if (el) el.innerHTML = announcements[announcementIdx];
     }, 4500);
+
+    function toggleTickerPause() {
+      isTickerPaused = !isTickerPaused;
+      const btn = document.getElementById('ticker-pause-btn');
+      if (btn) btn.innerText = isTickerPaused ? '▶' : '❚❚';
+    }
+
+    function openCustomerWishlist() {
+      openCustomerAccount('wishlist');
+    }
+
+    function openSearchModal() {
+      const modal = document.getElementById('search-modal-overlay');
+      if (modal) modal.classList.add('active');
+      const input = document.getElementById('global-search-input');
+      if (input) {
+        input.focus();
+        if (input.value) handleGlobalSearchInput(input.value);
+      }
+    }
+
+    function closeSearchModal() {
+      const modal = document.getElementById('search-modal-overlay');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function clearGlobalSearch() {
+      const input = document.getElementById('global-search-input');
+      if (input) {
+        input.value = '';
+        input.focus();
+      }
+      const clearBtn = document.getElementById('clear-search-btn');
+      if (clearBtn) clearBtn.style.display = 'none';
+      const box = document.getElementById('search-results-box');
+      if (box) box.innerHTML = '<p style="font-size: 12px; color: var(--text-muted);">Try searching for "Runner", "Airlift", "Accolade", "Leggings", or "White".</p>';
+    }
+
+    function handleGlobalSearchInput(val) {
+      const query = (val || '').trim().toLowerCase();
+      const clearBtn = document.getElementById('clear-search-btn');
+      if (clearBtn) clearBtn.style.display = query ? 'block' : 'none';
+      const box = document.getElementById('search-results-box');
+      if (!box) return;
+
+      if (!query) {
+        box.innerHTML = '<p style="font-size: 12px; color: var(--text-muted);">Try searching for "Runner", "Airlift", "Accolade", "Leggings", or "White".</p>';
+        return;
+      }
+
+      const matches = allProducts.filter(p => 
+        (p.title && p.title.toLowerCase().includes(query)) ||
+        (p.color_family && p.color_family.toLowerCase().includes(query)) ||
+        (p.fabric_technology && p.fabric_technology.toLowerCase().includes(query)) ||
+        (p.category_id && p.category_id.toLowerCase().includes(query))
+      );
+
+      if (matches.length === 0) {
+        box.innerHTML = `<p style="font-size: 13px; color: var(--text-muted); padding: 14px 0;">No items found matching "<strong>${query}</strong>".</p>`;
+        return;
+      }
+
+      box.innerHTML = matches.slice(0, 8).map(p => `
+        <div onclick="closeSearchModal(); openProductDetailPage('${p.product_id}', '${p.handle}')" style="display: flex; gap: 14px; align-items: center; padding: 10px; border-bottom: 1px solid var(--border-subtle); cursor: pointer; transition: background 0.15s;" onmouseover="this.style.background='var(--bg-card)'" onmouseout="this.style.background='transparent'">
+          <img src="${p.image_url}" alt="${p.title}" style="width: 48px; height: 60px; object-fit: cover; border-radius: 2px;" />
+          <div style="flex: 1;">
+            <div style="font-size: 13px; font-weight: 700; color: var(--brand-espresso);">${p.title}</div>
+            <div style="font-size: 11px; color: var(--text-muted);">${p.color_family || 'Standard'} • ${p.fabric_technology || 'Luxury'}</div>
+            <div style="font-size: 12px; font-weight: 700; color: var(--brand-terracotta); margin-top: 2px;">₹${Number(p.sale_price).toLocaleString('en-IN')}</div>
+          </div>
+          <span style="font-size: 12px; color: var(--text-muted);">View ↗</span>
+        </div>
+      `).join('');
+    }
 
 
     // -------------------------------------------------------------

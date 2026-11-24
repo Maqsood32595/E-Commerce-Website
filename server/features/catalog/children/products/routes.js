@@ -106,4 +106,81 @@ router.post('/', async (req, res) => {
     }
 });
 
+// GET /api/catalog/products/reviews
+router.get('/reviews', async (req, res) => {
+    try {
+        const { productId } = req.query;
+        let query = 'SELECT * FROM product_reviews';
+        const params = [];
+        if (productId) {
+            query += ' WHERE product_id = $1';
+            params.push(productId);
+        }
+        query += ' ORDER BY created_at DESC';
+        const result = await db.query(query, params);
+        res.json({ success: true, slice: 'catalog.products', reviews: result.rows });
+    } catch (err) {
+        res.status(500).json({ error: err.message, slice: 'catalog.products' });
+    }
+});
+
+// POST /api/catalog/products/reviews
+router.post('/reviews', async (req, res) => {
+    try {
+        const { productId, authorName, rating, headline, comment, fitFeedback } = req.body;
+        if (!productId || !authorName || !rating) {
+            return res.status(400).json({ error: 'productId, authorName, and rating are required', slice: 'catalog.products' });
+        }
+        const result = await db.query(`
+            INSERT INTO product_reviews
+            (product_id, author_name, rating, headline, comment, fit_feedback)
+            VALUES ($1, $2, $3, $4, $5, $6)
+            RETURNING *;
+        `, [productId, authorName, rating, headline || null, comment || null, fitFeedback || 'True to Size']);
+        res.json({ success: true, slice: 'catalog.products', review: result.rows[0] });
+    } catch (err) {
+        res.status(500).json({ error: err.message, slice: 'catalog.products' });
+    }
+});
+
+// GET /api/catalog/products/variants
+router.get('/variants', async (req, res) => {
+    try {
+        const { productId } = req.query;
+        let query = 'SELECT * FROM product_variants WHERE is_available = true';
+        const params = [];
+        if (productId) {
+            query += ' AND product_id = $1';
+            params.push(productId);
+        }
+        query += ' ORDER BY color_name, size';
+        const result = await db.query(query, params);
+        res.json({ success: true, slice: 'catalog.products', variants: result.rows });
+    } catch (err) {
+        res.status(500).json({ error: err.message, slice: 'catalog.products' });
+    }
+});
+
+// POST /api/catalog/products/variants
+router.post('/variants', async (req, res) => {
+    try {
+        const { variantId, productId, sku, colorName, colorHex, size, inventoryQuantity, price, currency } = req.body;
+        if (!variantId || !productId || !sku || !colorName || !size) {
+            return res.status(400).json({ error: 'variantId, productId, sku, colorName, and size are required', slice: 'catalog.products' });
+        }
+        const result = await db.query(`
+            INSERT INTO product_variants
+            (variant_id, product_id, sku, color_name, color_hex, size, inventory_quantity, price, currency)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+            ON CONFLICT (variant_id) DO UPDATE SET 
+                inventory_quantity = EXCLUDED.inventory_quantity,
+                price = EXCLUDED.price
+            RETURNING *;
+        `, [variantId, productId, sku, colorName, colorHex || null, size, inventoryQuantity || 0, price || 0, currency || 'INR']);
+        res.json({ success: true, slice: 'catalog.products', variant: result.rows[0] });
+    } catch (err) {
+        res.status(500).json({ error: err.message, slice: 'catalog.products' });
+    }
+});
+
 module.exports = router;

@@ -1,9 +1,0 @@
-{
-    "id": "coupons",
-    "name": "Discounts & Promo Engine",
-    "description": "Grandchild slice validating promotional codes, minimum order rules, and subtotal deductions.",
-    "version": "1.0.0",
-    "enabled": true,
-    "basePath": "/coupons",
-    "routes": "./routes.js"
-}

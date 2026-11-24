@@ -1,9 +1,0 @@
-{
-    "id": "heatmaps",
-    "name": "Click Heatmaps & Telemetry Aggregates",
-    "description": "Grandchild slice calculating click densities, X/Y coordinate clusters, and element ranking.",
-    "version": "1.0.0",
-    "enabled": true,
-    "basePath": "/heatmaps",
-    "routes": "./routes.js"
-}
