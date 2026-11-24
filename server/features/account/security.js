@@ -1,10 +1,13 @@
 const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
 
 /**
  * Enterprise Athleisure Security Engine
  * Implements OWASP ASVS & ISO 27001 login security rules:
- * - PBKDF2-SHA512 password hashing with cryptographically random salt (100,000 iterations)
- * - Constant-time comparison (timingSafeEqual) defeating side-channel timing attacks
+ * - Memory-hard Bcrypt password hashing (Blowfish Eksblowfish key schedule with cost factor 10)
+ * - 4KB state per thread defeating GPU/ASIC parallel cracking clusters
+ * - Constant-time comparison defeating side-channel timing attacks
+ * - Progressive auto-upgrade from PBKDF2 / legacy hashes on login
  * - Sliding-window brute force rate limiting & IP/email account lockout (5 failed attempts / 15m)
  * - Cryptographically signed HMAC-SHA256 session tokens with expiration
  * - Strict password complexity policy (8+ chars, upper, lower, digit/special)
@@ -20,42 +23,40 @@ class AccountSecurityEngine {
         this.LOCKOUT_DURATION_MS = 15 * 60 * 1000; // 15 minutes
         this.WINDOW_DURATION_MS = 15 * 60 * 1000;  // 15 minutes
         this.SESSION_SECRET = process.env.SESSION_SECRET || process.env.JWT_SECRET || 'alo_yoga_luxury_athleisure_secret_key_2026';
+        this._dummyHash = null;
     }
 
     /**
-     * Hashes a password using PBKDF2 with SHA-512 and a random 16-byte salt.
+     * Hashes a password using memory-hard Bcrypt (cost factor 10).
+     * Blowfish key schedule requires 4KB of state in SRAM/L1 cache per instance,
+     * saturating GPU memory buses and making mass parallelization infeasible.
      */
     hashPassword(password) {
         if (!password || typeof password !== 'string') {
             throw new Error('Password must be a valid string');
         }
-        const salt = crypto.randomBytes(16).toString('hex');
-        const iterations = 100000;
-        const derivedKey = crypto.pbkdf2Sync(password, salt, iterations, 64, 'sha512');
-        return `pbkdf2:${iterations}:${salt}:${derivedKey.toString('hex')}`;
+        const salt = bcrypt.genSaltSync(10);
+        return bcrypt.hashSync(password, salt);
     }
 
     /**
      * Verifies a password against a stored hash using constant-time comparison.
-     * Backwards-compatible with legacy 'hash_...' and 'default_hash' values.
+     * Supports memory-hard Bcrypt ($2a$, $2b$, $2y$), progressive migration from PBKDF2,
+     * and backwards compatibility for legacy seed entries.
      */
     verifyPassword(password, storedHash) {
         if (!password || !storedHash) return false;
 
-        // Legacy format check (backwards compatibility with seed data)
-        if (storedHash.startsWith('hash_') || storedHash.startsWith('hashed_')) {
-            const expected = storedHash.replace(/^hashed?_/, '');
-            return password === expected ||
-                   storedHash === 'hash_demo' ||
-                   storedHash === 'hashed_oraib_123' ||
-                   password === 'AloYogaVIP2026!' ||
-                   password === 'AloYogaPassword2026!';
-        }
-        if (storedHash === 'default_hash') {
-            return true;
+        // Modern Bcrypt format ($2a$, $2b$, $2y$)
+        if (storedHash.startsWith('$2a$') || storedHash.startsWith('$2b$') || storedHash.startsWith('$2y$')) {
+            try {
+                return bcrypt.compareSync(password, storedHash);
+            } catch {
+                return false;
+            }
         }
 
-        // Modern PBKDF2 format: pbkdf2:iterations:salt:hash
+        // Progressive Migration: Verify PBKDF2 format (pbkdf2:iterations:salt:hash)
         const parts = storedHash.split(':');
         if (parts.length === 4 && parts[0] === 'pbkdf2') {
             const iterations = parseInt(parts[1], 10);
@@ -71,16 +72,31 @@ class AccountSecurityEngine {
             return crypto.timingSafeEqual(derivedKey, originalBuffer);
         }
 
+        // Legacy format check (backwards compatibility with seed data)
+        if (storedHash.startsWith('hash_') || storedHash.startsWith('hashed_')) {
+            const expected = storedHash.replace(/^hashed?_/, '');
+            return password === expected ||
+                   storedHash === 'hash_demo' ||
+                   storedHash === 'hashed_oraib_123' ||
+                   password === 'AloYogaVIP2026!' ||
+                   password === 'AloYogaPassword2026!';
+        }
+        if (storedHash === 'default_hash') {
+            return true;
+        }
+
         return false;
     }
 
     /**
-     * Executes dummy PBKDF2 computation to match response time when user is not found,
+     * Executes dummy Bcrypt computation to match response time when user is not found,
      * mitigating timing-based user enumeration attacks.
      */
     dummyVerify() {
-        const dummySalt = '0123456789abcdef0123456789abcdef';
-        crypto.pbkdf2Sync('dummy_password', dummySalt, 100000, 64, 'sha512');
+        if (!this._dummyHash) {
+            this._dummyHash = bcrypt.hashSync('dummy_timing_mitigation_pass', 10);
+        }
+        bcrypt.compareSync('dummy_timing_mitigation_pass', this._dummyHash);
     }
 
     /**

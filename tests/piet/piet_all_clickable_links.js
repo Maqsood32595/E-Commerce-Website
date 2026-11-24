@@ -1676,7 +1676,7 @@ async function runAllClickableLinksPietSuite() {
             record('Auth Security: Password Policy', 'Action: Enforce 8+ Character & Complexity Policy (Rejects Weak Password with 400)',
                 weakRegRes.error && weakRegRes.error.includes('8 characters'));
 
-            // Action 2: PBKDF2 Password Hashing & Salt Verification in Database
+            // Action 2: Memory-Hard Bcrypt Password Hashing & Salt Verification in Database
             securityPietEmail = `piet-secure-${runId}@example.com`;
             const secureRegRes = await (await fetch(`${baseUrl}/api/account/auth/register`, {
                 method: 'POST',
@@ -1689,8 +1689,8 @@ async function runAllClickableLinksPietSuite() {
                 })
             })).json();
             const dbHashCheck = (await db.query('SELECT password_hash FROM customer_accounts WHERE email = $1', [securityPietEmail])).rows[0];
-            record('Auth Security: PBKDF2 Hashing', 'Action: Verify 100,000-Iteration Salted PBKDF2 Hash in PostgreSQL (pbkdf2:100000:...)',
-                secureRegRes.success && dbHashCheck && dbHashCheck.password_hash.startsWith('pbkdf2:100000:'));
+            record('Auth Security: Bcrypt Hashing', 'Action: Verify Memory-Hard Bcrypt Hash in PostgreSQL ($2a$10$... / $2b$10$...)',
+                secureRegRes.success && dbHashCheck && (dbHashCheck.password_hash.startsWith('$2a$') || dbHashCheck.password_hash.startsWith('$2b$')));
 
             // Action 3: Cryptographic HMAC-SHA256 Session Token Issuance & Verification
             const issuedToken = secureRegRes.token;

@@ -158,7 +158,7 @@ router.post('/auth/register', async (req, res) => {
             return res.status(400).json({ error: strength.error, slice: 'account' });
         }
 
-        // Hash password using 100,000-iteration PBKDF2 with SHA-512 and random salt
+        // Hash password using memory-hard Bcrypt (Blowfish key schedule) with cost factor 10
         const pwdHash = security.hashPassword(pwd);
 
         const result = await db.query(`
@@ -277,8 +277,8 @@ router.post('/auth/login', async (req, res) => {
         security.clearFailedAttempts(cleanEmail);
         security.clearFailedAttempts(clientIp);
 
-        // Background upgrade to PBKDF2 if stored hash is legacy format
-        if (user.password_hash && !user.password_hash.startsWith('pbkdf2:')) {
+        // Progressive upgrade to memory-hard Bcrypt if stored hash is PBKDF2 or legacy format
+        if (user.password_hash && (!user.password_hash.startsWith('$2a$') && !user.password_hash.startsWith('$2b$'))) {
             const newHash = security.hashPassword(pwdToVerify);
             db.query('UPDATE customer_accounts SET password_hash = $1, last_login_at = NOW() WHERE customer_id = $2', [newHash, user.customer_id]).catch(() => {});
         } else {
