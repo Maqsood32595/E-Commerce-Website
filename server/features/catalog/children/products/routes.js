@@ -30,6 +30,58 @@ router.get('/', async (req, res) => {
     }
 });
 
+// GET /api/catalog/products/detail/:handleOrId
+router.get('/detail/:handleOrId', async (req, res) => {
+    try {
+        const { handleOrId } = req.params;
+        const prodQuery = `
+            SELECT p.*, c.name as category_name
+            FROM products p
+            LEFT JOIN categories c ON p.category_id = c.category_id
+            WHERE (p.handle = $1 OR p.product_id = $1) AND p.is_active = true
+            LIMIT 1;
+        `;
+        const prodRes = await db.query(prodQuery, [handleOrId]);
+        if (prodRes.rows.length === 0) {
+            return res.status(404).json({ error: 'Product not found', slice: 'catalog.products' });
+        }
+        const product = prodRes.rows[0];
+
+        // Fetch variants
+        const variantsRes = await db.query(`
+            SELECT * FROM product_variants
+            WHERE product_id = $1 AND is_available = true
+            ORDER BY size ASC;
+        `, [product.product_id]);
+
+        // Fetch reviews
+        const reviewsRes = await db.query(`
+            SELECT * FROM product_reviews
+            WHERE product_id = $1
+            ORDER BY created_at DESC;
+        `, [product.product_id]);
+
+        // Fetch similar items in category or footwear
+        const similarRes = await db.query(`
+            SELECT product_id, title, handle, mrp, sale_price, discount_label, image_url, color_family
+            FROM products
+            WHERE product_id != $1 AND (category_id = $2 OR category_id LIKE 'shoes%') AND is_active = true
+            LIMIT 6;
+        `, [product.product_id, product.category_id]);
+
+        res.json({
+            success: true,
+            slice: 'catalog.products',
+            product,
+            variants: variantsRes.rows,
+            reviews: reviewsRes.rows,
+            similarItems: similarRes.rows
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message, slice: 'catalog.products' });
+    }
+});
+
 // POST /api/catalog/products
 router.post('/', async (req, res) => {
     try {

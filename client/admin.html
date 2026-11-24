@@ -67,6 +67,11 @@
     th { text-align: left; padding: 12px 14px; background: var(--card); color: var(--muted); text-transform: uppercase; font-size: 11px; font-weight: 700; border-bottom: 1px solid var(--border); }
     td { padding: 14px; border-bottom: 1px solid var(--border); }
     .btn-delete { background: #58111A; color: #FFF; border: none; padding: 6px 12px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: 600; }
+    .btn-edit { background: #1C3B2B; color: #78E08F; border: 1px solid #2ECC71; padding: 6px 12px; font-size: 11px; border-radius: 3px; cursor: pointer; font-weight: 600; margin-right: 6px; }
+    .btn-edit:hover { background: #2ECC71; color: #111; }
+    .edit-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; padding: 24px; }
+    .edit-modal-overlay.open { display: flex; }
+    .edit-modal-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; max-width: 800px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 32px; box-shadow: 0 20px 50px rgba(0,0,0,0.7); }
   </style>
 </head>
 <body>
@@ -152,6 +157,22 @@
         <input type="text" id="sp-image" value="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80" />
       </div>
 
+      <div class="form-grid" style="margin-bottom: 20px;">
+        <div>
+          <label class="label">Product Description (PDP)</label>
+          <textarea id="sp-desc" style="height: 90px;" placeholder="Detailed overview, technical capabilities...">Peach-finish Alosoft fabric with four-way stretch and gentle compression.</textarea>
+        </div>
+        <div>
+          <label class="label">Fit & Sizing Details (PDP)</label>
+          <textarea id="sp-fit" style="height: 90px;" placeholder="Fit guidance, model measurements...">True to size. Sculpted peach-finish feel with supportive contour.</textarea>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 24px;">
+        <label class="label">Fabrication & Care Details (PDP)</label>
+        <textarea id="sp-fab" style="height: 70px;" placeholder="Fabric blend, wash instructions...">87% Polyester, 13% Elastane. Machine wash cold with like colors.</textarea>
+      </div>
+
       <button class="btn" onclick="uploadSingleProduct()">Publish & Ingest Product to Supabase</button>
       <div id="sp-status" style="margin-top: 14px; font-size: 13px; color: var(--gold);"></div>
     </div>
@@ -227,6 +248,91 @@
         </div>
       </div>
     </div>
+
+    <!-- Product Edit Modal (Syncs with Storefront PDP dynamically) -->
+    <div class="edit-modal-overlay" id="edit-modal">
+      <div class="edit-modal-box">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h2 style="font-size: 18px; color: var(--gold);" id="edit-modal-title">Edit Product Details</h2>
+          <button onclick="closeEditModal()" style="background: none; border: none; color: #FFF; font-size: 20px; cursor: pointer;">✕</button>
+        </div>
+        <input type="hidden" id="edit-prod-id" />
+        <div class="form-grid">
+          <div>
+            <label class="label">Product Title</label>
+            <input type="text" id="edit-title" />
+          </div>
+          <div>
+            <label class="label">Handle / Slug</label>
+            <input type="text" id="edit-handle" />
+          </div>
+          <div>
+            <label class="label">Category / Product Type</label>
+            <input type="text" id="edit-category" />
+          </div>
+          <div>
+            <label class="label">Fabric Technology</label>
+            <input type="text" id="edit-fabric" />
+          </div>
+          <div>
+            <label class="label">Color Family</label>
+            <input type="text" id="edit-color" />
+          </div>
+          <div>
+            <label class="label">Color Hex Code</label>
+            <input type="text" id="edit-color-hex" />
+          </div>
+          <div>
+            <label class="label">MRP Price (₹)</label>
+            <input type="number" id="edit-mrp" />
+          </div>
+          <div>
+            <label class="label">Sale Price (₹)</label>
+            <input type="number" id="edit-sale" />
+          </div>
+          <div>
+            <label class="label">Discount Tag</label>
+            <input type="text" id="edit-discount" />
+          </div>
+          <div>
+            <label class="label">Badge Label</label>
+            <input type="text" id="edit-badge" />
+          </div>
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <label class="label">Main Image URL</label>
+          <input type="text" id="edit-image" />
+        </div>
+
+        <div class="form-grid" style="margin-bottom: 16px;">
+          <div>
+            <label class="label">Product Description (PDP)</label>
+            <textarea id="edit-desc" style="height: 100px;"></textarea>
+          </div>
+          <div>
+            <label class="label">Fit & Sizing Details (PDP)</label>
+            <textarea id="edit-fit" style="height: 100px;"></textarea>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <label class="label">Fabrication Specs (PDP)</label>
+          <textarea id="edit-fab" style="height: 70px;"></textarea>
+        </div>
+
+        <div style="margin-bottom: 24px;">
+          <label class="label">Available Sizes (Comma separated, e.g. 5W, 6W, 7W or XXS, XS, S, M, L)</label>
+          <input type="text" id="edit-sizes" placeholder="e.g. 5W, 6W, 7W, 8W, 9W, 10W, 11W, 12W" />
+        </div>
+
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <button class="btn" onclick="saveProductEdit()">Save Changes & Sync PDP</button>
+          <button onclick="closeEditModal()" style="background: var(--card); border: 1px solid var(--border); color: #FFF; padding: 14px 20px; font-size: 12px; font-weight: 700; border-radius: 4px; cursor: pointer;">Cancel</button>
+          <span id="edit-status" style="color: var(--gold); font-size: 13px; font-weight: 600;"></span>
+        </div>
+      </div>
+    </div>
   </main>
 
   <script>
@@ -265,6 +371,9 @@
         const salePrice = Number(document.getElementById('sp-sale').value);
         const discountLabel = document.getElementById('sp-discount').value.trim();
         const imageUrl = document.getElementById('sp-image').value.trim();
+        const description = document.getElementById('sp-desc') ? document.getElementById('sp-desc').value.trim() : null;
+        const fitDetails = document.getElementById('sp-fit') ? document.getElementById('sp-fit').value.trim() : null;
+        const fabricationDetails = document.getElementById('sp-fab') ? document.getElementById('sp-fab').value.trim() : null;
 
         const sizes = Array.from(document.querySelectorAll('input[name="sp-size"]:checked')).map(el => el.value);
 
@@ -286,12 +395,15 @@
             salePrice,
             discountLabel,
             imageUrl,
+            description,
+            fitDetails,
+            fabricationDetails,
             sizes
           })
         })).json();
 
         if (res.success) {
-          document.getElementById('sp-status').innerText = `✓ Successfully published "${res.product.title}" with ${res.variants.length} size variants into Supabase!`;
+          document.getElementById('sp-status').innerHTML = `✓ Successfully published "${res.product.title}" into Supabase! <a href="/products/${res.product.handle}" target="_blank" style="color: #FFF; text-decoration: underline; margin-left: 8px;">View PDP ↗</a>`;
         } else {
           document.getElementById('sp-status').innerText = `Error: ${res.error}`;
         }
@@ -311,17 +423,103 @@
 
         tbody.innerHTML = res.products.map(p => `
           <tr>
-            <td><strong>${p.title}</strong></td>
+            <td><strong>${p.title}</strong><br><small style="color: var(--muted); font-size: 10px;">/products/${p.handle}</small></td>
             <td><span style="background: var(--card); padding: 4px 8px; border-radius: 3px; font-size: 11px;">${p.category_id || 'General'}</span></td>
             <td><span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: ${p.color_hex || '#555'}; margin-right: 6px;"></span>${p.color_family || 'Neutral'}</td>
             <td>${p.fabric_technology || 'Standard'}</td>
             <td><strong>₹${Number(p.sale_price).toLocaleString('en-IN')}</strong></td>
             <td>${p.variant_count || 5} sizes</td>
-            <td><button class="btn-delete" onclick="deleteProduct('${p.product_id}')">Delete</button></td>
+            <td style="white-space: nowrap;">
+              <button class="btn-edit" onclick="editProduct('${p.product_id}')">Edit</button>
+              <button class="btn-delete" onclick="deleteProduct('${p.product_id}')">Delete</button>
+            </td>
           </tr>
         `).join('');
       } catch (e) {
         console.error('Failed to load admin products:', e);
+      }
+    }
+
+    async function editProduct(productId) {
+      try {
+        const res = await (await fetch(`/api/admin/bulk/products/${productId}`)).json();
+        if (!res.product) {
+          alert('Failed to load product data.');
+          return;
+        }
+        const p = res.product;
+        document.getElementById('edit-prod-id').value = p.product_id;
+        document.getElementById('edit-title').value = p.title || '';
+        document.getElementById('edit-handle').value = p.handle || '';
+        document.getElementById('edit-category').value = p.category_id || '';
+        document.getElementById('edit-fabric').value = p.fabric_technology || '';
+        document.getElementById('edit-color').value = p.color_family || '';
+        document.getElementById('edit-color-hex').value = p.color_hex || '';
+        document.getElementById('edit-mrp').value = p.mrp || 0;
+        document.getElementById('edit-sale').value = p.sale_price || 0;
+        document.getElementById('edit-discount').value = p.discount_label || '';
+        document.getElementById('edit-badge').value = p.badge_label || '';
+        document.getElementById('edit-image').value = p.image_url || '';
+        document.getElementById('edit-desc').value = p.description || '';
+        document.getElementById('edit-fit').value = p.fit_details || '';
+        document.getElementById('edit-fab').value = p.fabrication_details || '';
+
+        const sizeList = (res.variants && res.variants.length > 0)
+          ? res.variants.map(v => v.size).join(', ')
+          : 'XXS, XS, S, M, L, XL';
+        document.getElementById('edit-sizes').value = sizeList;
+        document.getElementById('edit-status').innerText = '';
+
+        document.getElementById('edit-modal').classList.add('open');
+      } catch (e) {
+        alert('Error loading product: ' + e.message);
+      }
+    }
+
+    function closeEditModal() {
+      document.getElementById('edit-modal').classList.remove('open');
+    }
+
+    async function saveProductEdit() {
+      try {
+        const productId = document.getElementById('edit-prod-id').value;
+        const title = document.getElementById('edit-title').value.trim();
+        const handle = document.getElementById('edit-handle').value.trim();
+        const categoryId = document.getElementById('edit-category').value.trim();
+        const fabricTechnology = document.getElementById('edit-fabric').value.trim();
+        const colorFamily = document.getElementById('edit-color').value.trim();
+        const colorHex = document.getElementById('edit-color-hex').value.trim();
+        const mrp = Number(document.getElementById('edit-mrp').value);
+        const salePrice = Number(document.getElementById('edit-sale').value);
+        const discountLabel = document.getElementById('edit-discount').value.trim();
+        const badgeLabel = document.getElementById('edit-badge').value.trim();
+        const imageUrl = document.getElementById('edit-image').value.trim();
+        const description = document.getElementById('edit-desc').value.trim();
+        const fitDetails = document.getElementById('edit-fit').value.trim();
+        const fabricationDetails = document.getElementById('edit-fab').value.trim();
+        const sizesRaw = document.getElementById('edit-sizes').value;
+        const sizes = sizesRaw.split(',').map(s => s.trim()).filter(Boolean);
+
+        const res = await (await fetch(`/api/admin/bulk/products/${productId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title, handle, categoryId, fabricTechnology,
+            colorFamily, colorHex, mrp, salePrice, discountLabel,
+            badgeLabel, imageUrl, description, fitDetails, fabricationDetails,
+            sizes
+          })
+        })).json();
+
+        if (res.success) {
+          document.getElementById('edit-status').innerHTML = `✓ Synced with PDP! <a href="/products/${res.product.handle}" target="_blank" style="color: #FFF; text-decoration: underline;">View Live PDP ↗</a>`;
+          loadAdminProducts();
+          setTimeout(() => { closeEditModal(); }, 1800);
+        } else {
+          document.getElementById('edit-status').innerText = `Error: ${res.error}`;
+        }
+      } catch (e) {
+        document.getElementById('edit-status').innerText = `Error: ${e.message}`;
       }
     }
 
