@@ -1961,6 +1961,27 @@ async function runAllClickableLinksPietSuite() {
             record('Order Status Click: FIND ORDER', 'Lookup Order by Email & Confirmation # (POST /api/account/orders/lookup)',
                 osLookupRes.success && osLookupRes.order?.order_id.startsWith('536aaf91'));
 
+            // ======================================================================
+            // GROUP 22: Help Center (/pages/help-center)
+            // ======================================================================
+            console.log("\n--- [GROUP 22: Help Center Topics, FAQs & Contact Actions] ---");
+            record('Help Center UI: Hero & Actions', 'Verify HELP CENTER Hero, Start Return/Exchange, Track your Order & Outside U.S. Link',
+                homeHtml.includes('id="help-center-section"') &&
+                homeHtml.includes('id="hc-btn-return"') &&
+                homeHtml.includes('id="hc-btn-track"') &&
+                homeHtml.includes('Start Return Outside the U.S.'));
+
+            record('Help Center UI: 7 Topics & 8 FAQs', 'Verify TOPICS Cards (Returns, Orders, Discount Codes, Payment, Access, Size Guide, Stores) & FAQ Accordions',
+                homeHtml.includes('hc-topic-card') &&
+                homeHtml.includes('toggleHelpFaq(0)') &&
+                homeHtml.includes('toggleHelpFaq(7)'));
+
+            record('Help Center UI: Contact Us Cards', 'Verify CHAT (START CHAT), EMAIL (GET IN TOUCH), CALL ((855) 793-3100) & TEXT ((424) 567-8133)',
+                homeHtml.includes('id="hc-btn-chat"') &&
+                homeHtml.includes('GET IN TOUCH') &&
+                homeHtml.includes('(855) 793-3100') &&
+                homeHtml.includes('(424) 567-8133'));
+
         } catch (pdpErr) {
             record('PDP Suite', 'PDP testing failed', false, pdpErr.message);
         }

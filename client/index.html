@@ -3522,6 +3522,118 @@
     </div>
   </section>
 
+  <!-- Dedicated HELP CENTER Page (/pages/help-center) -->
+  <section id="help-center-section" style="display: none;">
+    <div style="background: linear-gradient(180deg, #CFE0EC 0%, #E7EEF2 75%, #EAE2D6 100%); padding: 64px 20px 56px; text-align: center;">
+      <h1 style="font-family: var(--font-heading); font-size: 32px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #111; margin-bottom: 28px;">HELP CENTER</h1>
+      <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; max-width: 680px; margin: 0 auto 18px;">
+        <button id="hc-btn-return" onclick="openCms('returns-support')"
+          style="flex: 1; min-width: 240px; background: #FFF; border: 1px solid #E5E5E5; border-radius: 6px; padding: 18px 22px; display: flex; align-items: center; justify-content: space-between; font-size: 14px; font-weight: 600; color: #111; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.06);">
+          <span>↩ Start U.S. Return or Exchange</span><span>&gt;</span>
+        </button>
+        <button id="hc-btn-track" onclick="openOrderStatusPage()"
+          style="flex: 1; min-width: 240px; background: #FFF; border: 1px solid #E5E5E5; border-radius: 6px; padding: 18px 22px; display: flex; align-items: center; justify-content: space-between; font-size: 14px; font-weight: 600; color: #111; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.06);">
+          <span>📍 Track your Order</span><span>&gt;</span>
+        </button>
+      </div>
+      <a onclick="openCms('returns-and-exchanges')" style="font-size: 12px; color: #222; cursor: pointer; text-decoration: underline;">Start Return Outside the U.S. →</a>
+    </div>
+
+    <div style="max-width: 1120px; margin: 48px auto 72px; padding: 0 24px;">
+      <h2 style="font-family: var(--font-heading); font-size: 20px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #111; margin-bottom: 20px;">TOPICS</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; margin-bottom: 56px;">
+        <div class="hc-topic-card" onclick="openCms('returns-support')" style="border: 1px solid #E0DDD6; border-radius: 6px; padding: 22px; background: #FFF; cursor: pointer;">
+          <div style="font-size: 14px; font-weight: 700; color: #111; margin-bottom: 8px;">Returns &amp; Exchanges</div>
+          <div style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">Want to make a free return?</div>
+        </div>
+        <div class="hc-topic-card" onclick="openCms('orders-and-shipping-support')" style="border: 1px solid #E0DDD6; border-radius: 6px; padding: 22px; background: #FFF; cursor: pointer;">
+          <div style="font-size: 14px; font-weight: 700; color: #111; margin-bottom: 8px;">Orders &amp; Shipping</div>
+          <div style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">Looking for your order status, or have questions about shipping?</div>
+        </div>
+        <div class="hc-topic-card" onclick="showAloMessage('Discount Codes', 'Apply ALOINDIA15 (15% Off orders above ₹5,000) or NAMASTE10 (10% Off orders above ₹3,000) at checkout.')" style="border: 1px solid #E0DDD6; border-radius: 6px; padding: 22px; background: #FFF; cursor: pointer;">
+          <div style="font-size: 14px; font-weight: 700; color: #111; margin-bottom: 8px;">Discount Codes</div>
+          <div style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">Have a discount code you'd like to use?</div>
+        </div>
+        <div class="hc-topic-card" onclick="openCms('gift-cards')" style="border: 1px solid #E0DDD6; border-radius: 6px; padding: 22px; background: #FFF; cursor: pointer;">
+          <div style="font-size: 14px; font-weight: 700; color: #111; margin-bottom: 8px;">Payment Types &amp; Gift Cards</div>
+          <div style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">Wondering what forms of payment we accept?</div>
+        </div>
+        <div class="hc-topic-card" onclick="openAloAccessPage()" style="border: 1px solid #E0DDD6; border-radius: 6px; padding: 22px; background: #FFF; cursor: pointer;">
+          <div style="font-size: 14px; font-weight: 700; color: #111; margin-bottom: 8px;">YOGA Access</div>
+          <div style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">Interested in joining our rewards program?</div>
+        </div>
+        <div class="hc-topic-card" onclick="openPdpSizeGuideModal()" style="border: 1px solid #E0DDD6; border-radius: 6px; padding: 22px; background: #FFF; cursor: pointer;">
+          <div style="font-size: 14px; font-weight: 700; color: #111; margin-bottom: 8px;">Size Guide</div>
+          <div style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">Want to know more about our sizing?</div>
+        </div>
+        <div class="hc-topic-card" onclick="openCms('stores')" style="border: 1px solid #E0DDD6; border-radius: 6px; padding: 22px; background: #FFF; cursor: pointer;">
+          <div style="font-size: 14px; font-weight: 700; color: #111; margin-bottom: 8px;">Stores</div>
+          <div style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">Want to find a store near you?</div>
+        </div>
+      </div>
+
+      <h2 style="font-family: var(--font-heading); font-size: 20px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #111; margin-bottom: 18px;">FREQUENTLY ASKED QUESTIONS</h2>
+      <div id="hc-faq-list" style="margin-bottom: 56px;">
+        <div style="border-bottom: 1px solid #E0DDD6; padding: 16px 0; cursor: pointer;" onclick="toggleHelpFaq(0)">
+          <div style="display:flex; justify-content:space-between; font-size:14px; font-weight:500;"><span>Where can I purchase an item from the Bag Collection?</span><span>⌄</span></div>
+          <div class="hc-faq-ans" id="hc-faq-0" style="display:none; font-size:13px; color:var(--text-muted); margin-top:10px;">Select YOGA Bag Collection pieces are available online and in flagship sanctuaries.</div>
+        </div>
+        <div style="border-bottom: 1px solid #E0DDD6; padding: 16px 0; cursor: pointer;" onclick="toggleHelpFaq(1)">
+          <div style="display:flex; justify-content:space-between; font-size:14px; font-weight:500;"><span>Do you provide price matching or adjustments?</span><span>⌄</span></div>
+          <div class="hc-faq-ans" id="hc-faq-1" style="display:none; font-size:13px; color:var(--text-muted); margin-top:10px;">We offer one-time price adjustments within 7 days of purchase for full-price items.</div>
+        </div>
+        <div style="border-bottom: 1px solid #E0DDD6; padding: 16px 0; cursor: pointer;" onclick="toggleHelpFaq(2)">
+          <div style="display:flex; justify-content:space-between; font-size:14px; font-weight:500;"><span>Why is my discount code not working?</span><span>⌄</span></div>
+          <div class="hc-faq-ans" id="hc-faq-2" style="display:none; font-size:13px; color:var(--text-muted); margin-top:10px;">Ensure your bag meets the minimum order threshold (e.g. ₹5,000 for ALOINDIA15).</div>
+        </div>
+        <div style="border-bottom: 1px solid #E0DDD6; padding: 16px 0; cursor: pointer;" onclick="toggleHelpFaq(3)">
+          <div style="display:flex; justify-content:space-between; font-size:14px; font-weight:500;"><span>What is the status of my return?</span><span>⌄</span></div>
+          <div class="hc-faq-ans" id="hc-faq-3" style="display:none; font-size:13px; color:var(--text-muted); margin-top:10px;">Returns are processed within 3–5 business days once received at our fulfillment hub.</div>
+        </div>
+        <div style="border-bottom: 1px solid #E0DDD6; padding: 16px 0; cursor: pointer;" onclick="toggleHelpFaq(4)">
+          <div style="display:flex; justify-content:space-between; font-size:14px; font-weight:500;"><span>How can I modify my order?</span><span>⌄</span></div>
+          <div class="hc-faq-ans" id="hc-faq-4" style="display:none; font-size:13px; color:var(--text-muted); margin-top:10px;">Orders begin processing immediately; contact live chat within 30 minutes for urgent edits.</div>
+        </div>
+        <div style="border-bottom: 1px solid #E0DDD6; padding: 16px 0; cursor: pointer;" onclick="toggleHelpFaq(5)">
+          <div style="display:flex; justify-content:space-between; font-size:14px; font-weight:500;"><span>What is the status of my order?</span><span>⌄</span></div>
+          <div class="hc-faq-ans" id="hc-faq-5" style="display:none; font-size:13px; color:var(--text-muted); margin-top:10px;">Use Track Your Order above or Order History in your account to view live BlueDart tracking.</div>
+        </div>
+        <div style="border-bottom: 1px solid #E0DDD6; padding: 16px 0; cursor: pointer;" onclick="toggleHelpFaq(6)">
+          <div style="display:flex; justify-content:space-between; font-size:14px; font-weight:500;"><span>How do I return or exchange my item(s)</span><span>⌄</span></div>
+          <div class="hc-faq-ans" id="hc-faq-6" style="display:none; font-size:13px; color:var(--text-muted); margin-top:10px;">Unworn items with tags are eligible for free returns &amp; exchanges through January 10, 2027.</div>
+        </div>
+        <div style="border-bottom: 1px solid #E0DDD6; padding: 16px 0; cursor: pointer;" onclick="toggleHelpFaq(7)">
+          <div style="display:flex; justify-content:space-between; font-size:14px; font-weight:500;"><span>How do I access Priority Customer Service Via Text?</span><span>⌄</span></div>
+          <div class="hc-faq-ans" id="hc-faq-7" style="display:none; font-size:13px; color:var(--text-muted); margin-top:10px;">Level 2 &amp; 3 YOGA Access members can text (424) 567-8133 24/7 for priority concierge support.</div>
+        </div>
+      </div>
+
+      <h2 style="font-family: var(--font-heading); font-size: 20px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #111; margin-bottom: 20px;">COULDN'T RESOLVE YOUR ISSUE? CONTACT US.</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px;">
+        <div style="background: #F4F3F1; border-radius: 6px; padding: 24px;">
+          <div style="font-size: 16px; font-weight: 700; margin-bottom: 10px;">💬 CHAT</div>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 18px;">Chat support is available 24 hours a day, 7 days a week.</p>
+          <button id="hc-btn-chat" onclick="openLiveSupport()" style="background: #111; color: #FFF; border: none; padding: 10px 22px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; cursor: pointer;">START CHAT</button>
+        </div>
+        <div style="background: #F4F3F1; border-radius: 6px; padding: 24px;">
+          <div style="font-size: 16px; font-weight: 700; margin-bottom: 10px;">✉️ EMAIL</div>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 18px;">Email us anytime, and we'll get back to you as soon as we can!</p>
+          <a href="mailto:support@yoga.com" style="display: inline-block; background: #111; color: #FFF; text-decoration: none; padding: 10px 22px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em;">GET IN TOUCH</a>
+        </div>
+        <div style="background: #F4F3F1; border-radius: 6px; padding: 24px;">
+          <div style="font-size: 16px; font-weight: 700; margin-bottom: 10px;">📞 CALL</div>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 18px;">Phone call support is available 24 hours a day, 7 days a week.</p>
+          <a href="tel:855-793-3100" style="font-size: 13px; font-weight: 700; color: #111; text-decoration: none;">(855) 793-3100</a>
+        </div>
+        <div style="background: #F4F3F1; border-radius: 6px; padding: 24px;">
+          <div style="font-size: 16px; font-weight: 700; margin-bottom: 10px;">🗨️ TEXT</div>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 18px;">Available 24 x 7. Priority support for Level 2 &amp; 3 YOGA Access members.</p>
+          <a href="sms:+14245678133" style="font-size: 13px; font-weight: 700; color: #111; text-decoration: none;">(424) 567-8133</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Dedicated ORDER STATUS Lookup Page -->
   <section id="order-status-section" style="display: none; max-width: 520px; margin: 48px auto 80px; padding: 0 20px; text-align: center;">
     <h1 style="font-family: var(--font-heading); font-size: 28px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #111; margin-bottom: 10px;">ORDER STATUS</h1>
@@ -5416,6 +5528,10 @@
     }
 
     async function openCms(slug) {
+      if (slug === 'help-center') {
+        openHelpCenterPage();
+        return;
+      }
       try {
         const res = await (await fetch(`/api/catalog/cms/${slug}`)).json();
         if (res.page) {
@@ -5443,6 +5559,21 @@
       } else {
         openCustomerAccount('shipping');
       }
+    }
+
+    function openHelpCenterPage() {
+      ['catalog-section', 'account-section', 'cart-page-section', 'auth-page-section', 'pdp-page-section', 'order-status-section'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.style.display = 'none';
+      });
+      const cv = document.getElementById('content-view'); if (cv) cv.classList.remove('active');
+      const hc = document.getElementById('help-center-section');
+      if (hc) hc.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleHelpFaq(idx) {
+      const el = document.getElementById(`hc-faq-${idx}`);
+      if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
     }
 
     function openOrderStatusPage() {
