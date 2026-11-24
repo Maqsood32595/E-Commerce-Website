@@ -1997,7 +1997,7 @@
 
     #auth-page-section {
       background: radial-gradient(circle at 50% 25%, rgba(248, 245, 240, 0.94), rgba(235, 226, 216, 0.98)),
-                  url('https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1800&q=80') center center / cover no-repeat fixed;
+        url('https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1800&q=80') center center / cover no-repeat fixed;
       min-height: 85vh;
       padding: 50px 20px 80px;
     }
@@ -2033,12 +2033,14 @@
       margin-bottom: 16px;
       display: none;
     }
+
     .auth-alert-banner.error {
       background: #FEF2F2;
       border: 1px solid #FCA5A5;
       color: #991B1B;
       display: block;
     }
+
     .auth-alert-banner.warning {
       background: #FFFBEB;
       border: 1px solid #FCD34D;
@@ -2054,11 +2056,13 @@
       margin: 6px 0 8px;
       overflow: hidden;
     }
+
     .auth-pwd-meter-fill {
       height: 100%;
       width: 0%;
       transition: width 0.25s ease, background 0.25s ease;
     }
+
     .auth-pwd-reqs {
       display: flex;
       justify-content: space-between;
@@ -2066,6 +2070,7 @@
       color: #6B7280;
       margin-bottom: 12px;
     }
+
     .auth-pwd-req.met {
       color: #059669;
       font-weight: 600;
@@ -2080,6 +2085,7 @@
       border-top: 1px solid #F3F4F6;
       text-align: center;
     }
+
     .auth-trust-badge-item {
       display: flex;
       flex-direction: column;
@@ -2089,9 +2095,11 @@
       color: #6B7280;
       line-height: 1.25;
     }
+
     .auth-trust-badge-icon {
       font-size: 14px;
     }
+
     .auth-trust-badge-item strong {
       color: #111827;
       font-weight: 600;
@@ -3448,11 +3456,6 @@
 
   <!-- Dedicated Customer Authentication Portal (/account/login) -->
   <section class="auth-page-container" id="auth-page-section" style="display: none;">
-    <!-- Enterprise Security Header Badge -->
-    <div class="auth-security-badge">
-      <span>🔒</span> <strong>256-Bit SSL</strong> Encrypted &bull; DPDPA 2023 Protected
-    </div>
-
     <!-- Security Feedback Alert Banner -->
     <div class="auth-alert-banner" id="auth-alert-banner"></div>
 
@@ -3484,11 +3487,14 @@
         <input type="email" class="auth-input" id="auth-join-email" placeholder="Email" />
       </div>
       <div class="auth-input-group">
-        <input type="password" class="auth-input" id="auth-join-password" placeholder="Password (Min. 8 chars, A-Z, 0-9)" oninput="checkPasswordStrengthUI(this.value)" />
+        <input type="password" class="auth-input" id="auth-join-password"
+          placeholder="Password (Min. 8 chars, A-Z, 0-9)" oninput="checkPasswordStrengthUI(this.value)" />
         <button type="button" class="auth-pw-toggle" onclick="togglePasswordVisibility('auth-join-password', this)"
           title="Toggle password visibility">👁</button>
         <!-- Real-Time Password Strength Meter -->
-        <div class="auth-pwd-meter" id="auth-pwd-meter"><div class="auth-pwd-meter-fill" id="auth-pwd-meter-fill"></div></div>
+        <div class="auth-pwd-meter" id="auth-pwd-meter">
+          <div class="auth-pwd-meter-fill" id="auth-pwd-meter-fill"></div>
+        </div>
         <div class="auth-pwd-reqs" id="auth-pwd-reqs">
           <span class="auth-pwd-req" id="req-len">✓ 8+ Chars</span>
           <span class="auth-pwd-req" id="req-case">✓ Upper & Lower</span>
@@ -3526,22 +3532,6 @@
       <button class="auth-btn-submit" id="btn-auth-signin" onclick="executeSignIn()">SIGN IN</button>
       <div class="auth-disclaimer" style="margin-top: 18px;">
         Don't have an account? <a onclick="switchAuthTab('join')">Join Now</a>
-      </div>
-    </div>
-
-    <!-- Trust & Security Badges Row -->
-    <div class="auth-trust-badges-row">
-      <div class="auth-trust-badge-item">
-        <span class="auth-trust-badge-icon">🛡️</span>
-        <span><strong>Salted PBKDF2</strong><br>Zero-Knowledge</span>
-      </div>
-      <div class="auth-trust-badge-item">
-        <span class="auth-trust-badge-icon">⚡</span>
-        <span><strong>Brute-Force</strong><br>Rate Shield</span>
-      </div>
-      <div class="auth-trust-badge-item">
-        <span class="auth-trust-badge-icon">🔑</span>
-        <span><strong>HMAC Token</strong><br>Secure Session</span>
       </div>
     </div>
   </section>

@@ -1765,13 +1765,11 @@ async function runAllClickableLinksPietSuite() {
             record('Auth Security: Brute Force Shield', 'Action: Trigger Brute Force Lockout on 5 Consecutive Failed Attempts (Returns 429 Too Many Requests)',
                 lastLockoutStatus === 429 && lastLockoutRes.retryAfter !== undefined);
 
-            // Action 8: Luxury Athleisure Background & Security Badges in UI
-            record('Auth UI: Background & Security Badges', 'Action: Verify Luxury Athleisure Hero Styling, 256-Bit SSL Badge & Trust Row',
-                homeHtml.includes('auth-security-badge') &&
-                homeHtml.includes('256-Bit SSL') &&
-                homeHtml.includes('DPDPA 2023') &&
-                homeHtml.includes('auth-trust-badges-row') &&
-                homeHtml.includes('Salted PBKDF2'));
+            // Action 8: Luxury Athleisure Background & Clean Minimal Styling in UI
+            record('Auth UI: Background & Clean Form', 'Action: Verify Luxury Athleisure Hero Styling & Clean Minimalist Auth Form',
+                homeHtml.includes('auth-page-container') &&
+                homeHtml.includes('auth-page-section') &&
+                homeHtml.includes('auth-promo-banner'));
 
             // Action 9: Real-Time Password Strength Meter in DOM
             record('Auth UI: Password Strength Meter', 'Action: Verify Real-Time Password Strength Meter Bar & Requirement Checklist Elements',
