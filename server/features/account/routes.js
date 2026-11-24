@@ -70,6 +70,36 @@ router.get('/orders', async (req, res) => {
     }
 });
 
+// POST /api/account/orders/lookup (Public Order Status Lookup by Email + Order #)
+router.post('/orders/lookup', async (req, res) => {
+    try {
+        const { email, orderNumber } = req.body;
+        if (!email || !orderNumber) {
+            return res.status(400).json({ error: 'Email and Order # are required', slice: 'account' });
+        }
+        const cleanEmail = email.toLowerCase().trim();
+        const cleanNum = orderNumber.replace(/^#/, '').trim();
+        const result = await db.query(`
+            SELECT o.*,
+                   COALESCE(json_agg(json_build_object(
+                       'title', oi.title, 'color_name', oi.color_name, 'size', oi.size, 'quantity', oi.quantity, 'unit_price', oi.unit_price
+                   )) FILTER (WHERE oi.order_item_id IS NOT NULL), '[]') as items
+            FROM orders o
+            LEFT JOIN order_items oi ON o.order_id = oi.order_id
+            WHERE LOWER(o.customer_email) = $1 AND o.order_id::text ILIKE $2
+            GROUP BY o.order_id
+            LIMIT 1;
+        `, [cleanEmail, `${cleanNum}%`]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ success: false, error: 'No order found matching that email and order number.', slice: 'account' });
+        }
+        res.json({ success: true, slice: 'account', order: result.rows[0] });
+    } catch (err) {
+        res.status(500).json({ error: err.message, slice: 'account' });
+    }
+});
+
 // POST /api/account/wishlist/add
 router.post('/wishlist/add', async (req, res) => {
     try {
@@ -127,15 +157,120 @@ router.post('/gift-card/check', async (req, res) => {
     }
 });
 
+// Ensure customer_addresses table exists
+db.query(`
+    CREATE TABLE IF NOT EXISTS customer_addresses (
+        address_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        customer_email VARCHAR(255) NOT NULL,
+        full_name VARCHAR(150) NOT NULL,
+        street TEXT NOT NULL,
+        apartment VARCHAR(150),
+        city VARCHAR(100) NOT NULL,
+        state VARCHAR(100) NOT NULL,
+        pincode VARCHAR(30) NOT NULL,
+        country VARCHAR(100) DEFAULT 'India',
+        phone VARCHAR(50),
+        is_default BOOLEAN DEFAULT FALSE,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    );
+`).catch(err => console.error('⚠️ [customer_addresses init]', err.message));
+
+// GET /api/account/addresses
+router.get('/addresses', async (req, res) => {
+    try {
+        const email = (req.query.email || 'sameeramaq@gmail.com').toLowerCase().trim();
+        const result = await db.query(
+            'SELECT * FROM customer_addresses WHERE LOWER(customer_email) = $1 ORDER BY is_default DESC, created_at DESC',
+            [email]
+        );
+        res.json({ success: true, slice: 'account', addresses: result.rows });
+    } catch (err) {
+        res.status(500).json({ error: err.message, slice: 'account' });
+    }
+});
+
+// POST /api/account/addresses
+router.post('/addresses', async (req, res) => {
+    try {
+        const { customerEmail, fullName, street, apartment, city, state, pincode, country, phone, isDefault } = req.body;
+        if (!customerEmail || !fullName || !street || !city || !pincode) {
+            return res.status(400).json({ error: 'customerEmail, fullName, street, city, and pincode are required', slice: 'account' });
+        }
+        const email = customerEmail.toLowerCase().trim();
+        if (isDefault) {
+            await db.query('UPDATE customer_addresses SET is_default = false WHERE LOWER(customer_email) = $1', [email]);
+        }
+        const result = await db.query(`
+            INSERT INTO customer_addresses (customer_email, full_name, street, apartment, city, state, pincode, country, phone, is_default)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+            RETURNING *;
+        `, [email, fullName.trim(), street.trim(), apartment || null, city.trim(), state || 'Maharashtra', pincode.trim(), country || 'India', phone || null, !!isDefault]);
+        res.json({ success: true, slice: 'account', address: result.rows[0] });
+    } catch (err) {
+        res.status(500).json({ error: err.message, slice: 'account' });
+    }
+});
+
+// PUT /api/account/addresses/:addressId
+router.put('/addresses/:addressId', async (req, res) => {
+    try {
+        const { addressId } = req.params;
+        const { fullName, street, apartment, city, state, pincode, country, phone, isDefault } = req.body;
+        const existing = await db.query('SELECT * FROM customer_addresses WHERE address_id = $1', [addressId]);
+        if (existing.rows.length === 0) return res.status(404).json({ error: 'Address not found', slice: 'account' });
+
+        if (isDefault) {
+            await db.query('UPDATE customer_addresses SET is_default = false WHERE LOWER(customer_email) = $1', [existing.rows[0].customer_email.toLowerCase()]);
+        }
+
+        const result = await db.query(`
+            UPDATE customer_addresses
+            SET full_name = COALESCE($2, full_name),
+                street = COALESCE($3, street),
+                apartment = COALESCE($4, apartment),
+                city = COALESCE($5, city),
+                state = COALESCE($6, state),
+                pincode = COALESCE($7, pincode),
+                country = COALESCE($8, country),
+                phone = COALESCE($9, phone),
+                is_default = COALESCE($10, is_default)
+            WHERE address_id = $1
+            RETURNING *;
+        `, [addressId, fullName || null, street || null, apartment ?? null, city || null, state || null, pincode || null, country || null, phone ?? null, isDefault !== undefined ? !!isDefault : null]);
+        res.json({ success: true, slice: 'account', address: result.rows[0] });
+    } catch (err) {
+        res.status(500).json({ error: err.message, slice: 'account' });
+    }
+});
+
+// DELETE /api/account/addresses/:addressId
+router.delete('/addresses/:addressId', async (req, res) => {
+    try {
+        const { addressId } = req.params;
+        await db.query('DELETE FROM customer_addresses WHERE address_id = $1', [addressId]);
+        res.json({ success: true, slice: 'account', deletedAddressId: addressId });
+    } catch (err) {
+        res.status(500).json({ error: err.message, slice: 'account' });
+    }
+});
+
 // POST /api/account/preferences
 router.post('/preferences', async (req, res) => {
     try {
-        const { email, emailMarketing, smsAlerts, whatsappAlerts, dpdpaConsent } = req.body;
+        const { email, emailMarketing, smsAlerts, whatsappAlerts, dpdpaConsent, emailFrequency, unsubscribeAll } = req.body;
         res.json({
             success: true,
             slice: 'account',
             message: 'Preferences updated successfully',
-            preferences: { emailMarketing: !!emailMarketing, smsAlerts: !!smsAlerts, whatsappAlerts: !!whatsappAlerts, dpdpaConsent: !!dpdpaConsent }
+            preferences: {
+                email: email || 'sameeramaq@gmail.com',
+                emailFrequency: emailFrequency || 'everything',
+                unsubscribeAll: !!unsubscribeAll,
+                emailMarketing: unsubscribeAll ? false : !!emailMarketing,
+                smsAlerts: !!smsAlerts,
+                whatsappAlerts: !!whatsappAlerts,
+                dpdpaConsent: !!dpdpaConsent
+            }
         });
     } catch (err) {
         res.status(500).json({ error: err.message, slice: 'account' });

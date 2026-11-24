@@ -3239,8 +3239,8 @@
 
         <!-- Panel 2: ACCOUNT INFORMATION -->
         <div class="account-tab-panel" id="panel-info" style="display: none;">
-          <div class="account-form-card">
-            <h3 style="font-size: 18px; margin-bottom: 20px; color: var(--brand-espresso);">Personal Details</h3>
+          <div style="max-width: 520px;">
+            <h3 style="font-family: var(--font-heading); font-size: 18px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 20px; color: #111;">GENERAL INFO</h3>
             <div class="account-form-row">
               <label>First Name</label>
               <input type="text" id="acc-fname" value="Sameera" />
@@ -3250,19 +3250,28 @@
               <input type="text" id="acc-lname" value="Maqsood" />
             </div>
             <div class="account-form-row">
-              <label>Email Address</label>
+              <label>Email</label>
               <input type="email" id="acc-email" value="sameeramaq@gmail.com" readonly style="background: #F7F5F2;" />
             </div>
-            <div class="account-form-row">
-              <label>Phone Number</label>
-              <input type="text" id="acc-phone" value="+91 98200 12345" />
+            <div class="account-form-row" style="margin-bottom: 6px;">
+              <label>Phone number (optional)</label>
+              <input type="text" id="acc-phone" placeholder="Phone number (optional)" value="" />
             </div>
-            <div class="account-form-row">
-              <label>VIP Membership Tier</label>
-              <div id="acc-tier-badge" style="font-size: 13px; font-weight: 700; color: var(--brand-terracotta);">VIP Tier 1 (1 Reward Point Available)</div>
+            <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 18px;">Enables faster account lookup in-store.</div>
+            <button id="btn-update-account" onclick="saveCustomerProfile()"
+              style="background: #111111; color: #FFFFFF; border: none; padding: 14px 36px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; margin-bottom: 10px;">UPDATE ACCOUNT</button>
+            <div id="acc-profile-status" style="margin-top: 6px; font-size: 12px; color: #265431;"></div>
+
+            <hr style="border: none; border-top: 1px solid #DDD; margin: 28px 0 24px;" />
+
+            <h3 style="font-family: var(--font-heading); font-size: 18px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 14px; color: #111;">RESET PASSWORD</h3>
+            <div style="font-size: 12px; color: #333; margin-bottom: 8px;">Enter Email Address</div>
+            <div style="display: flex; gap: 10px; align-items: center; max-width: 380px;">
+              <input type="email" id="acc-reset-email" value="sameeramaq@gmail.com" style="flex: 1; padding: 11px 12px; border: 1px solid #999; font-size: 13px; background: #FFF;" />
+              <button id="btn-account-reset-pwd" onclick="executeAccountResetPassword()"
+                style="background: #111111; color: #FFFFFF; border: none; padding: 12px 26px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer;">RESET</button>
             </div>
-            <button class="btn-start-shopping" style="margin-top: 10px; padding: 10px 24px;" onclick="saveCustomerProfile()">Save Profile Details</button>
-            <div id="acc-profile-status" style="margin-top: 10px; font-size: 12px; color: #265431;"></div>
+            <div id="acc-reset-status" style="margin-top: 10px; font-size: 12px; color: #265431;"></div>
           </div>
         </div>
 
@@ -3319,48 +3328,89 @@
 
         <!-- Panel 4: SHIPPING INFORMATION -->
         <div class="account-tab-panel" id="panel-shipping" style="display: none;">
-          <div class="account-form-card">
-            <h3 style="font-size: 18px; margin-bottom: 20px; color: var(--brand-espresso);">Primary Shipping Address
-            </h3>
-            <p style="font-size: 14px; line-height: 1.8; color: var(--brand-espresso);">
-              <strong>Sameera Maqsood</strong><br />
-              402, Pali Hill Residency, Bandra West<br />
-              Mumbai, Maharashtra - 400050<br />
-              India<br />
-              Phone: +91 98200 12345
-            </p>
-            <div
-              style="margin-top: 20px; font-size: 12px; color: #265431; background: #F1F6F2; padding: 10px 14px; border-radius: 3px; border: 1px solid #D1E2D6;">
-              ✓ Verified Address for Delivery Duty Paid (DDP) Express Fulfillment
+          <button id="btn-add-new-address" onclick="openAddressFormModal()"
+            style="background: #111111; color: #FFFFFF; border: none; padding: 13px 28px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; margin-bottom: 32px;">ADD NEW ADDRESS</button>
+
+          <h2 style="font-family: var(--font-heading); font-size: 20px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #111; padding-bottom: 10px; border-bottom: 1px solid #111; margin-bottom: 22px;">DEFAULT ADDRESSES</h2>
+          <h3 style="font-family: var(--font-heading); font-size: 16px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #111; padding-bottom: 8px; border-bottom: 1px solid #111; margin-bottom: 16px;">DEFAULT SHIPPING ADDRESS</h3>
+
+          <div id="default-address-container" style="font-size: 13px; line-height: 1.7; color: #222; margin-bottom: 36px;">
+            <div>Sameera Maqsood, 402 Pali Hill Residency, Bandra West</div>
+            <div>Mumbai, Maharashtra 400050</div>
+            <div>India</div>
+            <div>T: Not provided</div>
+            <div style="margin-top: 10px; display: flex; gap: 14px;">
+              <a onclick="openAddressFormModal()" style="text-decoration: underline; cursor: pointer; color: #111; font-size: 12px;">Edit</a>
+              <a onclick="deleteCustomerAddress(null)" style="text-decoration: underline; cursor: pointer; color: #111; font-size: 12px;">Delete</a>
+            </div>
+          </div>
+
+          <h2 style="font-family: var(--font-heading); font-size: 20px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #111; padding-bottom: 10px; border-bottom: 1px solid #111; margin-bottom: 16px;">ADDITIONAL ADDRESSES</h2>
+          <div id="additional-addresses-container" style="font-size: 13px; color: #444;">
+            You have no other address entries in your address book.
+          </div>
+
+          <!-- Add / Edit Address Form Box -->
+          <div id="address-form-box" style="display: none; margin-top: 28px; background: #FFF; border: 1px solid var(--border-subtle); padding: 24px; border-radius: 4px; max-width: 560px;">
+            <h3 id="address-form-heading" style="font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; color: var(--brand-espresso);">Add New Address</h3>
+            <input type="hidden" id="addr-edit-id" />
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+              <input type="text" id="addr-fullname" placeholder="Full Name" style="padding: 10px 12px; border: 1px solid var(--border-subtle); font-size: 13px;" />
+              <input type="text" id="addr-phone" placeholder="Phone (e.g. +91 98200 12345)" style="padding: 10px 12px; border: 1px solid var(--border-subtle); font-size: 13px;" />
+            </div>
+            <input type="text" id="addr-street" placeholder="Street Address" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-subtle); font-size: 13px; margin-bottom: 12px;" />
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+              <input type="text" id="addr-city" placeholder="City" style="padding: 10px 12px; border: 1px solid var(--border-subtle); font-size: 13px;" />
+              <input type="text" id="addr-state" placeholder="State" style="padding: 10px 12px; border: 1px solid var(--border-subtle); font-size: 13px;" />
+              <input type="text" id="addr-pin" placeholder="PIN Code" style="padding: 10px 12px; border: 1px solid var(--border-subtle); font-size: 13px;" />
+            </div>
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; margin-bottom: 16px; cursor: pointer;">
+              <input type="checkbox" id="addr-is-default" checked />
+              <span>Set as Default Shipping Address</span>
+            </label>
+            <div style="display: flex; gap: 10px;">
+              <button class="alo-modal-btn" onclick="saveCustomerAddress()">Save Address</button>
+              <button class="filter-pill" onclick="closeAddressFormModal()">Cancel</button>
             </div>
           </div>
         </div>
 
         <!-- Panel 5: COMMUNICATION PREFERENCES -->
         <div class="account-tab-panel" id="panel-preferences" style="display: none;">
-          <div class="account-form-card">
-            <h3 style="font-size: 18px; margin-bottom: 20px; color: var(--brand-espresso);">Communication & Privacy
-              Controls</h3>
-            <div style="display: flex; flex-direction: column; gap: 14px; font-size: 13px;">
-              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                <input type="checkbox" id="pref-email" checked />
-                <span>Email Notifications (Exclusive drops, VIP sale previews)</span>
-              </label>
-              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                <input type="checkbox" id="pref-sms" checked />
-                <span>SMS Alerts (Live parcel tracking milestones)</span>
-              </label>
-              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                <input type="checkbox" id="pref-whatsapp" checked />
-                <span>WhatsApp Concierge (Order receipts & instant delivery updates)</span>
-              </label>
-              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                <input type="checkbox" id="pref-dpdpa" checked />
-                <span>India DPDPA Data Consent (Compliant with Digital Personal Data Protection Act 2023)</span>
-              </label>
+          <div style="max-width: 520px;">
+            <p style="font-size: 13px; color: #222; padding-bottom: 12px; border-bottom: 1px solid #DDD; margin-bottom: 18px;">
+              How often would you like to receive marketing emails from us?
+            </p>
+            <div style="border: 1px solid #333; padding: 14px 16px; font-size: 13px; margin-bottom: 14px; background: #FFF;">
+              Sending to: <strong id="pref-sending-email">sameeramaq@gmail.com</strong>
             </div>
-            <button class="btn-start-shopping" style="margin-top: 24px; padding: 10px 24px;"
-              onclick="savePreferences()">Save Preferences</button>
+            <div id="pref-frequency-box" style="border: 1px solid #333; padding: 16px; font-size: 13px; margin-bottom: 14px; background: #FFF;">
+              <div style="margin-bottom: 12px; color: #222;">Email me:</div>
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                  <input type="radio" name="pref-freq" value="everything" checked style="accent-color: #111;" />
+                  <span style="font-weight: 600;">Everything</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                  <input type="radio" name="pref-freq" value="once_a_day" style="accent-color: #111;" />
+                  <span>Once a day</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                  <input type="radio" name="pref-freq" value="three_a_week" style="accent-color: #111;" />
+                  <span>Three a week</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                  <input type="radio" name="pref-freq" value="once_a_week" style="accent-color: #111;" />
+                  <span>Once a week</span>
+                </label>
+              </div>
+            </div>
+            <div style="border: 1px solid #E5E5E5; padding: 12px 16px; font-size: 13px; margin-bottom: 18px; background: #FFF; display: flex; align-items: center; gap: 12px;">
+              <input type="checkbox" id="pref-unsubscribe-all" onchange="document.getElementById('pref-frequency-box').style.opacity = this.checked ? '0.45' : '1';" style="width: 18px; height: 18px; accent-color: #111; cursor: pointer;" />
+              <label for="pref-unsubscribe-all" style="cursor: pointer;">Unsubscribe from all</label>
+            </div>
+            <button id="btn-save-preferences" onclick="savePreferences()"
+              style="width: 100%; max-width: 260px; background: #111111; color: #FFFFFF; border: none; padding: 14px 24px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer;">SAVE PREFERENCES</button>
             <div id="pref-status-msg" style="margin-top: 10px; font-size: 12px; color: #265431;"></div>
           </div>
         </div>
@@ -3470,6 +3520,31 @@
         Don't have an account? <a onclick="switchAuthTab('join')">Join Now</a>
       </div>
     </div>
+  </section>
+
+  <!-- Dedicated ORDER STATUS Lookup Page -->
+  <section id="order-status-section" style="display: none; max-width: 520px; margin: 48px auto 80px; padding: 0 20px; text-align: center;">
+    <h1 style="font-family: var(--font-heading); font-size: 28px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #111; margin-bottom: 10px;">ORDER STATUS</h1>
+    <p style="font-size: 13px; color: #333; margin-bottom: 24px;">Enter your email address &amp; order number to view the status.</p>
+
+    <div style="text-align: left; font-size: 12px; color: #222; margin-bottom: 14px;">
+      <span style="color: #C93B2B;">*</span>Required Fields
+    </div>
+
+    <div style="text-align: left; margin-bottom: 16px;">
+      <label style="display: block; font-size: 12px; color: #222; margin-bottom: 6px;"><span style="color: #C93B2B;">*</span>Email (Address used to place the order)</label>
+      <input type="email" id="os-email" placeholder="sameeramaq@gmail.com" style="width: 100%; padding: 12px; border: 1px solid #333; font-size: 13px; background: #FFF;" />
+    </div>
+
+    <div style="text-align: left; margin-bottom: 22px;">
+      <label style="display: block; font-size: 12px; color: #222; margin-bottom: 6px;"><span style="color: #C93B2B;">*</span>Order / Order Confirmation # (Example: 1160410 or XPAV284CT)</label>
+      <input type="text" id="os-order-id" placeholder="e.g. 536aaf91" style="width: 100%; padding: 12px; border: 1px solid #333; font-size: 13px; background: #FFF;" />
+    </div>
+
+    <button id="btn-find-order" onclick="lookupOrderStatus()"
+      style="background: #111111; color: #FFFFFF; border: none; padding: 14px 34px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer;">FIND ORDER</button>
+
+    <div id="os-result-box" style="margin-top: 24px; text-align: left; display: none;"></div>
   </section>
 
   <!-- Dedicated Full Cart & Checkout Review Page (Matching Alo Yoga Cart Spec) -->
@@ -5354,16 +5429,63 @@
     }
 
     function openAuthGated(destination) {
+      if (destination === 'track-my-order') {
+        openOrderStatusPage();
+        return;
+      }
       if (!isLoggedIn) {
         showAloMessage('Sign In Required', 'Please sign in to access your order history and saved addresses.');
         openAuthPage('/account');
         return;
       }
-      if (destination === 'track-my-order' || destination === 'order-history') {
+      if (destination === 'order-history') {
         openCustomerAccount('orders');
       } else {
         openCustomerAccount('shipping');
       }
+    }
+
+    function openOrderStatusPage() {
+      ['catalog-section', 'account-section', 'cart-page-section', 'auth-page-section', 'pdp-page-section'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.style.display = 'none';
+      });
+      const cv = document.getElementById('content-view'); if (cv) cv.classList.remove('active');
+      const osSec = document.getElementById('order-status-section');
+      if (osSec) osSec.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function lookupOrderStatus() {
+      const email = document.getElementById('os-email')?.value?.trim();
+      const orderNumber = document.getElementById('os-order-id')?.value?.trim();
+      const box = document.getElementById('os-result-box');
+      if (!email || !orderNumber) {
+        showAloMessage('Required Fields', 'Please enter both your email address and order number.');
+        return;
+      }
+      try {
+        const res = await (await fetch('/api/account/orders/lookup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, orderNumber })
+        })).json();
+        if (box) {
+          box.style.display = 'block';
+          if (res.success && res.order) {
+            const o = res.order;
+            box.innerHTML = `
+              <div style="background: #FFF; border: 1px solid #333; padding: 18px; font-size: 13px; line-height: 1.7;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                  <strong>Order #${o.order_id.slice(0, 8)}</strong>
+                  <span style="color: var(--brand-terracotta); font-weight:700;">${(o.status || 'PAID').toUpperCase()}</span>
+                </div>
+                <div>Total: <strong>₹${formatInr(o.grand_total)}</strong> (${(o.payment_method || 'UPI').toUpperCase()})</div>
+              </div>`;
+          } else {
+            box.innerHTML = `<div style="color: #991B1B; background: #FEF2F2; border: 1px solid #FCA5A5; padding: 12px; font-size: 13px;">${escapeHtml(res.error || 'Order not found.')}</div>`;
+          }
+        }
+      } catch (e) { }
     }
 
     function openCustomerAccount(tab = 'orders') {
@@ -5445,6 +5567,8 @@
 
       if (tabName === 'orders') {
         await loadCustomerOrders();
+      } else if (tabName === 'shipping') {
+        await loadCustomerAddresses();
       } else if (tabName === 'wishlist') {
         await loadWishlistItems();
       } else if (tabName === 'signout') {
@@ -5474,6 +5598,24 @@
       if (tierEl) tierEl.innerText = `${customer.vip_status || 'VIP'} (${customer.reward_points ?? 1} Reward Points Available)`;
       const ptsEl = document.getElementById('access-points-val');
       if (ptsEl) ptsEl.innerText = `${customer.reward_points ?? 1} PT`;
+      const prefEm = document.getElementById('pref-sending-email');
+      if (prefEm && customer.email) prefEm.innerText = customer.email;
+      const rstEm = document.getElementById('acc-reset-email');
+      if (rstEm && customer.email) rstEm.value = customer.email;
+    }
+
+    async function executeAccountResetPassword() {
+      const email = document.getElementById('acc-reset-email')?.value?.trim() || currentCustomer?.email || 'sameeramaq@gmail.com';
+      const statusEl = document.getElementById('acc-reset-status');
+      try {
+        const res = await (await fetch('/api/account/auth/forgot-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        })).json();
+        if (statusEl) statusEl.innerText = `✓ ${res.message || 'Password reset instructions sent.'}`;
+        showAloMessage('Reset Password', res.message || `Password reset instructions dispatched to ${email}.`);
+      } catch (e) { }
     }
 
     async function saveCustomerProfile() {
@@ -5499,6 +5641,124 @@
       } catch (e) {
         if (statusEl) { statusEl.style.color = '#991B1B'; statusEl.innerText = 'Failed to save profile.'; }
       }
+    }
+
+    let customerAddressesCache = [];
+
+    async function loadCustomerAddresses() {
+      try {
+        const email = encodeURIComponent(currentCustomer?.email || 'sameeramaq@gmail.com');
+        const res = await (await fetch(`/api/account/addresses?email=${email}`)).json();
+        customerAddressesCache = res.addresses || [];
+        renderCustomerAddresses();
+      } catch (e) { }
+    }
+
+    function renderCustomerAddresses() {
+      const defEl = document.getElementById('default-address-container');
+      const addEl = document.getElementById('additional-addresses-container');
+      if (!defEl || !addEl) return;
+
+      const defAddr = customerAddressesCache.find(a => a.is_default) || customerAddressesCache[0];
+      if (!defAddr) {
+        defEl.innerHTML = `
+          <div>India</div>
+          <div>T: Not provided</div>
+          <div style="margin-top: 10px; display: flex; gap: 14px;">
+            <a onclick="openAddressFormModal()" style="text-decoration: underline; cursor: pointer; color: #111; font-size: 12px;">Edit</a>
+            <a onclick="showAloMessage('Address Book', 'No saved default address to delete.')" style="text-decoration: underline; cursor: pointer; color: #111; font-size: 12px;">Delete</a>
+          </div>`;
+      } else {
+        defEl.innerHTML = `
+          <div>${escapeHtml(defAddr.full_name)}</div>
+          <div>${escapeHtml(defAddr.street)}${defAddr.apartment ? ', ' + escapeHtml(defAddr.apartment) : ''}</div>
+          <div>${escapeHtml(defAddr.city)}, ${escapeHtml(defAddr.state)} ${escapeHtml(defAddr.pincode)}</div>
+          <div>${escapeHtml(defAddr.country || 'India')}</div>
+          <div>T: ${escapeHtml(defAddr.phone || 'Not provided')}</div>
+          <div style="margin-top: 10px; display: flex; gap: 14px;">
+            <a onclick="openAddressFormModal('${defAddr.address_id}')" style="text-decoration: underline; cursor: pointer; color: #111; font-size: 12px;">Edit</a>
+            <a onclick="deleteCustomerAddress('${defAddr.address_id}')" style="text-decoration: underline; cursor: pointer; color: #111; font-size: 12px;">Delete</a>
+          </div>`;
+      }
+
+      const others = customerAddressesCache.filter(a => !defAddr || a.address_id !== defAddr.address_id);
+      if (others.length === 0) {
+        addEl.innerText = 'You have no other address entries in your address book.';
+      } else {
+        addEl.innerHTML = others.map(a => `
+          <div style="padding: 14px 0; border-bottom: 1px solid var(--border-subtle); line-height: 1.7;">
+            <div><strong>${escapeHtml(a.full_name)}</strong></div>
+            <div>${escapeHtml(a.street)}, ${escapeHtml(a.city)}, ${escapeHtml(a.state)} ${escapeHtml(a.pincode)}</div>
+            <div>${escapeHtml(a.country || 'India')} | T: ${escapeHtml(a.phone || 'Not provided')}</div>
+            <div style="margin-top: 6px; display: flex; gap: 14px;">
+              <a onclick="openAddressFormModal('${a.address_id}')" style="text-decoration: underline; cursor: pointer; color: #111; font-size: 12px;">Edit</a>
+              <a onclick="deleteCustomerAddress('${a.address_id}')" style="text-decoration: underline; cursor: pointer; color: #111; font-size: 12px;">Delete</a>
+            </div>
+          </div>`).join('');
+      }
+    }
+
+    function openAddressFormModal(addressId = null) {
+      const box = document.getElementById('address-form-box');
+      if (!box) return;
+      const addr = addressId ? customerAddressesCache.find(a => a.address_id === addressId) : null;
+      document.getElementById('address-form-heading').innerText = addr ? 'Edit Address' : 'Add New Address';
+      document.getElementById('addr-edit-id').value = addr ? addr.address_id : '';
+      document.getElementById('addr-fullname').value = addr ? addr.full_name : `${currentCustomer?.first_name || 'Sameera'} ${currentCustomer?.last_name || 'Maqsood'}`.trim();
+      document.getElementById('addr-phone').value = addr ? (addr.phone || '') : (currentCustomer?.phone || '');
+      document.getElementById('addr-street').value = addr ? addr.street : '';
+      document.getElementById('addr-city').value = addr ? addr.city : '';
+      document.getElementById('addr-state').value = addr ? addr.state : '';
+      document.getElementById('addr-pin').value = addr ? addr.pincode : '';
+      document.getElementById('addr-is-default').checked = addr ? !!addr.is_default : true;
+      box.style.display = 'block';
+      box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function closeAddressFormModal() {
+      const box = document.getElementById('address-form-box');
+      if (box) box.style.display = 'none';
+    }
+
+    async function saveCustomerAddress() {
+      const editId = document.getElementById('addr-edit-id').value;
+      const payload = {
+        customerEmail: currentCustomer?.email || 'sameeramaq@gmail.com',
+        fullName: document.getElementById('addr-fullname').value.trim(),
+        phone: document.getElementById('addr-phone').value.trim(),
+        street: document.getElementById('addr-street').value.trim(),
+        city: document.getElementById('addr-city').value.trim(),
+        state: document.getElementById('addr-state').value.trim(),
+        pincode: document.getElementById('addr-pin').value.trim(),
+        country: 'India',
+        isDefault: document.getElementById('addr-is-default').checked
+      };
+      if (!payload.fullName || !payload.street || !payload.city || !payload.pincode) {
+        showAloMessage('Required Fields', 'Please fill in Full Name, Street Address, City, and PIN Code.');
+        return;
+      }
+      const url = editId ? `/api/account/addresses/${editId}` : '/api/account/addresses';
+      const method = editId ? 'PUT' : 'POST';
+      const res = await (await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })).json();
+      if (res.success) {
+        closeAddressFormModal();
+        await loadCustomerAddresses();
+        showAloMessage('Address Saved', 'Your shipping address book has been updated.');
+      }
+    }
+
+    async function deleteCustomerAddress(addressId) {
+      if (!addressId) {
+        showAloMessage('Address Book', 'No saved address entry to delete.');
+        return;
+      }
+      await fetch(`/api/account/addresses/${addressId}`, { method: 'DELETE' });
+      await loadCustomerAddresses();
+      showAloMessage('Address Removed', 'The address entry has been removed from your address book.');
     }
 
     async function loadCustomerOrders() {
@@ -5592,18 +5852,24 @@
     }
 
     async function savePreferences() {
-      const email = document.getElementById('pref-email').checked;
-      const sms = document.getElementById('pref-sms').checked;
-      const whatsapp = document.getElementById('pref-whatsapp').checked;
-      const dpdpa = document.getElementById('pref-dpdpa').checked;
+      const freq = document.querySelector('input[name="pref-freq"]:checked')?.value || 'everything';
+      const unsub = !!document.getElementById('pref-unsubscribe-all')?.checked;
       await fetch('/api/account/preferences', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ emailMarketing: email, smsAlerts: sms, whatsappAlerts: whatsapp, dpdpaConsent: dpdpa })
+        body: JSON.stringify({
+          email: currentCustomer?.email || 'sameeramaq@gmail.com',
+          emailFrequency: freq,
+          unsubscribeAll: unsub,
+          emailMarketing: !unsub,
+          dpdpaConsent: true
+        })
       });
       const msgEl = document.getElementById('pref-status-msg');
       if (msgEl) {
-        msgEl.innerText = '✓ Preferences saved & synchronized with India DPDPA registry.';
+        msgEl.innerText = unsub
+          ? '✓ Unsubscribed from all marketing emails.'
+          : `✓ Preferences saved (${freq.replace(/_/g, ' ')}) & synced with India DPDPA registry.`;
         setTimeout(() => msgEl.innerText = '', 4000);
       }
     }

@@ -1858,6 +1858,109 @@ async function runAllClickableLinksPietSuite() {
                 cpSave.success && cpDel.success && (cpList.coupons || []).some(c => c.code === ephemeralCouponPietCode));
             ephemeralCouponPietCode = null;
 
+            // ======================================================================
+            // GROUP 21: Shipping Information & Address Book (/account/addresses)
+            // ======================================================================
+            console.log("\n--- [GROUP 21: Shipping Information & Address Book Clicks] ---");
+            const pietAddrEmail = `piet-addr-${runId}@example.com`;
+
+            // Action 1: Verify Shipping Information UI Elements (ADD NEW ADDRESS, DEFAULT ADDRESSES, ADDITIONAL ADDRESSES)
+            record('Shipping UI: Address Book Layout', 'Verify ADD NEW ADDRESS Button, DEFAULT ADDRESSES, DEFAULT SHIPPING ADDRESS & ADDITIONAL ADDRESSES',
+                homeHtml.includes('id="btn-add-new-address"') &&
+                homeHtml.includes('ADD NEW ADDRESS') &&
+                homeHtml.includes('DEFAULT ADDRESSES') &&
+                homeHtml.includes('DEFAULT SHIPPING ADDRESS') &&
+                homeHtml.includes('ADDITIONAL ADDRESSES') &&
+                homeHtml.includes('openAddressFormModal') &&
+                homeHtml.includes('deleteCustomerAddress'));
+
+            // Action 2: Click ADD NEW ADDRESS -> Create Default Shipping Address
+            const addDefRes = await (await fetch(`${baseUrl}/api/account/addresses`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    customerEmail: pietAddrEmail,
+                    fullName: 'Sameera Maqsood',
+                    street: '402 Pali Hill Residency',
+                    city: 'Mumbai',
+                    state: 'Maharashtra',
+                    pincode: '400050',
+                    phone: '+91 98200 12345',
+                    isDefault: true
+                })
+            })).json();
+            record('Shipping Click: ADD NEW ADDRESS', 'Create Default Shipping Address in PostgreSQL (POST /api/account/addresses)',
+                addDefRes.success && addDefRes.address?.is_default === true);
+
+            // Action 3: Click Edit -> Update Default Shipping Address
+            const addrId = addDefRes.address?.address_id;
+            const editAddrRes = addrId ? await (await fetch(`${baseUrl}/api/account/addresses/${addrId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ street: '501 Seaface Towers', phone: '+91 98200 99999' })
+            })).json() : {};
+            record('Shipping Click: Edit Address', 'Update Shipping Address & Phone (PUT /api/account/addresses/:id)',
+                editAddrRes.success && editAddrRes.address?.street === '501 Seaface Towers');
+
+            // Action 4: Fetch Address Book (GET /api/account/addresses)
+            const listAddrRes = await (await fetch(`${baseUrl}/api/account/addresses?email=${encodeURIComponent(pietAddrEmail)}`)).json();
+            record('Shipping API: List Addresses', 'Retrieve Customer Address Book from PostgreSQL',
+                listAddrRes.success && (listAddrRes.addresses || []).length === 1);
+
+            // Action 5: Click Delete -> Remove Address
+            const delAddrRes = addrId ? await (await fetch(`${baseUrl}/api/account/addresses/${addrId}`, { method: 'DELETE' })).json() : {};
+            record('Shipping Click: Delete Address', 'Remove Address Entry from Address Book (DELETE /api/account/addresses/:id)',
+                delAddrRes.success && delAddrRes.deletedAddressId === addrId);
+
+            // Action 6: Communication Preferences UI & Save Click
+            record('Preferences UI: Email Frequency & Unsubscribe', 'Verify Sending to, Everything/Once a day/Three a week/Once a week, Unsubscribe from all & SAVE PREFERENCES',
+                homeHtml.includes('id="pref-sending-email"') &&
+                homeHtml.includes('value="everything"') &&
+                homeHtml.includes('value="once_a_day"') &&
+                homeHtml.includes('value="three_a_week"') &&
+                homeHtml.includes('value="once_a_week"') &&
+                homeHtml.includes('id="pref-unsubscribe-all"') &&
+                homeHtml.includes('id="btn-save-preferences"'));
+
+            const prefFreqRes = await (await fetch(`${baseUrl}/api/account/preferences`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: pietAddrEmail, emailFrequency: 'once_a_week', unsubscribeAll: false, dpdpaConsent: true })
+            })).json();
+            record('Preferences Click: SAVE PREFERENCES', 'Persist Email Frequency & Unsubscribe Toggle (POST /api/account/preferences)',
+                prefFreqRes.success && prefFreqRes.preferences?.emailFrequency === 'once_a_week');
+
+            // Action 7: Account Information UI (GENERAL INFO, UPDATE ACCOUNT, RESET PASSWORD)
+            record('Account Info UI: General Info & Reset', 'Verify GENERAL INFO, Phone helper, UPDATE ACCOUNT, RESET PASSWORD & RESET Button',
+                homeHtml.includes('GENERAL INFO') &&
+                homeHtml.includes('id="btn-update-account"') &&
+                homeHtml.includes('RESET PASSWORD') &&
+                homeHtml.includes('id="acc-reset-email"') &&
+                homeHtml.includes('id="btn-account-reset-pwd"'));
+
+            const accResetRes = await (await fetch(`${baseUrl}/api/account/auth/forgot-password`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: pietAddrEmail })
+            })).json();
+            record('Account Info Click: RESET Password', 'Dispatch Password Reset from Account Information Tab (POST /api/account/auth/forgot-password)',
+                accResetRes.success && accResetRes.message.includes(pietAddrEmail));
+
+            // Action 8: Order Status Lookup Page UI & FIND ORDER Click
+            record('Order Status UI: Lookup Form', 'Verify ORDER STATUS, Required Fields, Email, Order # & FIND ORDER Button',
+                homeHtml.includes('id="order-status-section"') &&
+                homeHtml.includes('id="os-email"') &&
+                homeHtml.includes('id="os-order-id"') &&
+                homeHtml.includes('id="btn-find-order"'));
+
+            const osLookupRes = await (await fetch(`${baseUrl}/api/account/orders/lookup`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: 'sameeramaq@gmail.com', orderNumber: '536aaf91' })
+            })).json();
+            record('Order Status Click: FIND ORDER', 'Lookup Order by Email & Confirmation # (POST /api/account/orders/lookup)',
+                osLookupRes.success && osLookupRes.order?.order_id.startsWith('536aaf91'));
+
         } catch (pdpErr) {
             record('PDP Suite', 'PDP testing failed', false, pdpErr.message);
         }
