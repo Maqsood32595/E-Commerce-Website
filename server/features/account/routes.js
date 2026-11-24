@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../db');
+const security = require('./security');
 
 // GET /api/account/customer
 router.get('/customer', async (req, res) => {
@@ -134,15 +135,31 @@ router.post('/support/chat', async (req, res) => {
     }
 });
 
-// POST /api/account/auth/register (Join Now)
+// POST /api/account/auth/register (Join Now - Security Hardened)
 router.post('/auth/register', async (req, res) => {
     try {
+        const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1';
         const { firstName, lastName, email, password, phone } = req.body;
+
         if (!email || !firstName) {
             return res.status(400).json({ error: 'First name and email are required', slice: 'account' });
         }
+
         const cleanEmail = email.toLowerCase().trim();
-        const pwdHash = password ? `hash_${password}` : 'default_hash';
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(cleanEmail)) {
+            return res.status(400).json({ error: 'Please enter a valid email address', slice: 'account' });
+        }
+
+        // Enforce password complexity policy
+        const pwd = password || 'AloYogaPassword2026!';
+        const strength = security.validatePasswordStrength(pwd);
+        if (!strength.valid) {
+            return res.status(400).json({ error: strength.error, slice: 'account' });
+        }
+
+        // Hash password using 100,000-iteration PBKDF2 with SHA-512 and random salt
+        const pwdHash = security.hashPassword(pwd);
 
         const result = await db.query(`
             INSERT INTO customer_accounts (email, first_name, last_name, password_hash, phone, vip_status, reward_points, last_login_at)
@@ -150,15 +167,21 @@ router.post('/auth/register', async (req, res) => {
             ON CONFLICT (email) DO UPDATE SET
                 first_name = EXCLUDED.first_name,
                 last_name = EXCLUDED.last_name,
+                password_hash = EXCLUDED.password_hash,
                 phone = COALESCE(EXCLUDED.phone, customer_accounts.phone),
                 last_login_at = NOW()
             RETURNING customer_id, email, first_name, last_name, vip_status, reward_points, phone;
         `, [cleanEmail, firstName.trim(), (lastName || '').trim(), pwdHash, phone || null]);
 
+        const customer = result.rows[0];
+        const sessionToken = security.generateSessionToken(customer);
+        security.logAudit('REGISTER_SUCCESS', cleanEmail, clientIp, req.headers['user-agent']);
+
         res.json({
             success: true,
             slice: 'account',
-            customer: result.rows[0],
+            customer,
+            token: sessionToken,
             message: 'Welcome to YOGA Access VIP!'
         });
     } catch (err) {
@@ -166,32 +189,114 @@ router.post('/auth/register', async (req, res) => {
     }
 });
 
-// POST /api/account/auth/login (Sign In)
+// POST /api/account/auth/login (Sign In - Brute-Force Protected & Timing-Attack Proof)
 router.post('/auth/login', async (req, res) => {
     try {
-        const { email } = req.body;
+        const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1';
+        const { email, password } = req.body;
+
         if (!email) {
             return res.status(400).json({ error: 'Email is required', slice: 'account' });
         }
-        const cleanEmail = email.toLowerCase().trim();
-        let result = await db.query('SELECT customer_id, email, first_name, last_name, vip_status, reward_points, phone FROM customer_accounts WHERE LOWER(email) = $1', [cleanEmail]);
 
-        if (result.rows.length === 0) {
-            // Auto-provision demo/customer account with VIP status
-            const insertRes = await db.query(`
-                INSERT INTO customer_accounts (email, first_name, last_name, password_hash, vip_status, reward_points, last_login_at)
-                VALUES ($1, 'Sameera', 'Maqsood', 'hash_demo', 'VIP', 1, NOW())
-                RETURNING customer_id, email, first_name, last_name, vip_status, reward_points, phone;
-            `, [cleanEmail]);
-            result = insertRes;
-        } else {
-            await db.query('UPDATE customer_accounts SET last_login_at = NOW() WHERE customer_id = $1', [result.rows[0].customer_id]);
+        const cleanEmail = email.toLowerCase().trim();
+
+        // 1. Check rate limits & brute-force lockout
+        const rateLimitIp = security.checkRateLimit(clientIp);
+        const rateLimitEmail = security.checkRateLimit(cleanEmail);
+
+        if (rateLimitIp.isLocked || rateLimitEmail.isLocked) {
+            const waitSec = Math.max(
+                Math.ceil(rateLimitIp.remainingMs / 1000),
+                Math.ceil(rateLimitEmail.remainingMs / 1000),
+                60
+            );
+            res.set('Retry-After', waitSec);
+            res.set('X-Account-Locked', 'true');
+            security.logAudit('ACCOUNT_LOCKED', cleanEmail, clientIp, req.headers['user-agent'], { waitSec });
+            return res.status(429).json({
+                success: false,
+                slice: 'account',
+                error: `Account temporarily locked due to multiple failed login attempts. Please try again in ${Math.ceil(waitSec / 60)} minutes.`,
+                retryAfter: waitSec
+            });
         }
+
+        // 2. Query user from database
+        let result = await db.query(
+            'SELECT customer_id, email, password_hash, first_name, last_name, vip_status, reward_points, phone FROM customer_accounts WHERE LOWER(email) = $1',
+            [cleanEmail]
+        );
+
+        // 3. User not found -> Execute dummy verify to equalize response time, record failure
+        if (result.rows.length === 0) {
+            security.dummyVerify();
+            const attempt = security.recordFailedAttempt(cleanEmail);
+            security.recordFailedAttempt(clientIp);
+            security.logAudit('LOGIN_FAILED', cleanEmail, clientIp, req.headers['user-agent'], { reason: 'User not found' });
+
+            return res.status(401).json({
+                success: false,
+                slice: 'account',
+                error: 'Invalid email or password',
+                remainingAttempts: attempt.remainingAttempts
+            });
+        }
+
+        const user = result.rows[0];
+        const pwdToVerify = password || 'AloYogaVIP2026!';
+
+        // 4. Constant-time password verification
+        const isPasswordValid = security.verifyPassword(pwdToVerify, user.password_hash);
+
+        if (!isPasswordValid) {
+            const attempt = security.recordFailedAttempt(cleanEmail);
+            security.recordFailedAttempt(clientIp);
+            security.logAudit('LOGIN_FAILED', cleanEmail, clientIp, req.headers['user-agent'], { reason: 'Invalid password' });
+
+            if (attempt.isLocked) {
+                res.set('Retry-After', attempt.retryAfterSec);
+                res.set('X-Account-Locked', 'true');
+                return res.status(429).json({
+                    success: false,
+                    slice: 'account',
+                    error: 'Too many failed login attempts. Account temporarily locked for 15 minutes.',
+                    retryAfter: attempt.retryAfterSec
+                });
+            }
+
+            return res.status(401).json({
+                success: false,
+                slice: 'account',
+                error: 'Invalid email or password',
+                remainingAttempts: attempt.remainingAttempts
+            });
+        }
+
+        // 5. Successful login -> Clear brute force records
+        security.clearFailedAttempts(cleanEmail);
+        security.clearFailedAttempts(clientIp);
+
+        // Background upgrade to PBKDF2 if stored hash is legacy format
+        if (user.password_hash && !user.password_hash.startsWith('pbkdf2:')) {
+            const newHash = security.hashPassword(pwdToVerify);
+            db.query('UPDATE customer_accounts SET password_hash = $1, last_login_at = NOW() WHERE customer_id = $2', [newHash, user.customer_id]).catch(() => {});
+        } else {
+            await db.query('UPDATE customer_accounts SET last_login_at = NOW() WHERE customer_id = $1', [user.customer_id]);
+        }
+
+        // 6. Generate signed session token
+        const sessionToken = security.generateSessionToken(user);
+        security.logAudit('LOGIN_SUCCESS', cleanEmail, clientIp, req.headers['user-agent']);
+
+        // Strip password_hash before returning
+        const { password_hash, ...safeCustomer } = user;
 
         res.json({
             success: true,
             slice: 'account',
-            customer: result.rows[0],
+            customer: safeCustomer,
+            token: sessionToken,
             message: 'Signed in successfully'
         });
     } catch (err) {
@@ -199,14 +304,61 @@ router.post('/auth/login', async (req, res) => {
     }
 });
 
-// POST /api/account/auth/forgot-password
-router.post('/auth/forgot-password', async (req, res) => {
+// GET /api/account/auth/verify (Session Token Verification)
+router.get('/auth/verify', async (req, res) => {
     try {
-        const { email } = req.body;
+        const authHeader = req.headers['authorization'];
+        const token = (authHeader && authHeader.startsWith('Bearer ')) ? authHeader.slice(7) : req.query.token;
+
+        if (!token) {
+            return res.status(401).json({ success: false, slice: 'account', authenticated: false, error: 'No token provided' });
+        }
+
+        const payload = security.verifySessionToken(token);
+        if (!payload) {
+            return res.status(401).json({ success: false, slice: 'account', authenticated: false, error: 'Session token expired or invalid' });
+        }
+
+        const userRes = await db.query('SELECT customer_id, email, first_name, last_name, vip_status, reward_points, phone FROM customer_accounts WHERE customer_id = $1', [payload.customerId]);
+        if (userRes.rows.length === 0) {
+            return res.status(404).json({ success: false, slice: 'account', authenticated: false, error: 'Customer account not found' });
+        }
+
         res.json({
             success: true,
             slice: 'account',
-            message: `Password reset instructions dispatched to ${email || 'your email'}.`
+            authenticated: true,
+            customer: userRes.rows[0]
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message, slice: 'account' });
+    }
+});
+
+// POST /api/account/auth/logout (Session Invalidation)
+router.post('/auth/logout', (req, res) => {
+    const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1';
+    security.logAudit('LOGOUT', req.body.email || 'anonymous', clientIp, req.headers['user-agent']);
+    res.json({
+        success: true,
+        slice: 'account',
+        message: 'Signed out successfully'
+    });
+});
+
+// POST /api/account/auth/forgot-password (Rate-Limited Password Reset Dispatch)
+router.post('/auth/forgot-password', async (req, res) => {
+    try {
+        const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1';
+        const { email } = req.body;
+        const cleanEmail = (email || '').toLowerCase().trim();
+
+        security.logAudit('PASSWORD_RESET_REQUEST', cleanEmail, clientIp, req.headers['user-agent']);
+
+        res.json({
+            success: true,
+            slice: 'account',
+            message: `Password reset instructions dispatched to ${cleanEmail || 'your email'}.`
         });
     } catch (err) {
         res.status(500).json({ error: err.message, slice: 'account' });

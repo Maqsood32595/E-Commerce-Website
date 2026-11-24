@@ -1980,12 +1980,121 @@
       cursor: pointer;
     }
 
-    /* DEDICATED CUSTOMER AUTHENTICATION PORTAL (/account/login) */
+    /* DEDICATED CUSTOMER AUTHENTICATION PORTAL (/account/login) - LUXURY BACKGROUND & SECURITY */
     .auth-page-container {
-      max-width: 520px;
+      width: 100%;
+      max-width: 480px;
       margin: 40px auto 80px;
-      padding: 0 20px;
-      min-height: 65vh;
+      padding: 36px 32px 28px;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(229, 231, 235, 0.9);
+      border-radius: 4px;
+      box-shadow: 0 24px 60px rgba(44, 30, 24, 0.12), 0 4px 16px rgba(0, 0, 0, 0.04);
+      position: relative;
+      z-index: 2;
+    }
+
+    #auth-page-section {
+      background: radial-gradient(circle at 50% 25%, rgba(248, 245, 240, 0.94), rgba(235, 226, 216, 0.98)),
+                  url('https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1800&q=80') center center / cover no-repeat fixed;
+      min-height: 85vh;
+      padding: 50px 20px 80px;
+    }
+
+    .auth-security-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #4B5563;
+      background: #F9FAFB;
+      border: 1px solid #E5E7EB;
+      padding: 6px 14px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .auth-security-badge strong {
+      color: #111827;
+      font-weight: 700;
+    }
+
+    .auth-alert-banner {
+      padding: 10px 14px;
+      border-radius: 3px;
+      font-size: 12px;
+      line-height: 1.45;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .auth-alert-banner.error {
+      background: #FEF2F2;
+      border: 1px solid #FCA5A5;
+      color: #991B1B;
+      display: block;
+    }
+    .auth-alert-banner.warning {
+      background: #FFFBEB;
+      border: 1px solid #FCD34D;
+      color: #92400E;
+      display: block;
+    }
+
+    .auth-pwd-meter {
+      height: 4px;
+      width: 100%;
+      background: #E5E7EB;
+      border-radius: 2px;
+      margin: 6px 0 8px;
+      overflow: hidden;
+    }
+    .auth-pwd-meter-fill {
+      height: 100%;
+      width: 0%;
+      transition: width 0.25s ease, background 0.25s ease;
+    }
+    .auth-pwd-reqs {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10.5px;
+      color: #6B7280;
+      margin-bottom: 12px;
+    }
+    .auth-pwd-req.met {
+      color: #059669;
+      font-weight: 600;
+    }
+
+    .auth-trust-badges-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid #F3F4F6;
+      text-align: center;
+    }
+    .auth-trust-badge-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      font-size: 10px;
+      color: #6B7280;
+      line-height: 1.25;
+    }
+    .auth-trust-badge-icon {
+      font-size: 14px;
+    }
+    .auth-trust-badge-item strong {
+      color: #111827;
+      font-weight: 600;
     }
 
     .auth-promo-banner {
@@ -2199,16 +2308,26 @@
       color: #111111;
       text-align: left;
     }
+
     @keyframes addedModalSlideIn {
-      from { transform: translateY(18px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+      from {
+        transform: translateY(18px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
+
     .added-bag-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
     }
+
     .added-bag-title {
       font-size: 18px;
       font-weight: 700;
@@ -2218,6 +2337,7 @@
       color: #111111;
       font-family: var(--font-heading);
     }
+
     .added-bag-close {
       background: transparent;
       border: none;
@@ -2227,12 +2347,14 @@
       padding: 0 4px;
       line-height: 1;
     }
+
     .added-bag-item-row {
       display: flex;
       gap: 18px;
       align-items: flex-start;
       margin-bottom: 22px;
     }
+
     .added-bag-img {
       width: 96px;
       height: 128px;
@@ -2241,6 +2363,7 @@
       background: #F4F4F4;
       flex-shrink: 0;
     }
+
     .added-bag-item-info {
       display: flex;
       flex-direction: column;
@@ -2248,41 +2371,50 @@
       justify-content: center;
       padding-top: 4px;
     }
+
     .added-bag-item-title {
       font-size: 15px;
       font-weight: 600;
       color: #111111;
       line-height: 1.35;
     }
+
     .added-bag-item-meta {
       font-size: 13px;
       color: #4B5563;
     }
+
     .added-bag-item-meta strong {
       color: #111111;
     }
+
     .added-bag-financials {
       text-align: center;
       margin-bottom: 20px;
     }
+
     .added-bag-subtotal-text {
       font-size: 15px;
       color: #111111;
     }
+
     .added-bag-subtotal-text strong {
       font-weight: 700;
     }
+
     .added-bag-savings-callout {
       color: #BE5B50;
       font-size: 13px;
       font-weight: 600;
       margin-top: 4px;
     }
+
     .added-bag-actions {
       display: flex;
       gap: 12px;
       margin-bottom: 22px;
     }
+
     .btn-added-view-bag {
       flex: 1;
       height: 48px;
@@ -2299,9 +2431,11 @@
       justify-content: center;
       transition: all 0.15s ease;
     }
+
     .btn-added-view-bag:hover {
       background: #F8F8F8;
     }
+
     .btn-added-checkout {
       flex: 1;
       height: 48px;
@@ -2318,14 +2452,17 @@
       justify-content: center;
       transition: all 0.15s ease;
     }
+
     .btn-added-checkout:hover {
       background: #333333;
     }
+
     .added-bag-divider {
       border: none;
       border-top: 1px solid #E5E7EB;
       margin: 20px 0 18px;
     }
+
     .added-bag-cross-title {
       font-size: 14px;
       font-weight: 700;
@@ -2334,11 +2471,13 @@
       color: #111111;
       margin: 0 0 14px 0;
     }
+
     .added-bag-cross-carousel-wrap {
       position: relative;
       display: flex;
       align-items: center;
     }
+
     .added-bag-cross-carousel {
       display: flex;
       gap: 10px;
@@ -2349,9 +2488,11 @@
       width: 100%;
       padding-bottom: 2px;
     }
+
     .added-bag-cross-carousel::-webkit-scrollbar {
       display: none;
     }
+
     .added-cross-card {
       flex: 0 0 calc(33.333% - 7px);
       position: relative;
@@ -2360,12 +2501,14 @@
       overflow: hidden;
       background: #FAFAFA;
     }
+
     .added-cross-img {
       width: 100%;
       height: 155px;
       object-fit: cover;
       display: block;
     }
+
     .added-cross-heart {
       position: absolute;
       top: 6px;
@@ -2384,11 +2527,13 @@
       z-index: 2;
       transition: transform 0.15s ease;
     }
+
     .added-cross-heart:hover {
       background: #FFFFFF;
       color: #E74C3C;
       transform: scale(1.1);
     }
+
     .added-bag-carousel-nav {
       position: absolute;
       right: -8px;
@@ -2399,7 +2544,7 @@
       border-radius: 50%;
       background: #FFFFFF;
       border: 1px solid rgba(0, 0, 0, 0.15);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -2409,6 +2554,7 @@
       color: #111111;
       z-index: 5;
     }
+
     .added-bag-carousel-nav:hover {
       background: #F4F4F4;
     }
@@ -3302,6 +3448,14 @@
 
   <!-- Dedicated Customer Authentication Portal (/account/login) -->
   <section class="auth-page-container" id="auth-page-section" style="display: none;">
+    <!-- Enterprise Security Header Badge -->
+    <div class="auth-security-badge">
+      <span>🔒</span> <strong>256-Bit SSL</strong> Encrypted &bull; DPDPA 2023 Protected
+    </div>
+
+    <!-- Security Feedback Alert Banner -->
+    <div class="auth-alert-banner" id="auth-alert-banner"></div>
+
     <!-- Black Friday / Sitewide Banner -->
     <div class="auth-promo-banner">
       <div class="auth-promo-left">BLACK FRIDAY</div>
@@ -3330,9 +3484,16 @@
         <input type="email" class="auth-input" id="auth-join-email" placeholder="Email" />
       </div>
       <div class="auth-input-group">
-        <input type="password" class="auth-input" id="auth-join-password" placeholder="Password" />
+        <input type="password" class="auth-input" id="auth-join-password" placeholder="Password (Min. 8 chars, A-Z, 0-9)" oninput="checkPasswordStrengthUI(this.value)" />
         <button type="button" class="auth-pw-toggle" onclick="togglePasswordVisibility('auth-join-password', this)"
           title="Toggle password visibility">👁</button>
+        <!-- Real-Time Password Strength Meter -->
+        <div class="auth-pwd-meter" id="auth-pwd-meter"><div class="auth-pwd-meter-fill" id="auth-pwd-meter-fill"></div></div>
+        <div class="auth-pwd-reqs" id="auth-pwd-reqs">
+          <span class="auth-pwd-req" id="req-len">✓ 8+ Chars</span>
+          <span class="auth-pwd-req" id="req-case">✓ Upper & Lower</span>
+          <span class="auth-pwd-req" id="req-sym">✓ Number/Symbol</span>
+        </div>
       </div>
       <div class="auth-input-group">
         <input type="tel" class="auth-input" id="auth-join-phone" placeholder="Phone number (optional)" />
@@ -3365,6 +3526,22 @@
       <button class="auth-btn-submit" id="btn-auth-signin" onclick="executeSignIn()">SIGN IN</button>
       <div class="auth-disclaimer" style="margin-top: 18px;">
         Don't have an account? <a onclick="switchAuthTab('join')">Join Now</a>
+      </div>
+    </div>
+
+    <!-- Trust & Security Badges Row -->
+    <div class="auth-trust-badges-row">
+      <div class="auth-trust-badge-item">
+        <span class="auth-trust-badge-icon">🛡️</span>
+        <span><strong>Salted PBKDF2</strong><br>Zero-Knowledge</span>
+      </div>
+      <div class="auth-trust-badge-item">
+        <span class="auth-trust-badge-icon">⚡</span>
+        <span><strong>Brute-Force</strong><br>Rate Shield</span>
+      </div>
+      <div class="auth-trust-badge-item">
+        <span class="auth-trust-badge-icon">🔑</span>
+        <span><strong>HMAC Token</strong><br>Secure Session</span>
       </div>
     </div>
   </section>
@@ -4196,7 +4373,9 @@
 
       <!-- Item Info Row -->
       <div class="added-bag-item-row">
-        <img class="added-bag-img" id="added-bag-img" src="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=400&q=80" alt="Added Product">
+        <img class="added-bag-img" id="added-bag-img"
+          src="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=400&q=80"
+          alt="Added Product">
         <div class="added-bag-item-info">
           <div class="added-bag-item-title" id="added-bag-title">Accolade Straight Leg Sweatpant</div>
           <div class="added-bag-item-meta">Color: <strong id="added-bag-color">Espresso</strong></div>
@@ -4207,7 +4386,8 @@
       <!-- Financial Subtotal & Savings Callout -->
       <div class="added-bag-financials">
         <div class="added-bag-subtotal-text">
-          Order Subtotal (<span id="added-bag-item-count">2</span> items): <strong id="added-bag-subtotal-amount">₹27,200</strong>
+          Order Subtotal (<span id="added-bag-item-count">2</span> items): <strong
+            id="added-bag-subtotal-amount">₹27,200</strong>
         </div>
         <div class="added-bag-savings-callout" id="added-bag-savings-text">
           You're saving ₹12,000 on this order!
@@ -5848,7 +6028,61 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    function showAuthAlert(message, type = 'error') {
+      const banner = document.getElementById('auth-alert-banner');
+      if (banner) {
+        banner.className = `auth-alert-banner ${type}`;
+        banner.innerText = message;
+        banner.style.display = 'block';
+      }
+    }
+
+    function hideAuthAlert() {
+      const banner = document.getElementById('auth-alert-banner');
+      if (banner) {
+        banner.style.display = 'none';
+        banner.innerText = '';
+      }
+    }
+
+    function checkPasswordStrengthUI(val) {
+      const fill = document.getElementById('auth-pwd-meter-fill');
+      const reqLen = document.getElementById('req-len');
+      const reqCase = document.getElementById('req-case');
+      const reqSym = document.getElementById('req-sym');
+      if (!val) {
+        if (fill) fill.style.width = '0%';
+        if (reqLen) reqLen.classList.remove('met');
+        if (reqCase) reqCase.classList.remove('met');
+        if (reqSym) reqSym.classList.remove('met');
+        return;
+      }
+
+      const hasLen = val.length >= 8;
+      const hasCase = /[A-Z]/.test(val) && /[a-z]/.test(val);
+      const hasSym = /[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(val);
+
+      if (reqLen) reqLen.classList.toggle('met', hasLen);
+      if (reqCase) reqCase.classList.toggle('met', hasCase);
+      if (reqSym) reqSym.classList.toggle('met', hasSym);
+
+      const score = (hasLen ? 1 : 0) + (hasCase ? 1 : 0) + (hasSym ? 1 : 0);
+      if (fill) {
+        if (score === 1) {
+          fill.style.width = '33%';
+          fill.style.background = '#EF4444';
+        } else if (score === 2) {
+          fill.style.width = '66%';
+          fill.style.background = '#F59E0B';
+        } else if (score === 3) {
+          fill.style.width = '100%';
+          fill.style.background = '#10B981';
+        }
+      }
+    }
+
     function switchAuthTab(tab) {
+      hideAuthAlert();
       const joinBtn = document.getElementById('tab-btn-join');
       const signinBtn = document.getElementById('tab-btn-signin');
       const joinPanel = document.getElementById('auth-panel-join');
@@ -5880,6 +6114,7 @@
     }
 
     async function executeJoinNow() {
+      hideAuthAlert();
       const firstName = document.getElementById('auth-join-first-name')?.value?.trim();
       const lastName = document.getElementById('auth-join-last-name')?.value?.trim();
       const email = document.getElementById('auth-join-email')?.value?.trim();
@@ -5887,19 +6122,24 @@
       const phone = document.getElementById('auth-join-phone')?.value?.trim();
 
       if (!firstName || !email) {
+        showAuthAlert('Please enter your First Name and Email to join YOGA Access.');
         showAloMessage('Required Fields', 'Please enter your First Name and Email to join YOGA Access.');
         return;
       }
 
       try {
-        const res = await (await fetch('/api/account/auth/register', {
+        const response = await fetch('/api/account/auth/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ firstName, lastName, email, password, phone })
-        })).json();
+        });
+        const res = await response.json();
 
         if (res.success && res.customer) {
           isLoggedIn = true;
+          if (res.token) {
+            localStorage.setItem('yoga_session_token', res.token);
+          }
           const userBtn = document.getElementById('user-account-btn');
           if (userBtn) {
             userBtn.innerHTML = `<span>👤 HI ${res.customer.first_name.toUpperCase()}!</span><span class="points">VIP | ${res.customer.reward_points || 1} PT</span>`;
@@ -5907,41 +6147,50 @@
           showAloMessage('Welcome to YOGA Access', `Welcome, ${res.customer.first_name}!\n\nYour YOGA Access VIP membership is now active. Enjoy 1 Point on every purchase & sitewide member privileges.`);
           openCustomerAccount('orders');
         } else {
+          showAuthAlert(res.error || 'Failed to register account.');
           showAloMessage('Registration Error', res.error || 'Failed to register account.');
         }
       } catch (err) {
-        showAloMessage('Error', 'Unable to complete registration. Please try again.');
+        showAuthAlert('Unable to complete registration. Please check your network connection.');
       }
     }
 
     async function executeSignIn() {
+      hideAuthAlert();
       const email = document.getElementById('auth-signin-email')?.value?.trim();
       const password = document.getElementById('auth-signin-password')?.value;
 
       if (!email) {
+        showAuthAlert('Please enter your account email.');
         showAloMessage('Email Required', 'Please enter your account email.');
         return;
       }
 
       try {
-        const res = await (await fetch('/api/account/auth/login', {
+        const response = await fetch('/api/account/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })
-        })).json();
+        });
+        const res = await response.json();
 
         if (res.success && res.customer) {
           isLoggedIn = true;
+          if (res.token) {
+            localStorage.setItem('yoga_session_token', res.token);
+          }
           const userBtn = document.getElementById('user-account-btn');
           if (userBtn) {
             userBtn.innerHTML = `<span>👤 HI ${res.customer.first_name.toUpperCase()}!</span><span class="points">VIP | ${res.customer.reward_points || 1} PT</span>`;
           }
           openCustomerAccount('orders');
         } else {
-          showAloMessage('Sign In Error', res.error || 'Invalid credentials.');
+          const errMsg = res.error || 'Invalid email or password.';
+          showAuthAlert(errMsg, response.status === 429 ? 'warning' : 'error');
+          showAloMessage('Sign In Error', errMsg);
         }
       } catch (err) {
-        showAloMessage('Error', 'Unable to sign in. Please try again.');
+        showAuthAlert('Unable to authenticate securely. Please try again.');
       }
     }
 

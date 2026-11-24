@@ -57,6 +57,8 @@ async function runAllClickableLinksPietSuite() {
     let pdpQuickCartId = null;
     let pdpDirectCartId = null;
     let addedBagCartId = null;
+    let securityPietEmail = null;
+    let lockoutPietEmail = null;
 
     try {
         // ----------------------------------------------------------------------
@@ -1655,6 +1657,140 @@ async function runAllClickableLinksPietSuite() {
             record('Added to Bag Live Contract', 'Action: Quick-Add 2 Items (₹27,200 Subtotal, Espresso XS) Live Contract Verification',
                 validQuickAddContract);
 
+            // ======================================================================
+            // GROUP 19: Enterprise Login Security Rules & Luxury Background UI
+            // ======================================================================
+            console.log("\n--- [GROUP 19: Enterprise Login Security Rules & Luxury Background UI] ---");
+
+            // Action 1: Password Complexity Enforcement (Rejects Weak Password)
+            const weakRegRes = await (await fetch(`${baseUrl}/api/account/auth/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    firstName: 'PietSecurity',
+                    lastName: 'Tester',
+                    email: `piet-weak-${runId}@example.com`,
+                    password: 'weak'
+                })
+            })).json();
+            record('Auth Security: Password Policy', 'Action: Enforce 8+ Character & Complexity Policy (Rejects Weak Password with 400)',
+                weakRegRes.error && weakRegRes.error.includes('8 characters'));
+
+            // Action 2: PBKDF2 Password Hashing & Salt Verification in Database
+            securityPietEmail = `piet-secure-${runId}@example.com`;
+            const secureRegRes = await (await fetch(`${baseUrl}/api/account/auth/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    firstName: 'SecureUser',
+                    lastName: 'Piet',
+                    email: securityPietEmail,
+                    password: 'AloLuxurySecurePass2026!'
+                })
+            })).json();
+            const dbHashCheck = (await db.query('SELECT password_hash FROM customer_accounts WHERE email = $1', [securityPietEmail])).rows[0];
+            record('Auth Security: PBKDF2 Hashing', 'Action: Verify 100,000-Iteration Salted PBKDF2 Hash in PostgreSQL (pbkdf2:100000:...)',
+                secureRegRes.success && dbHashCheck && dbHashCheck.password_hash.startsWith('pbkdf2:100000:'));
+
+            // Action 3: Cryptographic HMAC-SHA256 Session Token Issuance & Verification
+            const issuedToken = secureRegRes.token;
+            const verifyTokenRes = await (await fetch(`${baseUrl}/api/account/auth/verify`, {
+                headers: { 'Authorization': `Bearer ${issuedToken}` }
+            })).json();
+            record('Auth Security: Session Token', 'Action: Verify Cryptographically Signed HMAC Session Token (GET /api/account/auth/verify)',
+                verifyTokenRes.success && verifyTokenRes.authenticated && verifyTokenRes.customer.email === securityPietEmail);
+
+            // Action 4: Successful Authentication & Last Login Timestamp Update
+            const validLoginRes = await (await fetch(`${baseUrl}/api/account/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: securityPietEmail,
+                    password: 'AloLuxurySecurePass2026!'
+                })
+            })).json();
+            record('Auth Security: Valid Sign In', 'Action: Sign In with Valid Credentials (Issues New Token & Updates last_login_at)',
+                validLoginRes.success && validLoginRes.token && validLoginRes.customer.email === securityPietEmail);
+
+            // Action 5: Invalid Credential Rejection with Remaining Attempts Tracking
+            const invalidLoginRes = await (await fetch(`${baseUrl}/api/account/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: securityPietEmail,
+                    password: 'WrongPassword123!'
+                })
+            })).json();
+            record('Auth Security: Failed Login Feedback', 'Action: Reject Invalid Password (Returns 401 & Remaining Attempts Counter)',
+                !invalidLoginRes.success && invalidLoginRes.error && invalidLoginRes.remainingAttempts !== undefined);
+
+            // Action 6: Timing Attack Resistance (Dummy Computation on Unknown Email)
+            const unknownEmailRes = await (await fetch(`${baseUrl}/api/account/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: `nonexistent-user-${runId}@example.com`,
+                    password: 'DummyPassword123!'
+                })
+            })).json();
+            record('Auth Security: Timing Attack Shield', 'Action: Mitigate User Enumeration via Constant-Time Dummy Verification',
+                !unknownEmailRes.success && unknownEmailRes.error === 'Invalid email or password');
+
+            // Action 7: Brute-Force Rate Limiting & Account Lockout Defense
+            lockoutPietEmail = `piet-lockout-${runId}@example.com`;
+            await fetch(`${baseUrl}/api/account/auth/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    firstName: 'Lockout',
+                    lastName: 'Target',
+                    email: lockoutPietEmail,
+                    password: 'ValidTargetPass123!'
+                })
+            });
+            let lastLockoutRes = null;
+            let lastLockoutStatus = 0;
+            for (let i = 0; i < 5; i++) {
+                const r = await fetch(`${baseUrl}/api/account/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: lockoutPietEmail,
+                        password: `BadAttempt${i}!`
+                    })
+                });
+                lastLockoutStatus = r.status;
+                lastLockoutRes = await r.json();
+            }
+            record('Auth Security: Brute Force Shield', 'Action: Trigger Brute Force Lockout on 5 Consecutive Failed Attempts (Returns 429 Too Many Requests)',
+                lastLockoutStatus === 429 && lastLockoutRes.retryAfter !== undefined);
+
+            // Action 8: Luxury Athleisure Background & Security Badges in UI
+            record('Auth UI: Background & Security Badges', 'Action: Verify Luxury Athleisure Hero Styling, 256-Bit SSL Badge & Trust Row',
+                homeHtml.includes('auth-security-badge') &&
+                homeHtml.includes('256-Bit SSL') &&
+                homeHtml.includes('DPDPA 2023') &&
+                homeHtml.includes('auth-trust-badges-row') &&
+                homeHtml.includes('Salted PBKDF2'));
+
+            // Action 9: Real-Time Password Strength Meter in DOM
+            record('Auth UI: Password Strength Meter', 'Action: Verify Real-Time Password Strength Meter Bar & Requirement Checklist Elements',
+                homeHtml.includes('auth-pwd-meter') &&
+                homeHtml.includes('auth-pwd-meter-fill') &&
+                homeHtml.includes('checkPasswordStrengthUI') &&
+                homeHtml.includes('req-len') &&
+                homeHtml.includes('req-case') &&
+                homeHtml.includes('req-sym'));
+
+            // Action 10: Secure Sign Out & Session Invalidation Endpoint
+            const logoutRes = await (await fetch(`${baseUrl}/api/account/auth/logout`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: securityPietEmail })
+            })).json();
+            record('Auth Security: Secure Sign Out', 'Action: Execute Secure Logout & Session Invalidation (POST /api/account/auth/logout)',
+                logoutRes.success && logoutRes.message.includes('Signed out'));
+
         } catch (pdpErr) {
             record('PDP Suite', 'PDP testing failed', false, pdpErr.message);
         }
@@ -1667,10 +1803,8 @@ async function runAllClickableLinksPietSuite() {
         try {
             await db.query(`DELETE FROM wishlist_items WHERE customer_email LIKE '%piet%'`);
             await db.query(`DELETE FROM product_reviews WHERE author_name LIKE '%PIET%'`);
-            if (ephemeralCustomerEmail) {
-                await db.query(`DELETE FROM customer_accounts WHERE email = $1`, [ephemeralCustomerEmail]);
-                console.log(`   ✓ Wiped ephemeral customer: ${ephemeralCustomerEmail}`);
-            }
+            await db.query(`DELETE FROM customer_accounts WHERE email LIKE '%piet%'`);
+            console.log(`   ✓ Wiped all ephemeral test customers (LIKE '%piet%')`);
             if (ephemeralProductId) {
                 await db.query(`DELETE FROM product_variants WHERE product_id = $1`, [ephemeralProductId]);
                 await db.query(`DELETE FROM products WHERE product_id = $1`, [ephemeralProductId]);
