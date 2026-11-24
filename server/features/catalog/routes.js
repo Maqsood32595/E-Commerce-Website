@@ -131,7 +131,68 @@ router.get('/filters', async (req, res) => {
             ORDER BY name ASC;
         `);
 
-        const sizes = ['XXS', 'XS', 'S', 'M', 'L', 'XL'];
+        const clothingSizes = ['XXS', 'XS', 'S', 'M', 'L', 'XL', '2XL'];
+        const shoeSizes = [
+            '3.5m/5w', '4m/5.5w', '4.5m/6w', '5m/6.5w',
+            '5.5m/7w', '6m/7.5w', '6.5m/8w', '7m/8.5w',
+            '7.5m/9w', '8m/9.5w', '8.5m/10w', '9m/10.5w',
+            '9.5m/11w', '10m/11.5w', '10.5m/12w', '11m/12.5w',
+            '11.5m/13w', '12m/13.5w', '12.5m/14w', '13m/14.5w',
+            '13.5m/15w', '14m/15.5w', '14.5m/16w', '15m/16.5w',
+            '15.5m/17w', '16m/17.5w', '3m/4.5w', '10m/12w',
+            '11m/13w', '12m/14w', '13m/15w', '14m/16w',
+            '15m/17w', '4m/6w', '5m/7w', '6m/8w'
+        ];
+
+        // Dynamic + Standard Colors matching User Spec (Image 2) & Admin Ingestion
+        const standardColors = [
+            { name: 'Beige', hex: '#D8BC9D' },
+            { name: 'Black', hex: '#111111' },
+            { name: 'Blue', hex: '#1E3A8A' },
+            { name: 'Brown', hex: '#704214' },
+            { name: 'Green', hex: '#005C29' },
+            { name: 'Grey', hex: '#CCCCCC' },
+            { name: 'Orange', hex: '#EA580C' },
+            { name: 'Pink', hex: '#FFB6C1' },
+            { name: 'Purple', hex: '#800080' },
+            { name: 'Red', hex: '#E74C3C' },
+            { name: 'White', hex: '#FFFFFF' },
+            { name: 'Yellow', hex: '#FFD700' }
+        ];
+
+        const dbColors = (colorsRes.rows || []).map(r => ({ name: r.color_family, hex: r.color_hex || '#333333' }));
+        const mergedColors = [...standardColors];
+        for (const c of dbColors) {
+            if (!mergedColors.some(sc => sc.name.toLowerCase() === c.name.toLowerCase())) {
+                mergedColors.push(c);
+            }
+        }
+
+        // Dynamic + Standard Fabrics matching User Spec (Image 4) & Admin Ingestion
+        const standardFabrics = [
+            'Airbrush',
+            'Airlift',
+            'Alo Softsculpt',
+            'Alolux',
+            'Alosoft',
+            'Cashmere',
+            'Double Take',
+            'Faux Fur',
+            'Fleece',
+            'Ribbed',
+            'Seamless',
+            'Sherpa',
+            'Waffle'
+        ];
+
+        const dbFabrics = (fabricsRes.rows || []).map(r => r.fabric_technology);
+        const mergedFabrics = [...standardFabrics];
+        for (const f of dbFabrics) {
+            if (!mergedFabrics.some(sf => sf.toLowerCase() === f.toLowerCase())) {
+                mergedFabrics.push(f);
+            }
+        }
+
         const percentOff = ['30% Off', '40% Off', '50% Off'];
 
         res.json({
@@ -139,9 +200,11 @@ router.get('/filters', async (req, res) => {
             slice: 'catalog',
             filters: {
                 productTypes: typesRes.rows,
-                sizes,
-                colors: colorsRes.rows.map(r => ({ name: r.color_family, hex: r.color_hex || '#333333' })),
-                fabrics: fabricsRes.rows.map(r => r.fabric_technology),
+                clothingSizes,
+                shoeSizes,
+                sizes: [...clothingSizes, ...shoeSizes],
+                colors: mergedColors,
+                fabrics: mergedFabrics,
                 percentOff
             }
         });

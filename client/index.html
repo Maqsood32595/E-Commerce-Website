@@ -1,30 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>YOGA | Luxury Athleisure & Studio Performance (India)</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧘</text></svg>">
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧘</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
   <style>
     :root {
-      --bg-base: #F9F8F6;       /* Warm Alabaster */
-      --bg-surface: #F2EFE9;    /* Soft Linen */
+      --bg-base: #F9F8F6;
+      /* Warm Alabaster */
+      --bg-surface: #F2EFE9;
+      /* Soft Linen */
       --bg-card: #FFFFFF;
       --border-subtle: #E8E3DA;
-      --text-main: #1A1A1A;     /* Obsidian Slate */
+      --text-main: #1A1A1A;
+      /* Obsidian Slate */
       --text-muted: #66625D;
-      --brand-espresso: #2C1E18;/* Primary Luxury CTA */
-      --brand-champagne: #C5A880;/* Warm Gold Accent */
+      --brand-espresso: #2C1E18;
+      /* Primary Luxury CTA */
+      --brand-champagne: #C5A880;
+      /* Warm Gold Accent */
       --brand-terracotta: #9E4736;
       --brand-sage: #5B7065;
       --font-heading: 'Cinzel', serif;
       --font-body: 'Plus Jakarta Sans', sans-serif;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       background-color: var(--bg-base);
       color: var(--text-main);
@@ -44,7 +58,14 @@
       text-transform: uppercase;
       font-weight: 600;
     }
-    .top-bar a { color: var(--brand-champagne); text-decoration: none; margin-left: 8px; font-weight: 700; cursor: pointer; }
+
+    .top-bar a {
+      color: var(--brand-champagne);
+      text-decoration: none;
+      margin-left: 8px;
+      font-weight: 700;
+      cursor: pointer;
+    }
 
     /* HEADER & MEGA NAVIGATION */
     header {
@@ -54,6 +75,7 @@
       top: 0;
       z-index: 1000;
     }
+
     .nav-container {
       max-width: 1440px;
       margin: 0 auto;
@@ -62,6 +84,7 @@
       justify-content: space-between;
       padding: 18px 32px;
     }
+
     .brand-logo {
       font-family: var(--font-heading);
       font-size: 28px;
@@ -71,11 +94,13 @@
       color: var(--brand-espresso);
       cursor: pointer;
     }
+
     .nav-links {
       display: flex;
       gap: 36px;
       list-style: none;
     }
+
     .nav-links a {
       text-decoration: none;
       color: var(--text-main);
@@ -86,13 +111,19 @@
       transition: color 0.2s;
       cursor: pointer;
     }
-    .nav-links a:hover, .nav-links a.active { color: var(--brand-terracotta); }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--brand-terracotta);
+    }
+
     .nav-actions {
       display: flex;
       align-items: center;
       gap: 20px;
       font-size: 13px;
     }
+
     .user-pill {
       display: flex;
       align-items: center;
@@ -106,13 +137,18 @@
       background: var(--bg-surface);
       transition: background 0.2s;
     }
-    .user-pill:hover { background: #E5E0D8; }
+
+    .user-pill:hover {
+      background: #E5E0D8;
+    }
+
     .user-pill span.points {
       color: var(--brand-terracotta);
       font-size: 11px;
       border-left: 1px solid var(--border-subtle);
       padding-left: 8px;
     }
+
     .cart-btn {
       background: none;
       border: 1px solid var(--border-subtle);
@@ -127,7 +163,11 @@
       color: var(--text-main);
       transition: all 0.2s;
     }
-    .cart-btn:hover { background: var(--bg-surface); }
+
+    .cart-btn:hover {
+      background: var(--bg-surface);
+    }
+
     .cart-badge {
       background: var(--brand-espresso);
       color: #FFF;
@@ -148,10 +188,12 @@
       visibility: hidden;
       transition: opacity 0.25s ease, visibility 0.25s;
     }
+
     .mega-menu-backdrop.active {
       opacity: 1;
       visibility: visible;
     }
+
     .mega-menu-drawer {
       position: absolute;
       top: 100%;
@@ -168,12 +210,14 @@
       transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s;
       pointer-events: none;
     }
+
     .mega-menu-drawer.open {
       opacity: 1;
       visibility: visible;
       transform: translateY(0);
       pointer-events: auto;
     }
+
     .mega-menu-grid {
       max-width: 1400px;
       margin: 0 auto;
@@ -181,6 +225,7 @@
       grid-template-columns: repeat(5, 1fr);
       gap: 32px;
     }
+
     .mega-col-title {
       font-size: 13px;
       font-weight: 700;
@@ -188,12 +233,14 @@
       margin-bottom: 18px;
       text-transform: capitalize;
     }
+
     .mega-col-list {
       list-style: none;
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
+
     .mega-col-list a {
       text-decoration: none;
       color: var(--text-muted);
@@ -202,6 +249,7 @@
       display: inline-block;
       cursor: pointer;
     }
+
     .mega-col-list a:hover {
       color: var(--brand-terracotta);
       transform: translateX(3px);
@@ -217,7 +265,16 @@
       gap: 14px;
       flex-wrap: wrap;
     }
-    .trending-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--brand-terracotta); margin-right: 8px; }
+
+    .trending-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--brand-terracotta);
+      margin-right: 8px;
+    }
+
     .pill-link {
       background: #FFF;
       border: 1px solid var(--border-subtle);
@@ -230,7 +287,12 @@
       cursor: pointer;
       transition: all 0.2s;
     }
-    .pill-link:hover { background: var(--brand-espresso); color: #FFF; border-color: var(--brand-espresso); }
+
+    .pill-link:hover {
+      background: var(--brand-espresso);
+      color: #FFF;
+      border-color: var(--brand-espresso);
+    }
 
     /* CATALOG SECTION */
     .catalog-section {
@@ -238,6 +300,7 @@
       margin: 40px auto 60px;
       padding: 0 32px;
     }
+
     .section-header {
       display: flex;
       justify-content: space-between;
@@ -246,12 +309,18 @@
       border-bottom: 1px solid var(--border-subtle);
       padding-bottom: 16px;
     }
-    .section-title { font-family: var(--font-heading); font-size: 26px; }
+
+    .section-title {
+      font-family: var(--font-heading);
+      font-size: 26px;
+    }
+
     .product-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 32px;
     }
+
     .product-card {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
@@ -261,10 +330,12 @@
       flex-direction: column;
       transition: transform 0.25s, box-shadow 0.25s;
     }
+
     .product-card:hover {
       transform: translateY(-4px);
       box-shadow: 0 16px 32px rgba(44, 30, 24, 0.08);
     }
+
     .card-img-wrap {
       position: relative;
       width: 100%;
@@ -272,13 +343,18 @@
       background: var(--bg-surface);
       overflow: hidden;
     }
+
     .card-img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       transition: transform 0.4s;
     }
-    .product-card:hover .card-img { transform: scale(1.03); }
+
+    .product-card:hover .card-img {
+      transform: scale(1.03);
+    }
+
     .card-discount-badge {
       position: absolute;
       top: 14px;
@@ -291,17 +367,45 @@
       text-transform: uppercase;
       border-radius: 2px;
     }
+
     .card-details {
       padding: 18px;
       display: flex;
       flex-direction: column;
       flex: 1;
     }
-    .prod-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-    .prod-color { font-size: 11px; color: var(--text-muted); margin-bottom: 12px; }
-    .price-row { display: flex; align-items: baseline; gap: 8px; margin-top: auto; }
-    .sale-price { font-size: 15px; font-weight: 700; color: var(--brand-espresso); }
-    .mrp-price { font-size: 12px; text-decoration: line-through; color: #A09D98; }
+
+    .prod-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .prod-color {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .sale-price {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--brand-espresso);
+    }
+
+    .mrp-price {
+      font-size: 12px;
+      text-decoration: line-through;
+      color: #A09D98;
+    }
+
     .btn-atc {
       width: 100%;
       background: var(--brand-espresso);
@@ -316,7 +420,10 @@
       margin-top: 14px;
       transition: background 0.2s;
     }
-    .btn-atc:hover { background: var(--brand-terracotta); }
+
+    .btn-atc:hover {
+      background: var(--brand-terracotta);
+    }
 
     /* AS SEEN ON YOU LOOKBOOK SECTION */
     .lookbook-section {
@@ -326,15 +433,33 @@
       border-bottom: 1px solid var(--border-subtle);
       margin-top: 40px;
     }
-    .lookbook-container { max-width: 1400px; margin: 0 auto; }
-    .lookbook-title { font-family: var(--font-heading); font-size: 24px; text-align: center; margin-bottom: 8px; }
-    .lookbook-subtitle { font-size: 13px; color: var(--text-muted); text-align: center; margin-bottom: 32px; }
+
+    .lookbook-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .lookbook-title {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .lookbook-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
     .social-handles-scroll {
       display: flex;
       gap: 12px;
       overflow-x: auto;
       padding-bottom: 14px;
     }
+
     .social-pill {
       background: #FFF;
       border: 1px solid var(--border-subtle);
@@ -346,7 +471,11 @@
       cursor: pointer;
       transition: all 0.2s;
     }
-    .social-pill:hover { background: var(--brand-espresso); color: #FFF; }
+
+    .social-pill:hover {
+      background: var(--brand-espresso);
+      color: #FFF;
+    }
 
     /* FOOTER */
     footer {
@@ -354,6 +483,7 @@
       border-top: 1px solid var(--border-subtle);
       padding: 60px 32px 40px;
     }
+
     .footer-container {
       max-width: 1400px;
       margin: 0 auto;
@@ -361,6 +491,7 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 40px;
     }
+
     .footer-col h4 {
       font-size: 13px;
       font-weight: 700;
@@ -368,7 +499,14 @@
       letter-spacing: 0.08em;
       margin-bottom: 18px;
     }
-    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
     .footer-col a {
       color: var(--text-muted);
       font-size: 13px;
@@ -376,7 +514,11 @@
       cursor: pointer;
       transition: color 0.2s;
     }
-    .footer-col a:hover { color: var(--brand-terracotta); }
+
+    .footer-col a:hover {
+      color: var(--brand-terracotta);
+    }
+
     .footer-bottom {
       max-width: 1400px;
       margin: 40px auto 0;
@@ -399,9 +541,23 @@
       border-radius: 4px;
       display: none;
     }
-    .content-view.active { display: block; }
-    .content-title { font-family: var(--font-heading); font-size: 32px; margin-bottom: 16px; color: var(--brand-espresso); }
-    .content-body { font-size: 14px; color: var(--text-muted); line-height: 1.8; }
+
+    .content-view.active {
+      display: block;
+    }
+
+    .content-title {
+      font-family: var(--font-heading);
+      font-size: 32px;
+      margin-bottom: 16px;
+      color: var(--brand-espresso);
+    }
+
+    .content-body {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
 
     /* FLYOUT MINI-CART DRAWER */
     .cart-drawer-overlay {
@@ -412,7 +568,11 @@
       z-index: 1099;
       display: none;
     }
-    .cart-drawer-overlay.open { display: block; }
+
+    .cart-drawer-overlay.open {
+      display: block;
+    }
+
     .cart-drawer {
       position: fixed;
       top: 0;
@@ -427,7 +587,11 @@
       display: flex;
       flex-direction: column;
     }
-    .cart-drawer.open { right: 0; }
+
+    .cart-drawer.open {
+      right: 0;
+    }
+
     .drawer-header {
       padding: 18px 24px;
       border-bottom: 1px solid var(--border-subtle);
@@ -435,11 +599,35 @@
       justify-content: space-between;
       align-items: center;
     }
-    .drawer-title-wrap { display: flex; flex-direction: column; }
-    .drawer-title { font-family: var(--font-heading); font-size: 19px; color: var(--brand-espresso); margin: 0; }
-    .drawer-subtitle { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-    .close-drawer-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--brand-espresso); line-height: 1; padding: 4px; }
-    
+
+    .drawer-title-wrap {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .drawer-title {
+      font-family: var(--font-heading);
+      font-size: 19px;
+      color: var(--brand-espresso);
+      margin: 0;
+    }
+
+    .drawer-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .close-drawer-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--brand-espresso);
+      line-height: 1;
+      padding: 4px;
+    }
+
     .loyalty-banner {
       background: #FAF7F2;
       border-bottom: 1px solid #ECE4D8;
@@ -451,6 +639,7 @@
       align-items: center;
       gap: 8px;
     }
+
     .shipping-meter {
       background: var(--bg-surface);
       padding: 12px 24px;
@@ -458,15 +647,29 @@
       color: var(--text-muted);
       border-bottom: 1px solid var(--border-subtle);
     }
-    .meter-bar { height: 4px; background: var(--border-subtle); margin-top: 6px; border-radius: 2px; overflow: hidden; }
-    .meter-fill { height: 100%; background: var(--brand-terracotta); width: 100%; transition: width 0.3s; }
-    
+
+    .meter-bar {
+      height: 4px;
+      background: var(--border-subtle);
+      margin-top: 6px;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .meter-fill {
+      height: 100%;
+      background: var(--brand-terracotta);
+      width: 100%;
+      transition: width 0.3s;
+    }
+
     .cart-items-wrap {
       flex: 1;
       overflow-y: auto;
       padding: 20px 24px;
       scrollbar-width: thin;
     }
+
     .cart-item {
       display: flex;
       gap: 16px;
@@ -474,6 +677,7 @@
       padding-bottom: 18px;
       border-bottom: 1px solid var(--border-subtle);
     }
+
     .cart-item-img {
       width: 78px;
       height: 104px;
@@ -482,7 +686,12 @@
       border-radius: 2px;
       flex-shrink: 0;
     }
-    .cart-item-details { flex: 1; min-width: 0; }
+
+    .cart-item-details {
+      flex: 1;
+      min-width: 0;
+    }
+
     .cart-item-title {
       font-weight: 600;
       font-size: 13px;
@@ -492,16 +701,40 @@
       text-decoration: none;
       cursor: pointer;
     }
-    .cart-item-meta { font-size: 11px; color: var(--text-muted); margin-top: 4px; line-height: 1.4; }
-    .cart-item-pricing { display: flex; align-items: baseline; gap: 8px; margin-top: 8px; }
-    .cart-item-sale { font-size: 14px; font-weight: 700; color: var(--brand-espresso); }
-    .cart-item-mrp { font-size: 12px; color: var(--text-muted); text-decoration: line-through; }
+
+    .cart-item-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    .cart-item-pricing {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .cart-item-sale {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--brand-espresso);
+    }
+
+    .cart-item-mrp {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+
     .cart-item-actions {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-top: 12px;
     }
+
     .qty-stepper {
       display: inline-flex;
       align-items: center;
@@ -509,6 +742,7 @@
       border-radius: 2px;
       background: #FFF;
     }
+
     .qty-btn {
       background: none;
       border: none;
@@ -521,8 +755,18 @@
       justify-content: center;
       color: var(--brand-espresso);
     }
-    .qty-btn:hover { background: var(--bg-surface); }
-    .qty-val { width: 24px; text-align: center; font-size: 12px; font-weight: 600; }
+
+    .qty-btn:hover {
+      background: var(--bg-surface);
+    }
+
+    .qty-val {
+      width: 24px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
     .btn-wishlist {
       background: none;
       border: none;
@@ -532,7 +776,10 @@
       cursor: pointer;
       padding: 0;
     }
-    .btn-wishlist:hover { color: var(--brand-terracotta); }
+
+    .btn-wishlist:hover {
+      color: var(--brand-terracotta);
+    }
 
     /* PAIRS GREAT WITH CAROUSEL */
     .cross-sells-container {
@@ -540,6 +787,7 @@
       padding-top: 20px;
       border-top: 1px solid var(--border-subtle);
     }
+
     .cross-sells-title {
       font-family: var(--font-heading);
       font-size: 13px;
@@ -549,6 +797,7 @@
       color: var(--brand-espresso);
       margin-bottom: 12px;
     }
+
     .cross-sells-scroll {
       display: flex;
       gap: 12px;
@@ -557,6 +806,7 @@
       scrollbar-width: thin;
       scroll-snap-type: x mandatory;
     }
+
     .cross-sell-card {
       min-width: 145px;
       max-width: 145px;
@@ -570,6 +820,7 @@
       flex-direction: column;
       position: relative;
     }
+
     .cross-sell-badge {
       position: absolute;
       top: 6px;
@@ -582,6 +833,7 @@
       border-radius: 2px;
       z-index: 2;
     }
+
     .cross-sell-img {
       width: 100%;
       height: 110px;
@@ -590,6 +842,7 @@
       margin-bottom: 8px;
       background: var(--bg-surface);
     }
+
     .cross-sell-name {
       font-size: 11px;
       font-weight: 600;
@@ -601,10 +854,32 @@
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
     }
-    .cross-sell-color { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
-    .cross-sell-price-row { display: flex; align-items: baseline; gap: 6px; margin-top: 6px; font-size: 11px; }
-    .cross-sell-price { font-weight: 700; color: var(--brand-espresso); }
-    .cross-sell-mrp { font-size: 10px; color: var(--text-muted); text-decoration: line-through; }
+
+    .cross-sell-color {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .cross-sell-price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-top: 6px;
+      font-size: 11px;
+    }
+
+    .cross-sell-price {
+      font-weight: 700;
+      color: var(--brand-espresso);
+    }
+
+    .cross-sell-mrp {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+
     .btn-quick-add {
       margin-top: 8px;
       background: #FFF;
@@ -620,7 +895,11 @@
       border-radius: 2px;
       transition: all 0.2s;
     }
-    .btn-quick-add:hover { background: var(--brand-espresso); color: #FFF; }
+
+    .btn-quick-add:hover {
+      background: var(--brand-espresso);
+      color: #FFF;
+    }
 
     /* DRAWER FOOTER */
     .drawer-footer {
@@ -628,6 +907,7 @@
       border-top: 1px solid var(--border-subtle);
       background: var(--bg-card);
     }
+
     .savings-notice {
       background: #F1F6F2;
       border: 1px solid #D1E2D6;
@@ -641,11 +921,42 @@
       align-items: center;
       gap: 6px;
     }
-    .summary-heading { font-family: var(--font-heading); font-size: 14px; font-weight: 700; color: var(--brand-espresso); margin-bottom: 12px; }
-    .summary-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; color: var(--text-muted); }
-    .summary-row span:last-child { color: var(--brand-espresso); font-weight: 500; }
-    .summary-total { font-size: 16px; font-weight: 700; border-top: 1px solid var(--border-subtle); padding-top: 10px; margin-top: 10px; color: var(--brand-espresso) !important; }
-    .summary-total span:last-child { font-weight: 700; color: var(--brand-espresso); }
+
+    .summary-heading {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--brand-espresso);
+      margin-bottom: 12px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .summary-row span:last-child {
+      color: var(--brand-espresso);
+      font-weight: 500;
+    }
+
+    .summary-total {
+      font-size: 16px;
+      font-weight: 700;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 10px;
+      margin-top: 10px;
+      color: var(--brand-espresso) !important;
+    }
+
+    .summary-total span:last-child {
+      font-weight: 700;
+      color: var(--brand-espresso);
+    }
+
     .btn-checkout {
       width: 100%;
       background: var(--brand-espresso);
@@ -660,7 +971,10 @@
       margin-top: 14px;
       transition: background 0.2s;
     }
-    .btn-checkout:hover { background: var(--brand-terracotta); }
+
+    .btn-checkout:hover {
+      background: var(--brand-terracotta);
+    }
 
     /* DRAWER HELP & RETURNS MICROCOPY */
     .drawer-help-box {
@@ -673,6 +987,7 @@
       line-height: 1.6;
       border-radius: 3px;
     }
+
     .drawer-help-box h5 {
       font-size: 11px;
       font-weight: 700;
@@ -681,6 +996,7 @@
       color: var(--brand-espresso);
       margin-bottom: 6px;
     }
+
     .drawer-help-box a {
       color: var(--brand-espresso);
       font-weight: 600;
@@ -697,7 +1013,11 @@
       z-index: 1099;
       display: none;
     }
-    .filter-drawer-overlay.open { display: block; }
+
+    .filter-drawer-overlay.open {
+      display: block;
+    }
+
     .filter-drawer {
       position: fixed;
       top: 0;
@@ -712,22 +1032,29 @@
       display: flex;
       flex-direction: column;
     }
-    .filter-drawer.open { left: 0; }
+
+    .filter-drawer.open {
+      left: 0;
+    }
+
     .filter-drawer-header {
       padding: 20px 24px 16px;
       border-bottom: 1px solid var(--border-subtle);
     }
+
     .filter-header-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 12px;
     }
+
     .filter-header-title {
       font-size: 16px;
       font-weight: 700;
       color: var(--brand-espresso);
     }
+
     .close-filter-btn {
       background: none;
       border: none;
@@ -736,12 +1063,14 @@
       line-height: 1;
       color: var(--brand-espresso);
     }
+
     .active-filters-row {
       display: flex;
       align-items: center;
       gap: 12px;
       flex-wrap: wrap;
     }
+
     .active-tag-chip {
       font-size: 12px;
       font-weight: 700;
@@ -753,13 +1082,17 @@
       cursor: pointer;
       color: var(--brand-espresso);
     }
+
     .clear-all-link {
       font-size: 12px;
       text-decoration: underline;
       color: var(--text-muted);
       cursor: pointer;
     }
-    .clear-all-link:hover { color: var(--brand-terracotta); }
+
+    .clear-all-link:hover {
+      color: var(--brand-terracotta);
+    }
 
     .filter-drawer-body {
       flex: 1;
@@ -767,10 +1100,12 @@
       padding: 12px 24px 24px;
       scrollbar-width: thin;
     }
+
     .filter-accordion-item {
       border-bottom: 1px solid var(--border-subtle);
       padding: 16px 0;
     }
+
     .filter-accordion-header {
       display: flex;
       justify-content: space-between;
@@ -778,6 +1113,7 @@
       cursor: pointer;
       user-select: none;
     }
+
     .filter-accordion-title {
       font-size: 13px;
       font-weight: 700;
@@ -785,16 +1121,21 @@
       text-transform: uppercase;
       color: var(--brand-espresso);
     }
+
     .filter-accordion-icon {
       font-size: 14px;
       transition: transform 0.2s;
     }
+
     .filter-accordion-content {
       margin-top: 14px;
       display: block;
     }
-    .filter-accordion-content.collapsed { display: none; }
-    
+
+    .filter-accordion-content.collapsed {
+      display: none;
+    }
+
     .filter-checkbox-item {
       display: flex;
       align-items: center;
@@ -804,17 +1145,20 @@
       color: var(--brand-espresso);
       cursor: pointer;
     }
+
     .filter-checkbox-item input[type="checkbox"] {
       width: 16px;
       height: 16px;
       accent-color: #000;
       cursor: pointer;
     }
+
     .size-box-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 10px;
     }
+
     .size-box-btn {
       background: #FFF;
       border: 1px solid #C4C4C4;
@@ -826,16 +1170,19 @@
       border-radius: 2px;
       transition: all 0.15s;
     }
+
     .size-box-btn.selected {
       border-color: #000;
       background: #000;
       color: #FFF;
     }
+
     .filter-drawer-footer {
       padding: 16px 24px 20px;
       border-top: 1px solid var(--border-subtle);
       background: #FFF;
     }
+
     .btn-filter-apply {
       width: 100%;
       background: #000000;
@@ -849,7 +1196,10 @@
       cursor: pointer;
       border-radius: 2px;
     }
-    .btn-filter-apply:hover { opacity: 0.9; }
+
+    .btn-filter-apply:hover {
+      opacity: 0.9;
+    }
 
     /* CUSTOM LUXURY THEMED MODAL */
     .alo-modal-overlay {
@@ -865,7 +1215,12 @@
       pointer-events: none;
       transition: opacity 0.25s ease;
     }
-    .alo-modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+    .alo-modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
     .alo-modal-card {
       background: var(--bg-base);
       border: 1px solid var(--border-subtle);
@@ -876,11 +1231,52 @@
       box-shadow: 0 24px 64px rgba(44, 30, 24, 0.25);
       text-align: center;
     }
-    .alo-modal-icon { width: 48px; height: 48px; background: var(--bg-surface); color: var(--brand-terracotta); border: 1px solid var(--border-subtle); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 20px; font-weight: 700; }
-    .alo-modal-title { font-family: var(--font-heading); font-size: 20px; color: var(--brand-espresso); margin-bottom: 8px; }
-    .alo-modal-body { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 24px; white-space: pre-line; }
-    .alo-modal-btn { background: var(--brand-espresso); color: #FFF; border: none; padding: 13px 32px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; }
-    .alo-modal-btn:hover { background: var(--brand-terracotta); }
+
+    .alo-modal-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--bg-surface);
+      color: var(--brand-terracotta);
+      border: 1px solid var(--border-subtle);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .alo-modal-title {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      color: var(--brand-espresso);
+      margin-bottom: 8px;
+    }
+
+    .alo-modal-body {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 24px;
+      white-space: pre-line;
+    }
+
+    .alo-modal-btn {
+      background: var(--brand-espresso);
+      color: #FFF;
+      border: none;
+      padding: 13px 32px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .alo-modal-btn:hover {
+      background: var(--brand-terracotta);
+    }
 
     /* ACCOUNT DASHBOARD (Exact Alo Yoga Indian Athleisure Spec) */
     .account-container {
@@ -889,6 +1285,7 @@
       padding: 40px 24px 80px;
       min-height: 70vh;
     }
+
     .account-main-title {
       font-family: var(--font-heading);
       font-size: 24px;
@@ -898,11 +1295,13 @@
       color: var(--brand-espresso);
       margin-bottom: 36px;
     }
+
     .account-layout {
       display: flex;
       gap: 60px;
       align-items: flex-start;
     }
+
     .account-sidebar {
       width: 250px;
       flex-shrink: 0;
@@ -912,6 +1311,7 @@
       border-right: 1px solid var(--border-subtle);
       padding-right: 24px;
     }
+
     .account-nav-link {
       font-size: 12px;
       font-weight: 600;
@@ -923,20 +1323,27 @@
       transition: all 0.2s;
       padding: 4px 0;
     }
-    .account-nav-link:hover { color: var(--brand-espresso); }
+
+    .account-nav-link:hover {
+      color: var(--brand-espresso);
+    }
+
     .account-nav-link.active {
       color: var(--brand-espresso);
       font-weight: 800;
     }
+
     .account-content-pane {
       flex: 1;
       min-height: 400px;
     }
+
     .empty-orders-view {
       max-width: 500px;
       margin: 40px auto;
       text-align: center;
     }
+
     .empty-orders-title {
       font-family: var(--font-heading);
       font-size: 22px;
@@ -944,12 +1351,14 @@
       color: var(--brand-espresso);
       margin-bottom: 12px;
     }
+
     .empty-orders-desc {
       font-size: 14px;
       color: var(--text-muted);
       line-height: 1.6;
       margin-bottom: 28px;
     }
+
     .btn-start-shopping {
       background: var(--brand-espresso);
       color: #FFF;
@@ -963,7 +1372,11 @@
       border-radius: 2px;
       transition: background 0.2s;
     }
-    .btn-start-shopping:hover { background: var(--brand-terracotta); }
+
+    .btn-start-shopping:hover {
+      background: var(--brand-terracotta);
+    }
+
     .order-card-item {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
@@ -971,6 +1384,7 @@
       padding: 20px;
       margin-bottom: 16px;
     }
+
     .order-card-header {
       display: flex;
       justify-content: space-between;
@@ -979,6 +1393,7 @@
       margin-bottom: 12px;
       font-size: 13px;
     }
+
     .account-form-card {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
@@ -986,9 +1401,11 @@
       padding: 28px;
       max-width: 600px;
     }
+
     .account-form-row {
       margin-bottom: 16px;
     }
+
     .account-form-row label {
       display: block;
       font-size: 11px;
@@ -997,7 +1414,9 @@
       color: var(--text-muted);
       margin-bottom: 6px;
     }
-    .account-form-row input[type="text"], .account-form-row input[type="email"] {
+
+    .account-form-row input[type="text"],
+    .account-form-row input[type="email"] {
       width: 100%;
       padding: 10px 14px;
       border: 1px solid var(--border-subtle);
@@ -1006,12 +1425,14 @@
       border-radius: 2px;
       box-sizing: border-box;
     }
+
     .access-banner-hero {
       text-align: center;
       padding: 30px 20px 40px;
       border-bottom: 1px solid var(--border-subtle);
       margin-bottom: 28px;
     }
+
     .access-banner-title {
       font-family: var(--font-heading);
       font-size: 38px;
@@ -1020,6 +1441,7 @@
       color: var(--brand-espresso);
       text-transform: uppercase;
     }
+
     .access-banner-subtitle {
       font-size: 14px;
       font-weight: 700;
@@ -1043,14 +1465,16 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
       z-index: 1500;
       transition: transform 0.2s, background 0.2s;
     }
+
     .chat-floating-btn:hover {
       transform: scale(1.06);
       background: var(--brand-terracotta);
     }
+
     .chat-widget-window {
       position: fixed;
       bottom: 88px;
@@ -1060,18 +1484,30 @@
       background: #FFF;
       border: 1px solid var(--border-subtle);
       border-radius: 12px;
-      box-shadow: 0 12px 48px rgba(0,0,0,0.22);
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.22);
       z-index: 1501;
       display: none;
       flex-direction: column;
       overflow: hidden;
       animation: chatFadeIn 0.2s ease-out;
     }
-    .chat-widget-window.open { display: flex; }
-    @keyframes chatFadeIn {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
+
+    .chat-widget-window.open {
+      display: flex;
     }
+
+    @keyframes chatFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     .chat-header {
       background: #111111;
       color: #FFF;
@@ -1080,13 +1516,20 @@
       justify-content: space-between;
       align-items: center;
     }
+
     .chat-brand {
       font-family: var(--font-heading);
       font-size: 16px;
       font-weight: 800;
       letter-spacing: 0.12em;
     }
-    .chat-controls { display: flex; gap: 12px; align-items: center; }
+
+    .chat-controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
     .chat-ctrl-btn {
       background: none;
       border: none;
@@ -1097,8 +1540,16 @@
       align-items: center;
       justify-content: center;
     }
-    .chat-ctrl-btn:hover { color: #FFF; }
-    .chat-close-btn { font-size: 22px; line-height: 1; }
+
+    .chat-ctrl-btn:hover {
+      color: #FFF;
+    }
+
+    .chat-close-btn {
+      font-size: 22px;
+      line-height: 1;
+    }
+
     .chat-body {
       flex: 1;
       display: flex;
@@ -1106,6 +1557,7 @@
       overflow-y: auto;
       background: #FAFAFA;
     }
+
     .chat-disclaimer {
       font-size: 10px;
       color: #888;
@@ -1114,6 +1566,7 @@
       border-bottom: 1px solid #EFEFEF;
       background: #FFF;
     }
+
     .chat-messages {
       flex: 1;
       padding: 16px;
@@ -1122,9 +1575,20 @@
       flex-direction: column;
       gap: 12px;
     }
-    .chat-msg-row { display: flex; width: 100%; }
-    .chat-msg-row.bot { justify-content: flex-start; }
-    .chat-msg-row.user { justify-content: flex-end; }
+
+    .chat-msg-row {
+      display: flex;
+      width: 100%;
+    }
+
+    .chat-msg-row.bot {
+      justify-content: flex-start;
+    }
+
+    .chat-msg-row.user {
+      justify-content: flex-end;
+    }
+
     .chat-bubble {
       max-width: 82%;
       padding: 12px 14px;
@@ -1132,16 +1596,19 @@
       font-size: 12.5px;
       line-height: 1.45;
     }
+
     .chat-bubble.bot {
       background: #F0F0F0;
       color: #111;
       border-bottom-left-radius: 2px;
     }
+
     .chat-bubble.user {
       background: #111;
       color: #FFF;
       border-bottom-right-radius: 2px;
     }
+
     .chat-quick-prompts {
       display: flex;
       gap: 6px;
@@ -1151,6 +1618,7 @@
       background: #FFF;
       border-top: 1px solid #EFEFEF;
     }
+
     .chat-prompt-pill {
       background: #F2F2F2;
       border: 1px solid #E0E0E0;
@@ -1161,7 +1629,11 @@
       cursor: pointer;
       transition: background 0.2s;
     }
-    .chat-prompt-pill:hover { background: #E0E0E0; }
+
+    .chat-prompt-pill:hover {
+      background: #E0E0E0;
+    }
+
     .chat-footer {
       display: flex;
       align-items: center;
@@ -1170,6 +1642,7 @@
       border-top: 1px solid #EFEFEF;
       gap: 8px;
     }
+
     .chat-input {
       flex: 1;
       border: 1px solid #DDD;
@@ -1179,7 +1652,11 @@
       outline: none;
       font-family: inherit;
     }
-    .chat-input:focus { border-color: #111; }
+
+    .chat-input:focus {
+      border-color: #111;
+    }
+
     .chat-send-btn {
       background: none;
       border: none;
@@ -1190,7 +1667,10 @@
       justify-content: center;
       padding: 4px;
     }
-    .chat-send-btn:hover { color: var(--brand-terracotta); }
+
+    .chat-send-btn:hover {
+      color: var(--brand-terracotta);
+    }
 
     /* FULL CART / CHECKOUT REVIEW PAGE (Exact Alo Yoga Spec) */
     .cart-page-container {
@@ -1199,15 +1679,21 @@
       padding: 40px 24px 80px;
       min-height: 70vh;
     }
+
     .cart-page-grid {
       display: grid;
       grid-template-columns: 1fr 380px;
       gap: 60px;
       align-items: flex-start;
     }
+
     @media (max-width: 860px) {
-      .cart-page-grid { grid-template-columns: 1fr; gap: 40px; }
+      .cart-page-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
     }
+
     .cart-page-header {
       display: flex;
       justify-content: space-between;
@@ -1216,6 +1702,7 @@
       padding-bottom: 16px;
       margin-bottom: 24px;
     }
+
     .cart-page-title {
       font-family: var(--font-heading);
       font-size: 20px;
@@ -1224,6 +1711,7 @@
       text-transform: uppercase;
       color: var(--brand-espresso);
     }
+
     .cart-page-count {
       font-size: 13px;
       font-weight: 600;
@@ -1231,6 +1719,7 @@
       letter-spacing: 0.06em;
       text-transform: uppercase;
     }
+
     .cart-page-item {
       display: grid;
       grid-template-columns: 130px 1fr auto auto auto;
@@ -1239,9 +1728,13 @@
       padding: 24px 0;
       border-bottom: 1px solid var(--border-subtle);
     }
+
     @media (max-width: 600px) {
-      .cart-page-item { grid-template-columns: 90px 1fr; }
+      .cart-page-item {
+        grid-template-columns: 90px 1fr;
+      }
     }
+
     .cart-page-img {
       width: 130px;
       height: 160px;
@@ -1249,11 +1742,13 @@
       background: var(--bg-surface);
       border-radius: 2px;
     }
+
     .cart-page-item-info {
       display: flex;
       flex-direction: column;
       gap: 6px;
     }
+
     .cart-page-item-title {
       font-size: 14px;
       font-weight: 700;
@@ -1261,10 +1756,12 @@
       text-decoration: none;
       line-height: 1.4;
     }
+
     .cart-page-item-meta {
       font-size: 13px;
       color: var(--text-muted);
     }
+
     .cart-page-move-wishlist {
       font-size: 12px;
       color: var(--brand-espresso);
@@ -1276,7 +1773,11 @@
       text-align: left;
       margin-top: 8px;
     }
-    .cart-page-move-wishlist:hover { color: var(--brand-terracotta); }
+
+    .cart-page-move-wishlist:hover {
+      color: var(--brand-terracotta);
+    }
+
     .cart-page-stepper {
       display: inline-flex;
       align-items: center;
@@ -1284,6 +1785,7 @@
       border-radius: 2px;
       background: #FFF;
     }
+
     .cart-page-stepper-btn {
       background: none;
       border: none;
@@ -1296,21 +1798,36 @@
       justify-content: center;
       color: var(--brand-espresso);
     }
-    .cart-page-stepper-btn:hover { background: var(--bg-surface); }
+
+    .cart-page-stepper-btn:hover {
+      background: var(--bg-surface);
+    }
+
     .cart-page-stepper-val {
       width: 28px;
       text-align: center;
       font-size: 13px;
       font-weight: 600;
     }
+
     .cart-page-prices {
       display: flex;
       gap: 8px;
       align-items: baseline;
       font-size: 14px;
     }
-    .cart-page-price { font-weight: 700; color: var(--brand-espresso); }
-    .cart-page-mrp { font-size: 12px; color: var(--text-muted); text-decoration: line-through; }
+
+    .cart-page-price {
+      font-weight: 700;
+      color: var(--brand-espresso);
+    }
+
+    .cart-page-mrp {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+
     .cart-page-remove-btn {
       background: none;
       border: none;
@@ -1319,32 +1836,41 @@
       cursor: pointer;
       padding: 4px;
     }
-    .cart-page-remove-btn:hover { color: var(--brand-espresso); }
+
+    .cart-page-remove-btn:hover {
+      color: var(--brand-espresso);
+    }
+
     .cart-page-vip-box {
       margin-top: 28px;
       padding: 20px 0;
     }
+
     .cart-page-vip-title {
       font-size: 18px;
       font-weight: 800;
       color: var(--brand-espresso);
       margin-bottom: 4px;
     }
+
     .cart-page-vip-points {
       font-size: 13px;
       color: var(--text-muted);
     }
+
     .cart-page-sidebar {
       display: flex;
       flex-direction: column;
       gap: 20px;
     }
+
     .gift-message-box {
       padding: 16px 20px;
       border: 1px solid var(--border-subtle);
       background: #FFF;
       border-radius: 2px;
     }
+
     .gift-message-toggle {
       display: flex;
       align-items: center;
@@ -1354,6 +1880,7 @@
       color: var(--brand-espresso);
       cursor: pointer;
     }
+
     .gift-message-textarea {
       width: 100%;
       height: 70px;
@@ -1367,12 +1894,14 @@
       font-family: inherit;
       display: none;
     }
+
     .order-summary-card {
       border: 1px solid var(--border-subtle);
       padding: 24px;
       background: #FFF;
       border-radius: 2px;
     }
+
     .order-summary-title {
       font-family: var(--font-heading);
       font-size: 13px;
@@ -1382,6 +1911,7 @@
       color: var(--brand-espresso);
       margin-bottom: 20px;
     }
+
     .order-summary-row {
       display: flex;
       justify-content: space-between;
@@ -1389,6 +1919,7 @@
       margin-bottom: 12px;
       color: var(--brand-espresso);
     }
+
     .order-summary-savings {
       color: #8A3324;
       font-size: 13px;
@@ -1396,6 +1927,7 @@
       margin: 16px 0;
       text-align: center;
     }
+
     .btn-checkout-primary {
       width: 100%;
       background: #111111;
@@ -1410,13 +1942,18 @@
       border-radius: 2px;
       transition: background 0.2s;
     }
-    .btn-checkout-primary:hover { background: var(--brand-terracotta); }
+
+    .btn-checkout-primary:hover {
+      background: var(--brand-terracotta);
+    }
+
     .cart-help-accordion {
       border: 1px solid var(--border-subtle);
       background: #FFF;
       border-radius: 2px;
       overflow: hidden;
     }
+
     .cart-help-header {
       padding: 16px 20px;
       display: flex;
@@ -1429,12 +1966,14 @@
       text-transform: uppercase;
       color: var(--brand-espresso);
     }
+
     .cart-help-content {
       padding: 0 20px 18px;
       font-size: 12px;
       color: var(--text-muted);
       line-height: 1.6;
     }
+
     .cart-help-content a {
       color: var(--brand-espresso);
       text-decoration: underline;
@@ -1448,6 +1987,7 @@
       padding: 0 20px;
       min-height: 65vh;
     }
+
     .auth-promo-banner {
       background: #8E3A2B;
       color: #FFF;
@@ -1458,6 +1998,7 @@
       margin-bottom: 28px;
       border-radius: 2px;
     }
+
     .auth-promo-left {
       font-family: var(--font-heading);
       font-size: 20px;
@@ -1465,6 +2006,7 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
+
     .auth-promo-right {
       font-family: 'Playfair Display', Georgia, serif;
       font-size: 26px;
@@ -1472,11 +2014,13 @@
       line-height: 1.1;
       text-align: right;
     }
+
     .auth-tabs-header {
       display: flex;
       border-bottom: 2px solid var(--border-subtle);
       margin-bottom: 24px;
     }
+
     .auth-tab-btn {
       flex: 1;
       background: none;
@@ -1490,9 +2034,11 @@
       cursor: pointer;
       position: relative;
     }
+
     .auth-tab-btn.active {
       color: var(--brand-espresso);
     }
+
     .auth-tab-btn.active::after {
       content: '';
       position: absolute;
@@ -1502,16 +2048,19 @@
       height: 2px;
       background: var(--brand-espresso);
     }
+
     .auth-form-row {
       display: flex;
       gap: 12px;
       margin-bottom: 12px;
     }
+
     .auth-input-group {
       margin-bottom: 12px;
       position: relative;
       width: 100%;
     }
+
     .auth-input {
       width: 100%;
       padding: 13px 14px;
@@ -1524,9 +2073,11 @@
       box-sizing: border-box;
       font-family: inherit;
     }
+
     .auth-input:focus {
       border-color: var(--brand-espresso);
     }
+
     .auth-pw-toggle {
       position: absolute;
       right: 12px;
@@ -1537,12 +2088,14 @@
       font-size: 15px;
       color: var(--text-muted);
     }
+
     .auth-helper-text {
       font-size: 11px;
       color: var(--text-muted);
       margin-top: 5px;
       line-height: 1.4;
     }
+
     .auth-btn-submit {
       width: 100%;
       padding: 15px;
@@ -1558,9 +2111,11 @@
       margin-top: 8px;
       transition: background 0.2s ease;
     }
+
     .auth-btn-submit:hover {
       background: #000;
     }
+
     .auth-disclaimer {
       font-size: 11px;
       color: var(--text-muted);
@@ -1568,6 +2123,7 @@
       line-height: 1.6;
       margin-top: 14px;
     }
+
     .auth-disclaimer a {
       color: var(--brand-espresso);
       text-decoration: underline;
@@ -1590,11 +2146,13 @@
       transform: translateY(100%);
       transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
       z-index: 6;
-      box-shadow: 0 -4px 12px rgba(0,0,0,0.15);
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
     }
+
     .product-card:hover .card-quick-add-overlay {
       transform: translateY(0);
     }
+
     .quick-add-header-title {
       font-size: 10px;
       font-weight: 700;
@@ -1602,15 +2160,17 @@
       text-transform: uppercase;
       color: #E0E0E0;
     }
+
     .quick-add-size-pills {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 6px;
     }
+
     .quick-add-pill {
       background: transparent;
-      border: 1px solid rgba(255,255,255,0.25);
+      border: 1px solid rgba(255, 255, 255, 0.25);
       color: #FFF;
       font-size: 11px;
       font-weight: 600;
@@ -1619,10 +2179,238 @@
       cursor: pointer;
       transition: all 0.15s;
     }
+
     .quick-add-pill:hover {
       background: #FFF;
       color: #000;
       border-color: #FFF;
+    }
+
+    /* ADDED TO BAG POPUP MODAL STYLES (Exact Alo Spec from User Image) */
+    .added-to-bag-card {
+      background: #FFFFFF;
+      border-radius: 4px;
+      width: 92%;
+      max-width: 460px;
+      padding: 24px 28px 26px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      position: relative;
+      animation: addedModalSlideIn 0.22s ease-out;
+      color: #111111;
+      text-align: left;
+    }
+    @keyframes addedModalSlideIn {
+      from { transform: translateY(18px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .added-bag-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .added-bag-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin: 0;
+      color: #111111;
+      font-family: var(--font-heading);
+    }
+    .added-bag-close {
+      background: transparent;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #111111;
+      padding: 0 4px;
+      line-height: 1;
+    }
+    .added-bag-item-row {
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+      margin-bottom: 22px;
+    }
+    .added-bag-img {
+      width: 96px;
+      height: 128px;
+      object-fit: cover;
+      border-radius: 2px;
+      background: #F4F4F4;
+      flex-shrink: 0;
+    }
+    .added-bag-item-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      justify-content: center;
+      padding-top: 4px;
+    }
+    .added-bag-item-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #111111;
+      line-height: 1.35;
+    }
+    .added-bag-item-meta {
+      font-size: 13px;
+      color: #4B5563;
+    }
+    .added-bag-item-meta strong {
+      color: #111111;
+    }
+    .added-bag-financials {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .added-bag-subtotal-text {
+      font-size: 15px;
+      color: #111111;
+    }
+    .added-bag-subtotal-text strong {
+      font-weight: 700;
+    }
+    .added-bag-savings-callout {
+      color: #BE5B50;
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+    .added-bag-actions {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+    .btn-added-view-bag {
+      flex: 1;
+      height: 48px;
+      background: #FFFFFF;
+      border: 1.5px solid #111111;
+      color: #111111;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+    .btn-added-view-bag:hover {
+      background: #F8F8F8;
+    }
+    .btn-added-checkout {
+      flex: 1;
+      height: 48px;
+      background: #111111;
+      border: 1.5px solid #111111;
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+    .btn-added-checkout:hover {
+      background: #333333;
+    }
+    .added-bag-divider {
+      border: none;
+      border-top: 1px solid #E5E7EB;
+      margin: 20px 0 18px;
+    }
+    .added-bag-cross-title {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #111111;
+      margin: 0 0 14px 0;
+    }
+    .added-bag-cross-carousel-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .added-bag-cross-carousel {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      width: 100%;
+      padding-bottom: 2px;
+    }
+    .added-bag-cross-carousel::-webkit-scrollbar {
+      display: none;
+    }
+    .added-cross-card {
+      flex: 0 0 calc(33.333% - 7px);
+      position: relative;
+      cursor: pointer;
+      border-radius: 2px;
+      overflow: hidden;
+      background: #FAFAFA;
+    }
+    .added-cross-img {
+      width: 100%;
+      height: 155px;
+      object-fit: cover;
+      display: block;
+    }
+    .added-cross-heart {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: #111111;
+      cursor: pointer;
+      z-index: 2;
+      transition: transform 0.15s ease;
+    }
+    .added-cross-heart:hover {
+      background: #FFFFFF;
+      color: #E74C3C;
+      transform: scale(1.1);
+    }
+    .added-bag-carousel-nav {
+      position: absolute;
+      right: -8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      color: #111111;
+      z-index: 5;
+    }
+    .added-bag-carousel-nav:hover {
+      background: #F4F4F4;
     }
 
     /* DETAILED PRODUCT DESCRIPTION PAGE (PDP) */
@@ -1632,11 +2420,13 @@
       padding: 24px 24px 80px;
       font-family: inherit;
     }
+
     .pdp-breadcrumb-bar {
       display: flex;
       align-items: center;
       margin-bottom: 24px;
     }
+
     .pdp-back-btn {
       background: none;
       border: none;
@@ -1650,23 +2440,36 @@
       align-items: center;
       gap: 6px;
     }
-    .pdp-back-btn:hover { color: var(--brand-terracotta); }
+
+    .pdp-back-btn:hover {
+      color: var(--brand-terracotta);
+    }
+
     .pdp-hero-grid {
       display: grid;
       grid-template-columns: 1.25fr 0.85fr;
       gap: 50px;
       align-items: flex-start;
     }
+
     @media (max-width: 960px) {
-      .pdp-hero-grid { grid-template-columns: 1fr; gap: 32px; }
+      .pdp-hero-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
     }
+
     .pdp-gallery-wrap {
       display: flex;
       gap: 16px;
     }
+
     @media (max-width: 640px) {
-      .pdp-gallery-wrap { flex-direction: column-reverse; }
+      .pdp-gallery-wrap {
+        flex-direction: column-reverse;
+      }
     }
+
     .pdp-thumb-strip {
       display: flex;
       flex-direction: column;
@@ -1675,9 +2478,15 @@
       overflow-y: auto;
       flex-shrink: 0;
     }
+
     @media (max-width: 640px) {
-      .pdp-thumb-strip { flex-direction: row; max-height: none; overflow-x: auto; }
+      .pdp-thumb-strip {
+        flex-direction: row;
+        max-height: none;
+        overflow-x: auto;
+      }
     }
+
     .pdp-thumb-img {
       width: 74px;
       height: 94px;
@@ -1688,10 +2497,13 @@
       opacity: 0.65;
       transition: all 0.2s;
     }
-    .pdp-thumb-img:hover, .pdp-thumb-img.active {
+
+    .pdp-thumb-img:hover,
+    .pdp-thumb-img.active {
       opacity: 1;
       border-color: var(--brand-espresso);
     }
+
     .pdp-main-img-wrap {
       flex: 1;
       position: relative;
@@ -1700,6 +2512,7 @@
       overflow: hidden;
       min-height: 520px;
     }
+
     .pdp-main-img {
       width: 100%;
       height: 100%;
@@ -1708,17 +2521,23 @@
       display: block;
       transition: transform 0.3s;
     }
-    .pdp-main-img:hover { transform: scale(1.02); }
+
+    .pdp-main-img:hover {
+      transform: scale(1.02);
+    }
+
     .pdp-info-col {
       display: flex;
       flex-direction: column;
       gap: 14px;
     }
+
     .pdp-tag-row {
       display: flex;
       align-items: center;
       gap: 8px;
     }
+
     .pdp-discount-tag {
       display: inline-block;
       border: 1px solid #D5B4A8;
@@ -1730,6 +2549,7 @@
       padding: 3px 8px;
       border-radius: 2px;
     }
+
     .pdp-title {
       font-family: var(--font-heading);
       font-size: 28px;
@@ -1738,54 +2558,64 @@
       color: var(--brand-espresso);
       line-height: 1.25;
     }
+
     .pdp-price-row {
       display: flex;
       align-items: baseline;
       gap: 12px;
       margin-top: -2px;
     }
+
     .pdp-sale-price {
       font-size: 22px;
       font-weight: 700;
       color: var(--brand-espresso);
     }
+
     .pdp-mrp-price {
       font-size: 16px;
       text-decoration: line-through;
       color: var(--text-muted);
     }
+
     .pdp-tax-note {
       font-size: 11px;
       color: var(--text-muted);
       font-style: italic;
     }
+
     .pdp-swatches-section {
       margin: 12px 0 6px;
     }
+
     .pdp-swatch-header {
       font-size: 12px;
       font-weight: 600;
       color: var(--brand-espresso);
       margin-bottom: 8px;
     }
+
     .pdp-swatches-row {
       display: flex;
       align-items: center;
       gap: 8px;
       flex-wrap: wrap;
     }
+
     .pdp-swatch-btn {
       width: 26px;
       height: 26px;
       border-radius: 50%;
       cursor: pointer;
-      border: 1px solid rgba(0,0,0,0.2);
+      border: 1px solid rgba(0, 0, 0, 0.2);
       transition: outline 0.15s;
     }
+
     .pdp-swatch-btn.active {
       outline: 2px solid var(--brand-espresso);
       outline-offset: 2px;
     }
+
     .pdp-fit-bar {
       display: flex;
       justify-content: space-between;
@@ -1793,26 +2623,31 @@
       font-size: 12px;
       margin-top: 10px;
     }
+
     .pdp-fit-note {
       color: var(--brand-espresso);
       font-weight: 500;
     }
+
     .pdp-fit-actions {
       display: flex;
       gap: 12px;
     }
+
     .pdp-fit-link {
       color: var(--brand-espresso);
       text-decoration: underline;
       cursor: pointer;
       font-weight: 600;
     }
+
     .pdp-size-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 8px;
       margin-top: 4px;
     }
+
     .pdp-size-btn {
       padding: 12px 14px;
       background: #FFF;
@@ -1825,20 +2660,24 @@
       text-align: center;
       transition: all 0.15s;
     }
+
     .pdp-size-btn:hover {
       border-color: var(--brand-espresso);
     }
+
     .pdp-size-btn.active {
       background: var(--brand-espresso);
       color: #FFF;
       border-color: var(--brand-espresso);
     }
+
     .pdp-actions-wrap {
       display: flex;
       flex-direction: column;
       gap: 10px;
       margin-top: 14px;
     }
+
     .btn-pdp-atc {
       width: 100%;
       background: #000;
@@ -1853,7 +2692,11 @@
       border-radius: 2px;
       transition: opacity 0.2s;
     }
-    .btn-pdp-atc:hover { opacity: 0.88; }
+
+    .btn-pdp-atc:hover {
+      opacity: 0.88;
+    }
+
     .btn-pdp-wishlist {
       width: 100%;
       background: transparent;
@@ -1868,7 +2711,12 @@
       border-radius: 2px;
       transition: background 0.2s, color 0.2s;
     }
-    .btn-pdp-wishlist:hover { background: var(--brand-espresso); color: #FFF; }
+
+    .btn-pdp-wishlist:hover {
+      background: var(--brand-espresso);
+      color: #FFF;
+    }
+
     .pdp-perks-list {
       border-top: 1px solid var(--border-subtle);
       border-bottom: 1px solid var(--border-subtle);
@@ -1880,12 +2728,15 @@
       color: var(--brand-espresso);
       font-weight: 500;
     }
+
     .pdp-accordions {
       margin-top: 10px;
     }
+
     .pdp-acc-item {
       border-bottom: 1px solid var(--border-subtle);
     }
+
     .pdp-acc-header {
       display: flex;
       justify-content: space-between;
@@ -1898,6 +2749,7 @@
       cursor: pointer;
       color: var(--brand-espresso);
     }
+
     .pdp-acc-body {
       display: none;
       padding: 0 0 16px;
@@ -1905,7 +2757,10 @@
       line-height: 1.6;
       color: var(--text-muted);
     }
-    .pdp-acc-body.open { display: block; }
+
+    .pdp-acc-body.open {
+      display: block;
+    }
 
     /* BUILT FOR PERFORMANCE BLUEPRINT */
     .pdp-blueprint-section {
@@ -1914,6 +2769,7 @@
       border-radius: 4px;
       padding: 48px 36px;
     }
+
     .pdp-blueprint-title {
       font-family: var(--font-heading);
       font-size: 24px;
@@ -1924,21 +2780,25 @@
       margin-bottom: 40px;
       color: var(--brand-espresso);
     }
+
     .pdp-blueprint-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
       gap: 28px;
     }
+
     .pdp-blueprint-card {
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
+
     .pdp-blueprint-num {
       font-size: 20px;
       font-weight: 700;
       color: var(--brand-terracotta);
     }
+
     .pdp-blueprint-card-title {
       font-size: 12px;
       font-weight: 700;
@@ -1946,6 +2806,7 @@
       text-transform: uppercase;
       color: var(--brand-espresso);
     }
+
     .pdp-blueprint-card-desc {
       font-size: 12px;
       line-height: 1.5;
@@ -1956,6 +2817,7 @@
     .pdp-comparison-section {
       margin: 64px 0;
     }
+
     .pdp-section-heading {
       font-family: var(--font-heading);
       font-size: 22px;
@@ -1965,22 +2827,27 @@
       color: var(--brand-espresso);
       margin-bottom: 24px;
     }
+
     .pdp-table-wrap {
       overflow-x: auto;
       border: 1px solid var(--border-subtle);
       border-radius: 4px;
     }
+
     .pdp-compare-table {
       width: 100%;
       border-collapse: collapse;
       font-size: 12px;
     }
-    .pdp-compare-table th, .pdp-compare-table td {
+
+    .pdp-compare-table th,
+    .pdp-compare-table td {
       padding: 16px;
       border: 1px solid var(--border-subtle);
       text-align: left;
       vertical-align: top;
     }
+
     .pdp-compare-table th {
       background: var(--bg-surface);
       font-weight: 700;
@@ -1993,12 +2860,14 @@
     .pdp-styling-section {
       margin: 64px 0;
     }
+
     .pdp-styling-tabs {
       display: flex;
       gap: 16px;
       margin-bottom: 24px;
       border-bottom: 1px solid var(--border-subtle);
     }
+
     .pdp-styling-tab-btn {
       background: none;
       border: none;
@@ -2011,38 +2880,48 @@
       color: var(--text-muted);
       border-bottom: 2px solid transparent;
     }
+
     .pdp-styling-tab-btn.active {
       color: var(--brand-espresso);
       border-bottom-color: var(--brand-espresso);
     }
+
     .pdp-styling-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 24px;
     }
+
     @media (max-width: 768px) {
-      .pdp-styling-grid { grid-template-columns: 1fr; }
+      .pdp-styling-grid {
+        grid-template-columns: 1fr;
+      }
     }
+
     .pdp-styling-card {
       border: 1px solid var(--border-subtle);
       border-radius: 4px;
       overflow: hidden;
       background: #FFF;
     }
+
     .pdp-styling-card-img {
       width: 100%;
       height: 380px;
       object-fit: cover;
     }
+
     .pdp-styling-card-body {
       padding: 14px;
     }
+
     .pdp-styling-card-title {
       font-size: 13px;
       font-weight: 700;
       color: var(--brand-espresso);
       margin-bottom: 4px;
     }
+
     .pdp-styling-card-caption {
       font-size: 11px;
       color: var(--text-muted);
@@ -2054,6 +2933,7 @@
       border-top: 1px solid var(--border-subtle);
       padding-top: 48px;
     }
+
     .pdp-reviews-summary {
       display: flex;
       justify-content: space-between;
@@ -2062,22 +2942,26 @@
       gap: 24px;
       margin-bottom: 32px;
     }
+
     .pdp-stars-box {
       display: flex;
       align-items: baseline;
       gap: 12px;
     }
+
     .pdp-rating-num {
       font-size: 28px;
       font-weight: 700;
       color: var(--brand-espresso);
     }
+
     .pdp-fit-slider-container {
       display: flex;
       flex-direction: column;
       gap: 4px;
       min-width: 260px;
     }
+
     .pdp-fit-slider-label {
       font-size: 11px;
       font-weight: 700;
@@ -2085,6 +2969,7 @@
       text-transform: uppercase;
       color: var(--brand-espresso);
     }
+
     .pdp-fit-slider-bar {
       position: relative;
       width: 100%;
@@ -2093,6 +2978,7 @@
       border-radius: 3px;
       margin: 6px 0;
     }
+
     .pdp-fit-slider-pointer {
       position: absolute;
       top: -4px;
@@ -2103,54 +2989,65 @@
       background: var(--brand-espresso);
       border-radius: 50%;
     }
+
     .pdp-fit-slider-ticks {
       display: flex;
       justify-content: space-between;
       font-size: 10px;
       color: var(--text-muted);
     }
+
     .pdp-review-card {
       padding: 24px 0;
       border-bottom: 1px solid var(--border-subtle);
     }
+
     .pdp-review-top {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
       margin-bottom: 6px;
     }
+
     .pdp-review-author {
       font-size: 13px;
       font-weight: 700;
       color: var(--brand-espresso);
     }
+
     .pdp-review-headline {
       font-size: 14px;
       font-weight: 700;
       color: var(--brand-espresso);
       margin-bottom: 6px;
     }
+
     .pdp-review-body {
       font-size: 13px;
       line-height: 1.6;
       color: var(--text-muted);
       margin-bottom: 12px;
     }
+
     .pdp-review-meta {
       font-size: 11px;
       color: var(--text-muted);
       display: flex;
       gap: 16px;
     }
-
   </style>
 </head>
+
 <body>
 
   <!-- Top Announcement Bar -->
-  <div class="top-bar" style="position: relative; display: flex; justify-content: center; align-items: center; padding: 10px 24px;">
-    <span id="top-announcement-text">30% OFF SITEWIDE ✨ <a onclick="showCatalogView()" style="text-decoration: underline; cursor: pointer;">SHOP NOW</a></span>
-    <button id="ticker-pause-btn" onclick="toggleTickerPause()" style="position: absolute; right: 24px; background: none; border: none; color: #FFF; font-size: 13px; cursor: pointer; opacity: 0.85; padding: 4px 8px;" title="Pause / Play Announcement">❚❚</button>
+  <div class="top-bar"
+    style="position: relative; display: flex; justify-content: center; align-items: center; padding: 10px 24px;">
+    <span id="top-announcement-text">30% OFF SITEWIDE ✨ <a onclick="showCatalogView()"
+        style="text-decoration: underline; cursor: pointer;">SHOP NOW</a></span>
+    <button id="ticker-pause-btn" onclick="toggleTickerPause()"
+      style="position: absolute; right: 24px; background: none; border: none; color: #FFF; font-size: 13px; cursor: pointer; opacity: 0.85; padding: 4px 8px;"
+      title="Pause / Play Announcement">❚❚</button>
   </div>
 
   <!-- Header -->
@@ -2161,18 +3058,21 @@
         <li><a class="active" id="nav-women">WOMEN</a></li>
         <li><a id="nav-men" onclick="filterProducts('category', 'men', 'Men\'s Studio & Streetwear')">MEN</a></li>
         <li><a id="nav-shoes" onclick="filterProducts('category', 'shoes', 'Shoes & Footwear')">SHOES</a></li>
-        <li><a id="nav-gift" onclick="openGiftGuidePage()">GIFT GUIDE <span style="color: var(--brand-terracotta); font-size: 10px;">NEW</span></a></li>
+        <li><a id="nav-gift" onclick="openGiftGuidePage()">GIFT GUIDE <span
+              style="color: var(--brand-terracotta); font-size: 10px;">NEW</span></a></li>
       </ul>
       <div class="nav-actions">
         <!-- Search Button (Exact Alo Spec) -->
-        <button class="nav-icon-btn" id="nav-search-btn" onclick="openSearchModal()" title="Search catalog" style="background: none; border: none; cursor: pointer; font-size: 16px; color: var(--brand-espresso); padding: 6px 10px; display: flex; align-items: center;">🔍</button>
+        <button class="nav-icon-btn" id="nav-search-btn" onclick="openSearchModal()" title="Search catalog"
+          style="background: none; border: none; cursor: pointer; font-size: 16px; color: var(--brand-espresso); padding: 6px 10px; display: flex; align-items: center;">🔍</button>
         <!-- User State (Hi Sameera! | 1 PT / Sign In To Get Rewards) -->
         <div class="user-pill" id="user-account-btn" onclick="handleUserAccountClick()">
           <span>👤 HI SAMEERA!</span>
           <span class="points">VIP | 1 PT</span>
         </div>
         <!-- Wishlist Nav Icon (Exact Alo Spec) -->
-        <button class="nav-icon-btn" id="nav-wishlist-btn" onclick="openCustomerWishlist()" title="View Wishlist" style="background: none; border: none; cursor: pointer; font-size: 18px; color: var(--brand-espresso); padding: 6px 10px; display: flex; align-items: center;">♡</button>
+        <button class="nav-icon-btn" id="nav-wishlist-btn" onclick="openCustomerWishlist()" title="View Wishlist"
+          style="background: none; border: none; cursor: pointer; font-size: 18px; color: var(--brand-espresso); padding: 6px 10px; display: flex; align-items: center;">♡</button>
         <!-- Cart / Bag Button -->
         <button class="cart-btn" id="open-cart-btn">
           <span>Bag</span>
@@ -2209,7 +3109,8 @@
     <div class="content-body" id="content-body">
       This page is dynamically linked to Supabase.
     </div>
-    <button class="btn-checkout" style="max-width: 200px; margin-top: 24px;" onclick="showCatalogView()">Back to Store</button>
+    <button class="btn-checkout" style="max-width: 200px; margin-top: 24px;" onclick="showCatalogView()">Back to
+      Store</button>
   </div>
 
   <!-- Full Customer Account Dashboard (Matching Alo Yoga Spec) -->
@@ -2220,11 +3121,13 @@
     <div class="account-layout">
       <!-- Left Sidebar Nav -->
       <nav class="account-sidebar" id="account-sidebar">
-        <a class="account-nav-link active" id="acc-link-orders" onclick="openAccountTab('orders')">&gt; ORDER HISTORY</a>
+        <a class="account-nav-link active" id="acc-link-orders" onclick="openAccountTab('orders')">&gt; ORDER
+          HISTORY</a>
         <a class="account-nav-link" id="acc-link-info" onclick="openAccountTab('info')">ACCOUNT INFORMATION</a>
         <a class="account-nav-link" id="acc-link-access" onclick="openAccountTab('access')">YOGA ACCESS</a>
         <a class="account-nav-link" id="acc-link-shipping" onclick="openAccountTab('shipping')">SHIPPING INFORMATION</a>
-        <a class="account-nav-link" id="acc-link-preferences" onclick="openAccountTab('preferences')">COMMUNICATION PREFERENCES</a>
+        <a class="account-nav-link" id="acc-link-preferences" onclick="openAccountTab('preferences')">COMMUNICATION
+          PREFERENCES</a>
         <a class="account-nav-link" id="acc-link-wishlist" onclick="openAccountTab('wishlist')">WISHLIST</a>
         <a class="account-nav-link" id="acc-link-giftcard" onclick="openAccountTab('giftcard')">GIFT CARD BALANCE</a>
         <a class="account-nav-link" id="acc-link-signout" onclick="openAccountTab('signout')">SIGN OUT</a>
@@ -2237,8 +3140,9 @@
           <div id="orders-content-list">
             <div class="empty-orders-view" id="empty-orders-view">
               <h3 class="empty-orders-title">No orders yet</h3>
-              <p class="empty-orders-desc">You haven't placed any orders yet.<br/>When you do, they'll appear here.</p>
-              <button class="btn-start-shopping" id="btn-start-shopping" onclick="startShopping()">START SHOPPING</button>
+              <p class="empty-orders-desc">You haven't placed any orders yet.<br />When you do, they'll appear here.</p>
+              <button class="btn-start-shopping" id="btn-start-shopping" onclick="startShopping()">START
+                SHOPPING</button>
             </div>
             <div id="orders-records-list" style="display: none;"></div>
           </div>
@@ -2266,7 +3170,8 @@
             </div>
             <div class="account-form-row">
               <label>VIP Membership Tier</label>
-              <div style="font-size: 13px; font-weight: 700; color: var(--brand-terracotta);">VIP Tier 1 (1 Reward Point Available)</div>
+              <div style="font-size: 13px; font-weight: 700; color: var(--brand-terracotta);">VIP Tier 1 (1 Reward Point
+                Available)</div>
             </div>
           </div>
         </div>
@@ -2276,36 +3181,45 @@
           <div class="access-banner-hero">
             <div class="access-banner-title">YOGA ACCESS</div>
             <div class="access-banner-subtitle">THE LOYALTY PROGRAM</div>
-            <p style="font-size: 13px; color: var(--text-muted); margin-top: 14px; max-width: 540px; margin-left: auto; margin-right: auto; line-height: 1.6;">
-              Unlock exclusive experiences and gifts, earn points with every purchase, get early access to drops and events, and more.
+            <p
+              style="font-size: 13px; color: var(--text-muted); margin-top: 14px; max-width: 540px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+              Unlock exclusive experiences and gifts, earn points with every purchase, get early access to drops and
+              events, and more.
             </p>
           </div>
           <div class="account-form-card" style="margin: 0 auto;">
-            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 16px; margin-bottom: 16px;">
+            <div
+              style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 16px; margin-bottom: 16px;">
               <div>
-                <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">Current Points</div>
-                <div style="font-size: 28px; font-weight: 800; color: var(--brand-espresso);" id="access-points-val">1 PT</div>
+                <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">
+                  Current Points</div>
+                <div style="font-size: 28px; font-weight: 800; color: var(--brand-espresso);" id="access-points-val">1
+                  PT</div>
               </div>
               <div style="text-align: right;">
-                <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">Current Tier</div>
+                <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">
+                  Current Tier</div>
                 <div style="font-size: 14px; font-weight: 700; color: var(--brand-terracotta);">VIP ACCESS TIER 1</div>
               </div>
             </div>
             <p style="font-size: 12px; color: var(--text-muted); line-height: 1.6;">
-              • Earn 1 Point for every ₹93 spent sitewide.<br/>
-              • Complimentary Express Shipping activated for all domestic orders across India.<br/>
+              • Earn 1 Point for every ₹93 spent sitewide.<br />
+              • Complimentary Express Shipping activated for all domestic orders across India.<br />
               • Early 24-hour access to holiday limited edition drops.
             </p>
             <div style="display: flex; gap: 12px; margin-top: 20px;">
-              <div class="tier-card active" style="flex: 1; border: 1px solid var(--brand-espresso); padding: 12px; text-align: center; border-radius: 4px; background: var(--bg-card);">
+              <div class="tier-card active"
+                style="flex: 1; border: 1px solid var(--brand-espresso); padding: 12px; text-align: center; border-radius: 4px; background: var(--bg-card);">
                 <div style="font-size: 11px; font-weight: 800; color: var(--brand-espresso);">VIP</div>
                 <div style="font-size: 10px; color: var(--text-muted);">0 - 299 PTS</div>
               </div>
-              <div class="tier-card" style="flex: 1; border: 1px solid var(--border-subtle); padding: 12px; text-align: center; border-radius: 4px;">
+              <div class="tier-card"
+                style="flex: 1; border: 1px solid var(--border-subtle); padding: 12px; text-align: center; border-radius: 4px;">
                 <div style="font-size: 11px; font-weight: 800; color: var(--brand-espresso);">A-LIST</div>
                 <div style="font-size: 10px; color: var(--text-muted);">300 - 999 PTS</div>
               </div>
-              <div class="tier-card" style="flex: 1; border: 1px solid var(--border-subtle); padding: 12px; text-align: center; border-radius: 4px;">
+              <div class="tier-card"
+                style="flex: 1; border: 1px solid var(--border-subtle); padding: 12px; text-align: center; border-radius: 4px;">
                 <div style="font-size: 11px; font-weight: 800; color: var(--brand-espresso);">ALL ACCESS</div>
                 <div style="font-size: 10px; color: var(--text-muted);">1,000+ PTS</div>
               </div>
@@ -2316,15 +3230,17 @@
         <!-- Panel 4: SHIPPING INFORMATION -->
         <div class="account-tab-panel" id="panel-shipping" style="display: none;">
           <div class="account-form-card">
-            <h3 style="font-size: 18px; margin-bottom: 20px; color: var(--brand-espresso);">Primary Shipping Address</h3>
+            <h3 style="font-size: 18px; margin-bottom: 20px; color: var(--brand-espresso);">Primary Shipping Address
+            </h3>
             <p style="font-size: 14px; line-height: 1.8; color: var(--brand-espresso);">
-              <strong>Sameera Maqsood</strong><br/>
-              402, Pali Hill Residency, Bandra West<br/>
-              Mumbai, Maharashtra - 400050<br/>
-              India<br/>
+              <strong>Sameera Maqsood</strong><br />
+              402, Pali Hill Residency, Bandra West<br />
+              Mumbai, Maharashtra - 400050<br />
+              India<br />
               Phone: +91 98200 12345
             </p>
-            <div style="margin-top: 20px; font-size: 12px; color: #265431; background: #F1F6F2; padding: 10px 14px; border-radius: 3px; border: 1px solid #D1E2D6;">
+            <div
+              style="margin-top: 20px; font-size: 12px; color: #265431; background: #F1F6F2; padding: 10px 14px; border-radius: 3px; border: 1px solid #D1E2D6;">
               ✓ Verified Address for Delivery Duty Paid (DDP) Express Fulfillment
             </div>
           </div>
@@ -2333,7 +3249,8 @@
         <!-- Panel 5: COMMUNICATION PREFERENCES -->
         <div class="account-tab-panel" id="panel-preferences" style="display: none;">
           <div class="account-form-card">
-            <h3 style="font-size: 18px; margin-bottom: 20px; color: var(--brand-espresso);">Communication & Privacy Controls</h3>
+            <h3 style="font-size: 18px; margin-bottom: 20px; color: var(--brand-espresso);">Communication & Privacy
+              Controls</h3>
             <div style="display: flex; flex-direction: column; gap: 14px; font-size: 13px;">
               <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
                 <input type="checkbox" id="pref-email" checked />
@@ -2352,7 +3269,8 @@
                 <span>India DPDPA Data Consent (Compliant with Digital Personal Data Protection Act 2023)</span>
               </label>
             </div>
-            <button class="btn-start-shopping" style="margin-top: 24px; padding: 10px 24px;" onclick="savePreferences()">Save Preferences</button>
+            <button class="btn-start-shopping" style="margin-top: 24px; padding: 10px 24px;"
+              onclick="savePreferences()">Save Preferences</button>
             <div id="pref-status-msg" style="margin-top: 10px; font-size: 12px; color: #265431;"></div>
           </div>
         </div>
@@ -2373,7 +3291,8 @@
               <label>16-Digit Gift Card Number</label>
               <input type="text" id="gift-card-num-input" placeholder="e.g. 6034 8920 1234 5678" />
             </div>
-            <button class="btn-start-shopping" style="padding: 10px 24px;" onclick="checkGiftCardBalance()">Check Balance</button>
+            <button class="btn-start-shopping" style="padding: 10px 24px;" onclick="checkGiftCardBalance()">Check
+              Balance</button>
             <div id="gift-card-result" style="margin-top: 16px; font-size: 13px; font-weight: 600;"></div>
           </div>
         </div>
@@ -2386,7 +3305,9 @@
     <!-- Black Friday / Sitewide Banner -->
     <div class="auth-promo-banner">
       <div class="auth-promo-left">BLACK FRIDAY</div>
-      <div class="auth-promo-right">30% Off<br/><span style="font-size: 13px; font-family: inherit; font-style: normal; text-transform: lowercase;">sitewide</span></div>
+      <div class="auth-promo-right">30% Off<br /><span
+          style="font-size: 13px; font-family: inherit; font-style: normal; text-transform: lowercase;">sitewide</span>
+      </div>
     </div>
 
     <!-- Tabs: JOIN NOW vs SIGN IN -->
@@ -2410,7 +3331,8 @@
       </div>
       <div class="auth-input-group">
         <input type="password" class="auth-input" id="auth-join-password" placeholder="Password" />
-        <button type="button" class="auth-pw-toggle" onclick="togglePasswordVisibility('auth-join-password', this)" title="Toggle password visibility">👁</button>
+        <button type="button" class="auth-pw-toggle" onclick="togglePasswordVisibility('auth-join-password', this)"
+          title="Toggle password visibility">👁</button>
       </div>
       <div class="auth-input-group">
         <input type="tel" class="auth-input" id="auth-join-phone" placeholder="Phone number (optional)" />
@@ -2418,21 +3340,27 @@
       </div>
       <button class="auth-btn-submit" id="btn-auth-join" onclick="executeJoinNow()">JOIN NOW</button>
       <div class="auth-disclaimer">
-        By clicking "Join Now," you agree to our <a onclick="openCms('terms-of-use')">Terms</a>, acknowledge our <a onclick="openCms('privacy-policy')">Privacy Policy</a>, and agree to receive marketing communications.
+        By clicking "Join Now," you agree to our <a onclick="openCms('terms-of-use')">Terms</a>, acknowledge our <a
+          onclick="openCms('privacy-policy')">Privacy Policy</a>, and agree to receive marketing communications.
       </div>
     </div>
 
     <!-- SIGN IN Panel -->
     <div id="auth-panel-signin" style="display: none;">
       <div class="auth-input-group">
-        <input type="email" class="auth-input" id="auth-signin-email" placeholder="Email" value="sameeramaq@gmail.com" />
+        <input type="email" class="auth-input" id="auth-signin-email" placeholder="Email"
+          value="sameeramaq@gmail.com" />
       </div>
       <div class="auth-input-group">
-        <input type="password" class="auth-input" id="auth-signin-password" placeholder="Password" value="AloYogaVIP2026!" />
-        <button type="button" class="auth-pw-toggle" onclick="togglePasswordVisibility('auth-signin-password', this)" title="Toggle password visibility">👁</button>
+        <input type="password" class="auth-input" id="auth-signin-password" placeholder="Password"
+          value="AloYogaVIP2026!" />
+        <button type="button" class="auth-pw-toggle" onclick="togglePasswordVisibility('auth-signin-password', this)"
+          title="Toggle password visibility">👁</button>
       </div>
       <div style="text-align: right; margin-top: -4px; margin-bottom: 12px;">
-        <a onclick="showForgotPasswordPrompt()" style="font-size: 12px; color: var(--brand-espresso); text-decoration: underline; cursor: pointer;">Forgot your password?</a>
+        <a onclick="showForgotPasswordPrompt()"
+          style="font-size: 12px; color: var(--brand-espresso); text-decoration: underline; cursor: pointer;">Forgot
+          your password?</a>
       </div>
       <button class="auth-btn-submit" id="btn-auth-signin" onclick="executeSignIn()">SIGN IN</button>
       <div class="auth-disclaimer" style="margin-top: 18px;">
@@ -2469,7 +3397,8 @@
             <input type="checkbox" id="gift-message-checkbox" onchange="toggleGiftMessageTextarea(this.checked)" />
             <span>Add a Gift Message</span>
           </label>
-          <textarea class="gift-message-textarea" id="gift-message-textarea" placeholder="Enter your personalized gift message (complimentary embossed card included)..."></textarea>
+          <textarea class="gift-message-textarea" id="gift-message-textarea"
+            placeholder="Enter your personalized gift message (complimentary embossed card included)..."></textarea>
         </div>
 
         <!-- Order Summary Card -->
@@ -2498,13 +3427,16 @@
             <span id="help-toggle-icon">▲</span>
           </div>
           <div class="cart-help-content" id="help-content-box">
-            <p>Visit our <a onclick="openCms('faq')">FAQ page</a>, call us at <a href="tel:855-793-3100">855-793-3100</a>, or <a onclick="openLiveSupport()">chat us</a> using our live support:</p>
+            <p>Visit our <a onclick="openCms('faq')">FAQ page</a>, call us at <a
+                href="tel:855-793-3100">855-793-3100</a>, or <a onclick="openLiveSupport()">chat us</a> using our live
+              support:</p>
             <p style="margin-top: 8px;">
-              Mon-Fri: 6:00AM - 6:30PM PT<br/>
+              Mon-Fri: 6:00AM - 6:30PM PT<br />
               Sat-Sun: 8:00AM - 4:30PM PT
             </p>
             <p style="margin-top: 8px;">
-              <a href="mailto:support@yoga.com">Email us</a> anytime. If you contact us after business hours, we will get back to you the following business day.
+              <a href="mailto:support@yoga.com">Email us</a> anytime. If you contact us after business hours, we will
+              get back to you the following business day.
             </p>
           </div>
         </div>
@@ -2516,7 +3448,8 @@
             <span id="returns-toggle-icon">▼</span>
           </div>
           <div class="cart-help-content" id="returns-content-box" style="display: none;">
-            <p>We will gladly accept unworn, unwashed, unaltered or unused merchandise in sellable condition for a refund through January 10, 2027.</p>
+            <p>We will gladly accept unworn, unwashed, unaltered or unused merchandise in sellable condition for a
+              refund through January 10, 2027.</p>
           </div>
         </div>
       </div>
@@ -2545,7 +3478,8 @@
       <div class="pdp-info-col">
         <div class="pdp-tag-row">
           <span class="pdp-discount-tag" id="pdp-discount-tag">SAVE 30%</span>
-          <span id="pdp-badge-label" style="font-size: 10px; font-weight: 700; color: var(--brand-terracotta); text-transform: uppercase;"></span>
+          <span id="pdp-badge-label"
+            style="font-size: 10px; font-weight: 700; color: var(--brand-terracotta); text-transform: uppercase;"></span>
         </div>
 
         <h1 class="pdp-title" id="pdp-title">YOGA Runner (Unisex)</h1>
@@ -2632,7 +3566,8 @@
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
         <h2 class="pdp-section-heading" style="margin-bottom: 0;">HOW TO STYLE IT</h2>
         <div class="pdp-styling-tabs">
-          <button class="pdp-styling-tab-btn active" id="pdp-style-tab-women" onclick="switchPdpStylingTab('women')">WOMEN</button>
+          <button class="pdp-styling-tab-btn active" id="pdp-style-tab-women"
+            onclick="switchPdpStylingTab('women')">WOMEN</button>
           <button class="pdp-styling-tab-btn" id="pdp-style-tab-men" onclick="switchPdpStylingTab('men')">MEN</button>
         </div>
       </div>
@@ -2642,13 +3577,15 @@
     <!-- SIMILAR ITEMS Carousel -->
     <div class="pdp-comparison-section">
       <h2 class="pdp-section-heading">SIMILAR ITEMS</h2>
-      <div class="product-grid" id="pdp-similar-grid" style="grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));"></div>
+      <div class="product-grid" id="pdp-similar-grid"
+        style="grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));"></div>
     </div>
 
     <!-- STYLE INSPIRATION (Community Lookbook) -->
     <div class="pdp-comparison-section">
       <h2 class="pdp-section-heading">STYLE INSPIRATION</h2>
-      <p style="color: var(--text-muted); font-size: 13px; margin-top: -16px; margin-bottom: 20px;">Shop our best looks, styled by you</p>
+      <p style="color: var(--text-muted); font-size: 13px; margin-top: -16px; margin-bottom: 20px;">Shop our best looks,
+        styled by you</p>
       <div id="pdp-lookbook-row" style="display: flex; gap: 12px; flex-wrap: wrap;">
         <span class="social-pill">@meliniseri</span>
         <span class="social-pill">@giizeleoliveira</span>
@@ -2681,7 +3618,9 @@
 
       <!-- Filters & Search -->
       <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 24px; flex-wrap: wrap;">
-        <input type="text" id="pdp-review-search" placeholder="Search Reviews..." style="max-width: 280px; padding: 10px 14px; border: 1px solid var(--border-subtle); border-radius: 2px; font-size: 12px; outline: none;" oninput="filterReviewsText(this.value)" />
+        <input type="text" id="pdp-review-search" placeholder="Search Reviews..."
+          style="max-width: 280px; padding: 10px 14px; border: 1px solid var(--border-subtle); border-radius: 2px; font-size: 12px; outline: none;"
+          oninput="filterReviewsText(this.value)" />
         <button class="filter-pill" onclick="filterReviewsByTag('comfort')">COMFORT</button>
         <button class="filter-pill" onclick="filterReviewsByTag('satisfaction')">SATISFACTION</button>
         <button class="filter-pill" onclick="filterReviewsByTag('all')">ALL FILTERS</button>
@@ -2696,7 +3635,8 @@
   <div class="alo-modal-overlay" id="pdp-size-guide-modal">
     <div class="alo-modal-card" style="max-width: 580px;">
       <h2 class="alo-modal-title">Footwear & Apparel Sizing Guide</h2>
-      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">All footwear styles are unisex. For standard fit, select your true men's or women's conversion below.</p>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">All footwear styles are unisex. For
+        standard fit, select your true men's or women's conversion below.</p>
       <div style="overflow-x: auto; margin-bottom: 20px;">
         <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
           <thead>
@@ -2708,10 +3648,30 @@
             </tr>
           </thead>
           <tbody>
-            <tr><td style="padding: 8px; border: 1px solid var(--border-subtle);">7M</td><td style="padding: 8px; border: 1px solid var(--border-subtle);">8.5W</td><td style="padding: 8px; border: 1px solid var(--border-subtle);">40</td><td style="padding: 8px; border: 1px solid var(--border-subtle);">25.0 cm</td></tr>
-            <tr><td style="padding: 8px; border: 1px solid var(--border-subtle);">8M</td><td style="padding: 8px; border: 1px solid var(--border-subtle);">9.5W</td><td style="padding: 8px; border: 1px solid var(--border-subtle);">41</td><td style="padding: 8px; border: 1px solid var(--border-subtle);">26.0 cm</td></tr>
-            <tr><td style="padding: 8px; border: 1px solid var(--border-subtle);">9M</td><td style="padding: 8px; border: 1px solid var(--border-subtle);">10.5W</td><td style="padding: 8px; border: 1px solid var(--border-subtle);">42.5</td><td style="padding: 8px; border: 1px solid var(--border-subtle);">27.0 cm</td></tr>
-            <tr><td style="padding: 8px; border: 1px solid var(--border-subtle);">10M</td><td style="padding: 8px; border: 1px solid var(--border-subtle);">11.5W</td><td style="padding: 8px; border: 1px solid var(--border-subtle);">44</td><td style="padding: 8px; border: 1px solid var(--border-subtle);">28.0 cm</td></tr>
+            <tr>
+              <td style="padding: 8px; border: 1px solid var(--border-subtle);">7M</td>
+              <td style="padding: 8px; border: 1px solid var(--border-subtle);">8.5W</td>
+              <td style="padding: 8px; border: 1px solid var(--border-subtle);">40</td>
+              <td style="padding: 8px; border: 1px solid var(--border-subtle);">25.0 cm</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px; border: 1px solid var(--border-subtle);">8M</td>
+              <td style="padding: 8px; border: 1px solid var(--border-subtle);">9.5W</td>
+              <td style="padding: 8px; border: 1px solid var(--border-subtle);">41</td>
+              <td style="padding: 8px; border: 1px solid var(--border-subtle);">26.0 cm</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px; border: 1px solid var(--border-subtle);">9M</td>
+              <td style="padding: 8px; border: 1px solid var(--border-subtle);">10.5W</td>
+              <td style="padding: 8px; border: 1px solid var(--border-subtle);">42.5</td>
+              <td style="padding: 8px; border: 1px solid var(--border-subtle);">27.0 cm</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px; border: 1px solid var(--border-subtle);">10M</td>
+              <td style="padding: 8px; border: 1px solid var(--border-subtle);">11.5W</td>
+              <td style="padding: 8px; border: 1px solid var(--border-subtle);">44</td>
+              <td style="padding: 8px; border: 1px solid var(--border-subtle);">28.0 cm</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -2722,8 +3682,10 @@
   <div class="alo-modal-overlay" id="pdp-fit-desc-modal">
     <div class="alo-modal-card" style="max-width: 580px;">
       <h2 class="alo-modal-title">Fit & Performance Description</h2>
-      <p style="font-size: 13px; line-height: 1.6; color: var(--brand-espresso); margin-bottom: 16px;" id="pdp-fit-modal-content">
-        Unisex style—true to size. Extra-firm cushioning with responsive impact dispersion. For half sizes or wider feet, we recommend sizing up half a size.
+      <p style="font-size: 13px; line-height: 1.6; color: var(--brand-espresso); margin-bottom: 16px;"
+        id="pdp-fit-modal-content">
+        Unisex style—true to size. Extra-firm cushioning with responsive impact dispersion. For half sizes or wider
+        feet, we recommend sizing up half a size.
       </p>
       <button class="alo-modal-btn" onclick="closePdpFitDescriptionModal()">Close Description</button>
     </div>
@@ -2733,54 +3695,75 @@
   <section class="catalog-section" id="catalog-section">
     <!-- GIFT GUIDE HERO BANNER & JUMP TO FILTER BAR (Exact Alo Yoga Spec) -->
     <div id="gift-guide-hero" style="display: none; margin-bottom: 32px;">
-      <div style="position: relative; width: 100%; height: 360px; border-radius: 4px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: url('https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;">
+      <div
+        style="position: relative; width: 100%; height: 360px; border-radius: 4px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: url('https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;">
         <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.28);"></div>
         <div style="position: relative; z-index: 2; text-align: center; color: #FFF; padding: 20px;">
-          <h1 style="font-family: var(--font-heading); font-size: 42px; font-weight: 300; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 22px; text-shadow: 0 2px 14px rgba(0,0,0,0.4);">
+          <h1
+            style="font-family: var(--font-heading); font-size: 42px; font-weight: 300; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 22px; text-shadow: 0 2px 14px rgba(0,0,0,0.4);">
             YOGA <span style="font-size: 30px; font-family: serif;">✦</span> Gift Guide
           </h1>
-          <button class="btn-shop-all-gifts" id="btn-hero-shop-all-gifts" onclick="filterProducts('category', 'gift-shop-all', 'Shop All Gifts', 'Gift Guide')" style="background: #FFF; color: #111; border: none; padding: 14px 38px; font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; border-radius: 2px; transition: all 0.2s;">
+          <button class="btn-shop-all-gifts" id="btn-hero-shop-all-gifts"
+            onclick="filterProducts('category', 'gift-shop-all', 'Shop All Gifts', 'Gift Guide')"
+            style="background: #FFF; color: #111; border: none; padding: 14px 38px; font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; border-radius: 2px; transition: all 0.2s;">
             SHOP ALL GIFTS
           </button>
         </div>
       </div>
 
       <!-- Jump To Bar -->
-      <div style="display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 24px; flex-wrap: wrap;">
-        <span style="font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brand-espresso);">JUMP TO:</span>
-        <button class="pill-link" id="jump-btn-her" onclick="filterProducts('category', 'gifts-for-her', 'Gifts For Her', 'Gift Guide')" style="padding: 8px 20px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase;">FOR HER</button>
-        <button class="pill-link" id="jump-btn-him" onclick="filterProducts('category', 'gifts-for-him', 'Gifts For Him', 'Gift Guide')" style="padding: 8px 20px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase;">FOR HIM</button>
-        <button class="pill-link" id="jump-btn-shoes" onclick="filterProducts('category', 'shoes', 'Shoes & Footwear', 'Gift Guide')" style="padding: 8px 20px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase;">SHOES</button>
-        <button class="pill-link" id="jump-btn-top-rated" onclick="filterProducts('category', 'top-rated-gifts', 'Top Rated Gifts', 'Gift Guide')" style="padding: 8px 20px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase;">TOP RATED GIFTS</button>
+      <div
+        style="display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 24px; flex-wrap: wrap;">
+        <span
+          style="font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brand-espresso);">JUMP
+          TO:</span>
+        <button class="pill-link" id="jump-btn-her"
+          onclick="filterProducts('category', 'gifts-for-her', 'Gifts For Her', 'Gift Guide')"
+          style="padding: 8px 20px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase;">FOR
+          HER</button>
+        <button class="pill-link" id="jump-btn-him"
+          onclick="filterProducts('category', 'gifts-for-him', 'Gifts For Him', 'Gift Guide')"
+          style="padding: 8px 20px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase;">FOR
+          HIM</button>
+        <button class="pill-link" id="jump-btn-shoes"
+          onclick="filterProducts('category', 'shoes', 'Shoes & Footwear', 'Gift Guide')"
+          style="padding: 8px 20px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase;">SHOES</button>
+        <button class="pill-link" id="jump-btn-top-rated"
+          onclick="filterProducts('category', 'top-rated-gifts', 'Top Rated Gifts', 'Gift Guide')"
+          style="padding: 8px 20px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase;">TOP
+          RATED GIFTS</button>
       </div>
     </div>
 
     <div class="section-header">
       <div>
         <h2 class="section-title" id="catalog-heading">Save 30% — Trending Now</h2>
-        <p id="catalog-subheading" style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Double-knit Airlift, Peach-finish Alosoft, and Accolade French Terry</p>
+        <p id="catalog-subheading" style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Double-knit
+          Airlift, Peach-finish Alosoft, and Accolade French Terry</p>
       </div>
       <div id="catalog-filter-badge" style="display: none;">
-        <button class="pill-link" onclick="filterProducts('all', null, 'Save 30% — All Products')" style="background: var(--brand-terracotta); color: #FFF; border-color: var(--brand-terracotta);">
+        <button class="pill-link" onclick="filterProducts('all', null, 'Save 30% — All Products')"
+          style="background: var(--brand-terracotta); color: #FFF; border-color: var(--brand-terracotta);">
           ✕ Reset Filter
         </button>
       </div>
     </div>
 
     <!-- Catalog Interactive Filter & Sort Bar -->
-    <div class="catalog-filter-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border-subtle); margin-bottom: 24px; position: relative;">
+    <div class="catalog-filter-bar"
+      style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border-subtle); margin-bottom: 24px; position: relative;">
       <div class="filter-btn-group" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
         <button class="filter-pill-btn" id="btn-filter-all" onclick="openFilterDrawer()">
           <span>ALL FILTERS ⑂</span>
         </button>
-        <button class="filter-pill-btn" id="btn-filter-size" onclick="toggleFilterPopover('size')">
-          <span>SIZE ▾</span>
+        <button class="filter-pill-btn" id="btn-filter-size" onclick="openFilterDrawerToSection('size')">
+          <span>SIZE</span>
         </button>
-        <button class="filter-pill-btn" id="btn-filter-color" onclick="toggleFilterPopover('color')">
-          <span>COLOR ▾</span>
+        <button class="filter-pill-btn" id="btn-filter-color" onclick="openFilterDrawerToSection('color')">
+          <span>COLOR</span>
         </button>
-        <button class="filter-pill-btn" id="btn-filter-fabric" onclick="toggleFilterPopover('fabric')">
-          <span>FABRIC ▾</span>
+        <button class="filter-pill-btn" id="btn-filter-fabric" onclick="openFilterDrawerToSection('fabric')">
+          <span>FABRIC</span>
         </button>
       </div>
 
@@ -2789,17 +3772,24 @@
         <button class="sort-btn" id="btn-sort" onclick="toggleSortMenu()">
           <span id="sort-label">Sort by ▾</span>
         </button>
-        <div class="sort-menu" id="sort-menu" style="display: none; position: absolute; right: 0; top: calc(100% + 6px); background: #FFF; border: 1px solid var(--border-subtle); box-shadow: 0 8px 24px rgba(0,0,0,0.12); border-radius: 3px; min-width: 180px; z-index: 100;">
-          <div class="sort-option" onclick="applySort('default', 'Default')" style="padding: 10px 16px; font-size: 12px; cursor: pointer;">Default</div>
-          <div class="sort-option" onclick="applySort('price-asc', 'Price: Low to High')" style="padding: 10px 16px; font-size: 12px; cursor: pointer;">Price: Low to High</div>
-          <div class="sort-option" onclick="applySort('price-desc', 'Price: High to Low')" style="padding: 10px 16px; font-size: 12px; cursor: pointer;">Price: High to Low</div>
-          <div class="sort-option" onclick="applySort('newest', 'Newest')" style="padding: 10px 16px; font-size: 12px; cursor: pointer;">Newest</div>
-          <div class="sort-option" onclick="applySort('bestselling', 'Best Selling')" style="padding: 10px 16px; font-size: 12px; cursor: pointer;">Best Selling</div>
+        <div class="sort-menu" id="sort-menu"
+          style="display: none; position: absolute; right: 0; top: calc(100% + 6px); background: #FFF; border: 1px solid var(--border-subtle); box-shadow: 0 8px 24px rgba(0,0,0,0.12); border-radius: 3px; min-width: 180px; z-index: 100;">
+          <div class="sort-option" onclick="applySort('default', 'Default')"
+            style="padding: 10px 16px; font-size: 12px; cursor: pointer;">Default</div>
+          <div class="sort-option" onclick="applySort('price-asc', 'Price: Low to High')"
+            style="padding: 10px 16px; font-size: 12px; cursor: pointer;">Price: Low to High</div>
+          <div class="sort-option" onclick="applySort('price-desc', 'Price: High to Low')"
+            style="padding: 10px 16px; font-size: 12px; cursor: pointer;">Price: High to Low</div>
+          <div class="sort-option" onclick="applySort('newest', 'Newest')"
+            style="padding: 10px 16px; font-size: 12px; cursor: pointer;">Newest</div>
+          <div class="sort-option" onclick="applySort('bestselling', 'Best Selling')"
+            style="padding: 10px 16px; font-size: 12px; cursor: pointer;">Best Selling</div>
         </div>
       </div>
 
       <!-- Popover for Multi-Facet Filters -->
-      <div class="filter-popover" id="filter-popover" style="display: none; position: absolute; top: calc(100% + 6px); left: 0; background: #FFF; border: 1px solid var(--border-subtle); box-shadow: 0 12px 32px rgba(0,0,0,0.15); border-radius: 4px; padding: 20px; z-index: 100; min-width: 320px;">
+      <div class="filter-popover" id="filter-popover"
+        style="display: none; position: absolute; top: calc(100% + 6px); left: 0; background: #FFF; border: 1px solid var(--border-subtle); box-shadow: 0 12px 32px rgba(0,0,0,0.15); border-radius: 4px; padding: 20px; z-index: 100; min-width: 320px;">
         <div id="filter-popover-content"></div>
       </div>
     </div>
@@ -2861,11 +3851,14 @@
       </div>
       <div class="footer-col">
         <h4>Language & Region</h4>
-        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">🇮🇳 India (INR ₹) | All Duties & Taxes Included</p>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">🇮🇳 India (INR ₹) | All Duties &
+          Taxes Included</p>
         <p style="font-size: 12px; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px;">
           Delivery Duty Paid (DDP) automatically calculated for Indian addresses.
         </p>
-        <a href="/admin.html" target="_blank" style="color: var(--brand-terracotta); font-weight: 700; font-size: 12px; text-decoration: none;">↗ Open YOGA Admin Ingestion Portal</a>
+        <a href="/admin.html" target="_blank"
+          style="color: var(--brand-terracotta); font-weight: 700; font-size: 12px; text-decoration: none;">↗ Open YOGA
+          Admin Ingestion Portal</a>
       </div>
     </div>
     <div class="footer-bottom">
@@ -2892,75 +3885,193 @@
     </div>
 
     <div class="filter-drawer-body">
-      <!-- Accordion 1: PRODUCT TYPE -->
-      <div class="filter-accordion-item">
-        <div class="filter-accordion-header" onclick="toggleFilterAccordion('pt')">
-          <span class="filter-accordion-title">PRODUCT TYPE</span>
-          <span class="filter-accordion-icon" id="acc-icon-pt">▲</span>
-        </div>
-        <div class="filter-accordion-content" id="acc-content-pt">
-          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;">Women</div>
-          <div id="filter-product-types-list">
-            <!-- Dynamically populated from /api/catalog/filters -->
-          </div>
-        </div>
-      </div>
-
-      <!-- Accordion 2: SIZE -->
-      <div class="filter-accordion-item">
+      <!-- Accordion 1: SIZE (Exact User Spec Image 3) -->
+      <div class="filter-accordion-item" id="filter-sec-sz">
         <div class="filter-accordion-header" onclick="toggleFilterAccordion('sz')">
           <span class="filter-accordion-title">SIZE</span>
           <span class="filter-accordion-icon" id="acc-icon-sz">▲</span>
         </div>
         <div class="filter-accordion-content" id="acc-content-sz">
-          <div class="size-box-grid" id="filter-sizes-list">
+          <div style="font-size: 13px; font-weight: 700; color: #111; margin: 4px 0 10px;">Clothing</div>
+          <div class="size-box-grid" id="filter-clothing-sizes-list"
+            style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px;">
             <button class="size-box-btn" id="sz-btn-XXS" onclick="toggleSizeFilter('XXS')">XXS</button>
             <button class="size-box-btn" id="sz-btn-XS" onclick="toggleSizeFilter('XS')">XS</button>
             <button class="size-box-btn" id="sz-btn-S" onclick="toggleSizeFilter('S')">S</button>
             <button class="size-box-btn" id="sz-btn-M" onclick="toggleSizeFilter('M')">M</button>
             <button class="size-box-btn" id="sz-btn-L" onclick="toggleSizeFilter('L')">L</button>
             <button class="size-box-btn" id="sz-btn-XL" onclick="toggleSizeFilter('XL')">XL</button>
+            <button class="size-box-btn" id="sz-btn-2XL" onclick="toggleSizeFilter('2XL')">2XL</button>
+          </div>
+          <div style="font-size: 13px; font-weight: 700; color: #111; margin: 12px 0 10px;">Shoes</div>
+          <div class="size-box-grid" id="filter-shoe-sizes-list"
+            style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+            <button class="size-box-btn" id="sz-btn-3-5m-5w" onclick="toggleSizeFilter('3.5m/5w')">3.5m/5w</button>
+            <button class="size-box-btn" id="sz-btn-4m-5-5w" onclick="toggleSizeFilter('4m/5.5w')">4m/5.5w</button>
+            <button class="size-box-btn" id="sz-btn-4-5m-6w" onclick="toggleSizeFilter('4.5m/6w')">4.5m/6w</button>
+            <button class="size-box-btn" id="sz-btn-5m-6-5w" onclick="toggleSizeFilter('5m/6.5w')">5m/6.5w</button>
+            <button class="size-box-btn" id="sz-btn-5-5m-7w" onclick="toggleSizeFilter('5.5m/7w')">5.5m/7w</button>
+            <button class="size-box-btn" id="sz-btn-6m-7-5w" onclick="toggleSizeFilter('6m/7.5w')">6m/7.5w</button>
+            <button class="size-box-btn" id="sz-btn-6-5m-8w" onclick="toggleSizeFilter('6.5m/8w')">6.5m/8w</button>
+            <button class="size-box-btn" id="sz-btn-7m-8-5w" onclick="toggleSizeFilter('7m/8.5w')">7m/8.5w</button>
+            <button class="size-box-btn" id="sz-btn-7-5m-9w" onclick="toggleSizeFilter('7.5m/9w')">7.5m/9w</button>
+            <button class="size-box-btn" id="sz-btn-8m-9-5w" onclick="toggleSizeFilter('8m/9.5w')">8m/9.5w</button>
+            <button class="size-box-btn" id="sz-btn-8-5m-10w" onclick="toggleSizeFilter('8.5m/10w')">8.5m/10w</button>
+            <button class="size-box-btn" id="sz-btn-9m-10-5w" onclick="toggleSizeFilter('9m/10.5w')">9m/10.5w</button>
+            <button class="size-box-btn" id="sz-btn-9-5m-11w" onclick="toggleSizeFilter('9.5m/11w')">9.5m/11w</button>
+            <button class="size-box-btn" id="sz-btn-10m-11-5w"
+              onclick="toggleSizeFilter('10m/11.5w')">10m/11.5w</button>
+            <button class="size-box-btn" id="sz-btn-10-5m-12w"
+              onclick="toggleSizeFilter('10.5m/12w')">10.5m/12w</button>
+            <button class="size-box-btn" id="sz-btn-11m-12-5w"
+              onclick="toggleSizeFilter('11m/12.5w')">11m/12.5w</button>
+            <button class="size-box-btn" id="sz-btn-11-5m-13w"
+              onclick="toggleSizeFilter('11.5m/13w')">11.5m/13w</button>
+            <button class="size-box-btn" id="sz-btn-12m-13-5w"
+              onclick="toggleSizeFilter('12m/13.5w')">12m/13.5w</button>
+            <button class="size-box-btn" id="sz-btn-12-5m-14w"
+              onclick="toggleSizeFilter('12.5m/14w')">12.5m/14w</button>
+            <button class="size-box-btn" id="sz-btn-13m-14-5w"
+              onclick="toggleSizeFilter('13m/14.5w')">13m/14.5w</button>
+            <button class="size-box-btn" id="sz-btn-13-5m-15w"
+              onclick="toggleSizeFilter('13.5m/15w')">13.5m/15w</button>
+            <button class="size-box-btn" id="sz-btn-14m-15-5w"
+              onclick="toggleSizeFilter('14m/15.5w')">14m/15.5w</button>
+            <button class="size-box-btn" id="sz-btn-14-5m-16w"
+              onclick="toggleSizeFilter('14.5m/16w')">14.5m/16w</button>
+            <button class="size-box-btn" id="sz-btn-15m-16-5w"
+              onclick="toggleSizeFilter('15m/16.5w')">15m/16.5w</button>
+            <button class="size-box-btn" id="sz-btn-15-5m-17w"
+              onclick="toggleSizeFilter('15.5m/17w')">15.5m/17w</button>
+            <button class="size-box-btn" id="sz-btn-16m-17-5w"
+              onclick="toggleSizeFilter('16m/17.5w')">16m/17.5w</button>
+            <button class="size-box-btn" id="sz-btn-3m-4-5w" onclick="toggleSizeFilter('3m/4.5w')">3m/4.5w</button>
+            <button class="size-box-btn" id="sz-btn-10m-12w" onclick="toggleSizeFilter('10m/12w')">10m/12w</button>
+            <button class="size-box-btn" id="sz-btn-11m-13w" onclick="toggleSizeFilter('11m/13w')">11m/13w</button>
+            <button class="size-box-btn" id="sz-btn-12m-14w" onclick="toggleSizeFilter('12m/14w')">12m/14w</button>
+            <button class="size-box-btn" id="sz-btn-13m-15w" onclick="toggleSizeFilter('13m/15w')">13m/15w</button>
+            <button class="size-box-btn" id="sz-btn-14m-16w" onclick="toggleSizeFilter('14m/16w')">14m/16w</button>
+            <button class="size-box-btn" id="sz-btn-15m-17w" onclick="toggleSizeFilter('15m/17w')">15m/17w</button>
+            <button class="size-box-btn" id="sz-btn-4m-6w" onclick="toggleSizeFilter('4m/6w')">4m/6w</button>
+            <button class="size-box-btn" id="sz-btn-5m-7w" onclick="toggleSizeFilter('5m/7w')">5m/7w</button>
+            <button class="size-box-btn" id="sz-btn-6m-8w" onclick="toggleSizeFilter('6m/8w')">6m/8w</button>
           </div>
         </div>
       </div>
 
-      <!-- Accordion 3: COLOR -->
-      <div class="filter-accordion-item">
+      <!-- Accordion 2: COLOR (Exact User Spec Image 2) -->
+      <div class="filter-accordion-item" id="filter-sec-col">
         <div class="filter-accordion-header" onclick="toggleFilterAccordion('col')">
           <span class="filter-accordion-title">COLOR</span>
           <span class="filter-accordion-icon" id="acc-icon-col">▼</span>
         </div>
         <div class="filter-accordion-content collapsed" id="acc-content-col">
           <div id="filter-colors-list">
-            <!-- Dynamically populated from /api/catalog/filters -->
+            <label class="filter-checkbox-item"><input type="checkbox" id="chk-col-beige"
+                onchange="toggleColorFilter('Beige', this.checked)"><span
+                style="width: 16px; height: 16px; border-radius: 50%; background: #D8BC9D; border: 1px solid rgba(0,0,0,0.15); display: inline-block;"></span><span>Beige</span></label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="chk-col-black"
+                onchange="toggleColorFilter('Black', this.checked)"><span
+                style="width: 16px; height: 16px; border-radius: 50%; background: #000000; border: 1px solid rgba(0,0,0,0.15); display: inline-block;"></span><span>Black</span></label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="chk-col-blue"
+                onchange="toggleColorFilter('Blue', this.checked)"><span
+                style="width: 16px; height: 16px; border-radius: 50%; background: #1E3A8A; border: 1px solid rgba(0,0,0,0.15); display: inline-block;"></span><span>Blue</span></label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="chk-col-brown"
+                onchange="toggleColorFilter('Brown', this.checked)"><span
+                style="width: 16px; height: 16px; border-radius: 50%; background: #704214; border: 1px solid rgba(0,0,0,0.15); display: inline-block;"></span><span>Brown</span></label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="chk-col-green"
+                onchange="toggleColorFilter('Green', this.checked)"><span
+                style="width: 16px; height: 16px; border-radius: 50%; background: #005C29; border: 1px solid rgba(0,0,0,0.15); display: inline-block;"></span><span>Green</span></label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="chk-col-grey"
+                onchange="toggleColorFilter('Grey', this.checked)"><span
+                style="width: 16px; height: 16px; border-radius: 50%; background: #CCCCCC; border: 1px solid rgba(0,0,0,0.15); display: inline-block;"></span><span>Grey</span></label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="chk-col-orange"
+                onchange="toggleColorFilter('Orange', this.checked)"><span
+                style="width: 16px; height: 16px; border-radius: 50%; background: #EA580C; border: 1px solid rgba(0,0,0,0.15); display: inline-block;"></span><span>Orange</span></label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="chk-col-pink"
+                onchange="toggleColorFilter('Pink', this.checked)"><span
+                style="width: 16px; height: 16px; border-radius: 50%; background: #FFB6C1; border: 1px solid rgba(0,0,0,0.15); display: inline-block;"></span><span>Pink</span></label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="chk-col-purple"
+                onchange="toggleColorFilter('Purple', this.checked)"><span
+                style="width: 16px; height: 16px; border-radius: 50%; background: #800080; border: 1px solid rgba(0,0,0,0.15); display: inline-block;"></span><span>Purple</span></label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="chk-col-red"
+                onchange="toggleColorFilter('Red', this.checked)"><span
+                style="width: 16px; height: 16px; border-radius: 50%; background: #E74C3C; border: 1px solid rgba(0,0,0,0.15); display: inline-block;"></span><span>Red</span></label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="chk-col-white"
+                onchange="toggleColorFilter('White', this.checked)"><span
+                style="width: 16px; height: 16px; border-radius: 50%; background: #FFFFFF; border: 1px solid rgba(0,0,0,0.25); display: inline-block;"></span><span>White</span></label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="chk-col-yellow"
+                onchange="toggleColorFilter('Yellow', this.checked)"><span
+                style="width: 16px; height: 16px; border-radius: 50%; background: #FFD700; border: 1px solid rgba(0,0,0,0.15); display: inline-block;"></span><span>Yellow</span></label>
           </div>
         </div>
       </div>
 
-      <!-- Accordion 4: FABRIC -->
-      <div class="filter-accordion-item">
+      <!-- Accordion 3: FABRIC (Exact User Spec Image 4) -->
+      <div class="filter-accordion-item" id="filter-sec-fab">
         <div class="filter-accordion-header" onclick="toggleFilterAccordion('fab')">
           <span class="filter-accordion-title">FABRIC</span>
           <span class="filter-accordion-icon" id="acc-icon-fab">▼</span>
         </div>
         <div class="filter-accordion-content collapsed" id="acc-content-fab">
           <div id="filter-fabrics-list">
-            <!-- Dynamically populated from /api/catalog/filters -->
+            <label class="filter-checkbox-item"><input type="checkbox" id="chk-fab-airbrush"
+                onchange="toggleFabricFilter('Airbrush', this.checked)"><span>Airbrush</span></label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="chk-fab-airlift"
+                onchange="toggleFabricFilter('Airlift', this.checked)"><span>Airlift</span></label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="chk-fab-softsculpt"
+                onchange="toggleFabricFilter('Alo Softsculpt', this.checked)"><span>Alo Softsculpt</span></label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="chk-fab-alolux"
+                onchange="toggleFabricFilter('Alolux', this.checked)"><span>Alolux</span></label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="chk-fab-alosoft"
+                onchange="toggleFabricFilter('Alosoft', this.checked)"><span>Alosoft</span></label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="chk-fab-cashmere"
+                onchange="toggleFabricFilter('Cashmere', this.checked)"><span>Cashmere</span></label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="chk-fab-doubletake"
+                onchange="toggleFabricFilter('Double Take', this.checked)"><span>Double Take</span></label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="chk-fab-fauxfur"
+                onchange="toggleFabricFilter('Faux Fur', this.checked)"><span>Faux Fur</span></label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="chk-fab-fleece"
+                onchange="toggleFabricFilter('Fleece', this.checked)"><span>Fleece</span></label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="chk-fab-ribbed"
+                onchange="toggleFabricFilter('Ribbed', this.checked)"><span>Ribbed</span></label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="chk-fab-seamless"
+                onchange="toggleFabricFilter('Seamless', this.checked)"><span>Seamless</span></label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="chk-fab-sherpa"
+                onchange="toggleFabricFilter('Sherpa', this.checked)"><span>Sherpa</span></label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="chk-fab-waffle"
+                onchange="toggleFabricFilter('Waffle', this.checked)"><span>Waffle</span></label>
           </div>
         </div>
       </div>
 
-      <!-- Accordion 5: PERCENT OFF -->
-      <div class="filter-accordion-item">
+      <!-- Accordion 4: PERCENT OFF -->
+      <div class="filter-accordion-item" id="filter-sec-pct">
         <div class="filter-accordion-header" onclick="toggleFilterAccordion('pct')">
           <span class="filter-accordion-title">PERCENT OFF</span>
           <span class="filter-accordion-icon" id="acc-icon-pct">▼</span>
         </div>
         <div class="filter-accordion-content collapsed" id="acc-content-pct">
           <div id="filter-discounts-list">
-            <label class="filter-checkbox-item"><input type="checkbox" id="pct-30" onchange="toggleDiscountFilter('30%')"> 30% Off</label>
-            <label class="filter-checkbox-item"><input type="checkbox" id="pct-40" onchange="toggleDiscountFilter('40%')"> 40% Off</label>
-            <label class="filter-checkbox-item"><input type="checkbox" id="pct-50" onchange="toggleDiscountFilter('50%')"> 50% Off</label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="pct-30"
+                onchange="toggleDiscountFilter('30%')"> <span>30% Off</span></label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="pct-40"
+                onchange="toggleDiscountFilter('40%')"> <span>40% Off</span></label>
+            <label class="filter-checkbox-item"><input type="checkbox" id="pct-50"
+                onchange="toggleDiscountFilter('50%')"> <span>50% Off</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Accordion 5: PRODUCT TYPE -->
+      <div class="filter-accordion-item" id="filter-sec-pt">
+        <div class="filter-accordion-header" onclick="toggleFilterAccordion('pt')">
+          <span class="filter-accordion-title">PRODUCT TYPE</span>
+          <span class="filter-accordion-icon" id="acc-icon-pt">▼</span>
+        </div>
+        <div class="filter-accordion-content collapsed" id="acc-content-pt">
+          <div id="filter-product-types-list">
+            <!-- Dynamically populated from /api/catalog/filters -->
           </div>
         </div>
       </div>
@@ -2990,7 +4101,9 @@
     <!-- Free Shipping Progress Meter -->
     <div class="shipping-meter">
       <div id="meter-text">Free Express Shipping on all orders above ₹5,000</div>
-      <div class="meter-bar"><div class="meter-fill" id="meter-fill"></div></div>
+      <div class="meter-bar">
+        <div class="meter-fill" id="meter-fill"></div>
+      </div>
     </div>
 
     <!-- Scrollable Items Wrap -->
@@ -3011,14 +4124,17 @@
       <!-- Customer Support & Free Returns Microcopy Accordion -->
       <div class="drawer-help-box">
         <h5>Need help?</h5>
-        <p>Visit our <a onclick="openCms('faq')">FAQ page</a>, call us at <a href="tel:855-793-3100">855-793-3100</a>, or <a onclick="openLiveSupport()">chat us</a> using our live support:<br/>
-        Mon-Fri: 6:00AM - 6:30PM PT | Sat-Sun: 8:00AM - 4:30PM PT</p>
+        <p>Visit our <a onclick="openCms('faq')">FAQ page</a>, call us at <a href="tel:855-793-3100">855-793-3100</a>,
+          or <a onclick="openLiveSupport()">chat us</a> using our live support:<br />
+          Mon-Fri: 6:00AM - 6:30PM PT | Sat-Sun: 8:00AM - 4:30PM PT</p>
         <p style="margin-top: 8px;">
-          <a href="mailto:support@yoga.com">Email us</a> anytime. If you contact us after business hours, we will get back to you the following business day.
+          <a href="mailto:support@yoga.com">Email us</a> anytime. If you contact us after business hours, we will get
+          back to you the following business day.
         </p>
         <h5 style="margin-top: 14px;">Free Returns</h5>
         <p>
-          We will gladly accept unworn, unwashed, unaltered or unused merchandise in sellable condition for a refund through January 10, 2027.
+          We will gladly accept unworn, unwashed, unaltered or unused merchandise in sellable condition for a refund
+          through January 10, 2027.
         </p>
       </div>
     </div>
@@ -3040,15 +4156,21 @@
   <div class="alo-modal-overlay" id="search-modal-overlay">
     <div class="alo-modal-card" style="max-width: 640px; padding: 28px; width: 90%;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h3 style="font-size: 15px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;">Search Collection</h3>
-        <button id="close-search-btn" onclick="closeSearchModal()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: var(--brand-espresso);">✕</button>
+        <h3 style="font-size: 15px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;">Search
+          Collection</h3>
+        <button id="close-search-btn" onclick="closeSearchModal()"
+          style="background: none; border: none; font-size: 20px; cursor: pointer; color: var(--brand-espresso);">✕</button>
       </div>
       <div style="position: relative; margin-bottom: 20px;">
-        <input type="text" id="global-search-input" placeholder="Search by style, category, fabric, color..." style="width: 100%; padding: 14px 44px 14px 16px; border: 1px solid var(--border-subtle); border-radius: 4px; font-size: 14px; outline: none;" oninput="handleGlobalSearchInput(this.value)" />
-        <button id="clear-search-btn" onclick="clearGlobalSearch()" style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 14px; cursor: pointer; color: var(--text-muted); display: none;">✕</button>
+        <input type="text" id="global-search-input" placeholder="Search by style, category, fabric, color..."
+          style="width: 100%; padding: 14px 44px 14px 16px; border: 1px solid var(--border-subtle); border-radius: 4px; font-size: 14px; outline: none;"
+          oninput="handleGlobalSearchInput(this.value)" />
+        <button id="clear-search-btn" onclick="clearGlobalSearch()"
+          style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 14px; cursor: pointer; color: var(--text-muted); display: none;">✕</button>
       </div>
       <div id="search-results-box" style="max-height: 380px; overflow-y: auto;">
-        <p style="font-size: 12px; color: var(--text-muted);">Try searching for "Runner", "Airlift", "Accolade", "Leggings", or "White".</p>
+        <p style="font-size: 12px; color: var(--text-muted);">Try searching for "Runner", "Airlift", "Accolade",
+          "Leggings", or "White".</p>
       </div>
     </div>
   </div>
@@ -3063,9 +4185,61 @@
     </div>
   </div>
 
+  <!-- ADDED TO BAG POPUP MODAL (Exact Alo Workflow Spec from User Image) -->
+  <div class="alo-modal-overlay" id="added-to-bag-modal" onclick="closeAddedToBagModal(event)">
+    <div class="added-to-bag-card" onclick="event.stopPropagation()">
+      <!-- Header -->
+      <div class="added-bag-header">
+        <h2 class="added-bag-title">ADDED TO BAG</h2>
+        <button class="added-bag-close" onclick="closeAddedToBagModal()">&times;</button>
+      </div>
+
+      <!-- Item Info Row -->
+      <div class="added-bag-item-row">
+        <img class="added-bag-img" id="added-bag-img" src="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=400&q=80" alt="Added Product">
+        <div class="added-bag-item-info">
+          <div class="added-bag-item-title" id="added-bag-title">Accolade Straight Leg Sweatpant</div>
+          <div class="added-bag-item-meta">Color: <strong id="added-bag-color">Espresso</strong></div>
+          <div class="added-bag-item-meta">Size: <strong id="added-bag-size">XS (2-4)</strong></div>
+        </div>
+      </div>
+
+      <!-- Financial Subtotal & Savings Callout -->
+      <div class="added-bag-financials">
+        <div class="added-bag-subtotal-text">
+          Order Subtotal (<span id="added-bag-item-count">2</span> items): <strong id="added-bag-subtotal-amount">₹27,200</strong>
+        </div>
+        <div class="added-bag-savings-callout" id="added-bag-savings-text">
+          You're saving ₹12,000 on this order!
+        </div>
+      </div>
+
+      <!-- Action Buttons Side-by-Side -->
+      <div class="added-bag-actions">
+        <button class="btn-added-view-bag" id="btn-added-view-bag" onclick="handleAddedViewBag()">VIEW BAG</button>
+        <button class="btn-added-checkout" id="btn-added-checkout" onclick="handleAddedCheckout()">CHECKOUT</button>
+      </div>
+
+      <hr class="added-bag-divider">
+
+      <!-- Cross-Sell Carousel "PAIRS GREAT WITH" -->
+      <div class="added-bag-cross-sells">
+        <h3 class="added-bag-cross-title">PAIRS GREAT WITH</h3>
+        <div class="added-bag-cross-carousel-wrap">
+          <div class="added-bag-cross-carousel" id="added-bag-cross-items">
+            <!-- Dynamically populated complementary items -->
+          </div>
+          <button class="added-bag-carousel-nav" onclick="scrollAddedBagCrossSell(1)">&gt;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Live Floating AI Customer Support Chat Widget (Image 2 Spec) -->
-  <div class="chat-floating-btn" id="chat-floating-btn" onclick="toggleChatWidget()" title="Chat with YOGA AI Concierge">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <div class="chat-floating-btn" id="chat-floating-btn" onclick="toggleChatWidget()"
+    title="Chat with YOGA AI Concierge">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
       <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
     </svg>
   </div>
@@ -3080,27 +4254,31 @@
     </div>
     <div class="chat-body">
       <div class="chat-disclaimer">
-        By using this chat, you are acknowledging and accepting our Privacy Policy and Terms of Service. You understand and agree that this chat may be recorded and retained by YOGA and its service providers.
+        By using this chat, you are acknowledging and accepting our Privacy Policy and Terms of Service. You understand
+        and agree that this chat may be recorded and retained by YOGA and its service providers.
       </div>
       <div class="chat-messages" id="chat-messages-container">
         <div class="chat-msg-row bot">
           <div class="chat-bubble bot">
-            Hi, I'm YOGA's AI Assistant. Can I help you with making a return or exchange, a delivery issue, or something else today?
+            Hi, I'm YOGA's AI Assistant. Can I help you with making a return or exchange, a delivery issue, or something
+            else today?
           </div>
         </div>
       </div>
       <div class="chat-quick-prompts" id="chat-quick-prompts">
-        <button class="chat-prompt-pill" onclick="sendQuickPrompt('Return or exchange assistance')">Return or exchange</button>
+        <button class="chat-prompt-pill" onclick="sendQuickPrompt('Return or exchange assistance')">Return or
+          exchange</button>
         <button class="chat-prompt-pill" onclick="sendQuickPrompt('Track my delivery')">Delivery issue</button>
         <button class="chat-prompt-pill" onclick="sendQuickPrompt('Size and fit advice')">Size guide</button>
         <button class="chat-prompt-pill" onclick="sendQuickPrompt('YOGA Access loyalty points')">VIP Points</button>
       </div>
     </div>
     <div class="chat-footer">
-      <input type="text" class="chat-input" id="chat-input-field" placeholder="Message..." onkeydown="handleChatKeyDown(event)" />
+      <input type="text" class="chat-input" id="chat-input-field" placeholder="Message..."
+        onkeydown="handleChatKeyDown(event)" />
       <button class="chat-send-btn" id="chat-send-btn" onclick="sendChatMessage()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
         </svg>
       </button>
     </div>
@@ -3455,26 +4633,14 @@
     function renderFilterDrawerFacets() {
       if (!availableFiltersData) return;
 
-      // 1. Product Types
-      const ptList = document.getElementById('filter-product-types-list');
-      if (ptList) {
-        const standardTypes = [
-          'Bras', 'Dresses', 'Hair Ties', 'Headbands', 'Hoodies', 'Jackets',
-          'Leggings', 'Long Sleeves', 'Onesies', 'Pants', 'Pullovers', 'Scarves',
-          'Shorts', 'Skirts', 'Sweaters', 'Sweatpants', 'Sweatshirts', 'Tops'
-        ];
-        ptList.innerHTML = standardTypes.map(t => {
-          const isChecked = drawerFilters.productTypes.includes(t);
-          return `
-            <label class="filter-checkbox-item">
-              <input type="checkbox" id="chk-pt-${t.toLowerCase().replace(/\s+/g, '-')}" ${isChecked ? 'checked' : ''} onchange="toggleProductTypeFilter('${t}', this.checked)">
-              <span>${t}</span>
-            </label>
-          `;
-        }).join('');
-      }
+      // 1. Clothing & Shoe Sizes selection state sync
+      const allSizeBtns = document.querySelectorAll('#filter-sec-sz .size-box-btn');
+      allSizeBtns.forEach(btn => {
+        const sz = btn.innerText.trim();
+        btn.classList.toggle('selected', drawerFilters.sizes.includes(sz));
+      });
 
-      // 2. Colors
+      // 2. Colors sync (12 Colors from Image 2)
       const colList = document.getElementById('filter-colors-list');
       if (colList && availableFiltersData.colors) {
         colList.innerHTML = availableFiltersData.colors.map(c => {
@@ -3482,14 +4648,14 @@
           return `
             <label class="filter-checkbox-item">
               <input type="checkbox" id="chk-col-${c.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}" ${isChecked ? 'checked' : ''} onchange="toggleColorFilter('${c.name}', this.checked)">
-              <span style="width: 14px; height: 14px; border-radius: 50%; background: ${c.hex}; border: 1px solid rgba(0,0,0,0.2); display: inline-block;"></span>
+              <span style="width: 16px; height: 16px; border-radius: 50%; background: ${c.hex}; border: 1px solid rgba(0,0,0,0.2); display: inline-block;"></span>
               <span>${c.name}</span>
             </label>
           `;
         }).join('');
       }
 
-      // 3. Fabrics
+      // 3. Fabrics sync (13 Fabrics from Image 4)
       const fabList = document.getElementById('filter-fabrics-list');
       if (fabList && availableFiltersData.fabrics) {
         fabList.innerHTML = availableFiltersData.fabrics.map(f => {
@@ -3528,6 +4694,48 @@
       if (overlay) overlay.classList.add('open');
     }
 
+    function openFilterDrawerToSection(section) {
+      openFilterDrawer();
+      const secMap = {
+        size: 'sz',
+        color: 'col',
+        fabric: 'fab',
+        pt: 'pt',
+        percent: 'pct'
+      };
+      const targetId = secMap[section] || section;
+
+      // Expand target section
+      const targetContent = document.getElementById(`acc-content-${targetId}`);
+      const targetIcon = document.getElementById(`acc-icon-${targetId}`);
+      if (targetContent) {
+        targetContent.classList.remove('collapsed');
+        if (targetIcon) targetIcon.innerText = '▲';
+      }
+
+      // Collapse other sections
+      ['sz', 'col', 'fab', 'pct', 'pt'].forEach(id => {
+        if (id !== targetId) {
+          const c = document.getElementById(`acc-content-${id}`);
+          const ic = document.getElementById(`acc-icon-${id}`);
+          if (c) {
+            c.classList.add('collapsed');
+            if (ic) ic.innerText = '▼';
+          }
+        }
+      });
+
+      // Scroll into view inside drawer body
+      setTimeout(() => {
+        const secEl = document.getElementById(`filter-sec-${targetId}`);
+        if (secEl) secEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
+    }
+
+    function toggleFilterPopover(section) {
+      openFilterDrawerToSection(section);
+    }
+
     function closeFilterDrawer() {
       const drawer = document.getElementById('filter-drawer');
       const overlay = document.getElementById('filter-drawer-overlay');
@@ -3542,10 +4750,12 @@
         drawerFilters.productTypes = drawerFilters.productTypes.filter(t => t !== type);
       }
       updateFilterHeader();
+      applyDrawerFilters(false);
     }
 
     function toggleSizeFilter(sz) {
-      const btn = document.getElementById(`sz-btn-${sz}`);
+      const safeId = sz.replace(/[^a-zA-Z0-9]/g, '-');
+      const btn = document.getElementById(`sz-btn-${safeId}`) || document.getElementById(`sz-btn-${sz}`);
       if (drawerFilters.sizes.includes(sz)) {
         drawerFilters.sizes = drawerFilters.sizes.filter(s => s !== sz);
         if (btn) btn.classList.remove('selected');
@@ -3554,6 +4764,7 @@
         if (btn) btn.classList.add('selected');
       }
       updateFilterHeader();
+      applyDrawerFilters(false);
     }
 
     function toggleColorFilter(color, isChecked) {
@@ -3563,6 +4774,7 @@
         drawerFilters.colors = drawerFilters.colors.filter(c => c !== color);
       }
       updateFilterHeader();
+      applyDrawerFilters(false);
     }
 
     function toggleFabricFilter(fabric, isChecked) {
@@ -3572,6 +4784,7 @@
         drawerFilters.fabrics = drawerFilters.fabrics.filter(f => f !== fabric);
       }
       updateFilterHeader();
+      applyDrawerFilters(false);
     }
 
     function toggleDiscountFilter(pct) {
@@ -3581,6 +4794,7 @@
         drawerFilters.discounts.push(pct);
       }
       updateFilterHeader();
+      applyDrawerFilters(false);
     }
 
     function removeDrawerFilter(facet, value) {
@@ -3590,7 +4804,8 @@
         if (chk) chk.checked = false;
       } else if (facet === 'sizes') {
         drawerFilters.sizes = drawerFilters.sizes.filter(s => s !== value);
-        const btn = document.getElementById(`sz-btn-${value}`);
+        const safeId = value.replace(/[^a-zA-Z0-9]/g, '-');
+        const btn = document.getElementById(`sz-btn-${safeId}`) || document.getElementById(`sz-btn-${value}`);
         if (btn) btn.classList.remove('selected');
       } else if (facet === 'colors') {
         drawerFilters.colors = drawerFilters.colors.filter(c => c !== value);
@@ -3598,10 +4813,17 @@
         if (chk) chk.checked = false;
       } else if (facet === 'fabrics') {
         drawerFilters.fabrics = drawerFilters.fabrics.filter(f => f !== value);
-        const chk = document.getElementById(`chk-fab-${value.toLowerCase().replace(/[^a-z0-9]/g, '-')}`);
+        const slugHyphen = value.toLowerCase().replace(/[^a-z0-9]/g, '-');
+        const slugNoHyphen = value.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const slugShort = value.toLowerCase().replace('alo ', '').replace(/[^a-z0-9]/g, '');
+        const chk = document.getElementById(`chk-fab-${slugHyphen}`) ||
+          document.getElementById(`chk-fab-${slugNoHyphen}`) ||
+          document.getElementById(`chk-fab-${slugShort}`);
         if (chk) chk.checked = false;
       } else if (facet === 'discounts') {
         drawerFilters.discounts = drawerFilters.discounts.filter(d => d !== value);
+        const chk = document.getElementById(`pct-${value.replace(/[^0-9]/g, '')}`);
+        if (chk) chk.checked = false;
       }
       updateFilterHeader();
       applyDrawerFilters(false);
@@ -3655,10 +4877,30 @@
         });
       }
 
+      if (drawerFilters.sizes.length > 0) {
+        filtered = filtered.filter(p => {
+          const title = (p.title || '').toLowerCase();
+          const cat = (p.category_id || '').toLowerCase();
+          const isShoe = cat.includes('shoes') || cat === 'acc-shoes' || title.includes('runner') || title.includes('sneaker') || title.includes('boot') || title.includes('mule');
+          return drawerFilters.sizes.some(sz => {
+            const szL = sz.toLowerCase();
+            if (isShoe) {
+              return szL.includes('m/') || szL.includes('w');
+            } else {
+              return ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl'].includes(szL);
+            }
+          });
+        });
+      }
+
       if (drawerFilters.colors.length > 0) {
         filtered = filtered.filter(p => {
           const col = (p.color_family || '').toLowerCase();
-          return drawerFilters.colors.some(c => col.includes(c.toLowerCase()) || c.toLowerCase().includes(col));
+          const title = (p.title || '').toLowerCase();
+          return drawerFilters.colors.some(c => {
+            const cL = c.toLowerCase();
+            return col.includes(cL) || cL.includes(col) || title.includes(cL);
+          });
         });
       }
 
@@ -3666,7 +4908,10 @@
         filtered = filtered.filter(p => {
           const fab = (p.fabric_technology || '').toLowerCase();
           const title = (p.title || '').toLowerCase();
-          return drawerFilters.fabrics.some(f => fab.includes(f.toLowerCase()) || title.includes(f.toLowerCase()));
+          return drawerFilters.fabrics.some(f => {
+            const fL = f.toLowerCase();
+            return fab.includes(fL) || title.includes(fL);
+          });
         });
       }
 
@@ -3677,9 +4922,11 @@
         });
       }
 
-      const label = drawerFilters.productTypes.length > 0 
-        ? drawerFilters.productTypes.join(', ')
-        : (drawerFilters.colors.length > 0 ? drawerFilters.colors.join(', ') : 'Filtered Collection');
+      let label = 'Filtered Collection';
+      if (drawerFilters.sizes.length > 0) label = `Size: ${drawerFilters.sizes.join(', ')}`;
+      else if (drawerFilters.colors.length > 0) label = `Color: ${drawerFilters.colors.join(', ')}`;
+      else if (drawerFilters.fabrics.length > 0) label = `Fabric: ${drawerFilters.fabrics.join(', ')}`;
+      else if (drawerFilters.productTypes.length > 0) label = drawerFilters.productTypes.join(', ');
 
       renderProducts(filtered, label, `Filtered by ${Object.values(drawerFilters).flat().length} criteria`, true);
       if (closeAfter) closeFilterDrawer();
@@ -3727,7 +4974,7 @@
               customerEmail: 'sameeramaq@gmail.com'
             })
           });
-        } catch (e) {}
+        } catch (e) { }
         showAloMessage('Saved to Wishlist', `"${title}" has been added to your YOGA Wishlist.`);
       }
     }
@@ -3773,9 +5020,9 @@
               <span class="quick-add-header-title">QUICK ADD:</span>
               <div class="quick-add-size-pills">
                 ${(p.category_id && (p.category_id.includes('shoes') || p.category_id === 'acc-shoes') || p.title.toLowerCase().includes('runner') || p.title.toLowerCase().includes('sneaker') || p.title.toLowerCase().includes('boot') || p.title.toLowerCase().includes('mule'))
-                  ? ['5W', '6W', '7W', '8W', '9W', '10W', '11W', '12W'].map(sz => `<button class="quick-add-pill" onclick="quickAddProductSize(event, '${p.product_id}', '${p.title.replace(/'/g, "\\'")}', ${p.sale_price}, '${p.color_family || 'White/White'}', '${sz}')">${sz}</button>`).join('')
-                  : ['XXS', 'XS', 'S', 'M', 'L', 'XL'].map(sz => `<button class="quick-add-pill" onclick="quickAddProductSize(event, '${p.product_id}', '${p.title.replace(/'/g, "\\'")}', ${p.sale_price}, '${p.color_family || 'Black'}', '${sz}')">${sz}</button>`).join('')
-                }
+          ? ['5W', '6W', '7W', '8W', '9W', '10W', '11W', '12W'].map(sz => `<button class="quick-add-pill" onclick="quickAddProductSize(event, '${p.product_id}', '${p.title.replace(/'/g, "\\'")}', ${p.sale_price}, '${p.color_family || 'White/White'}', '${sz}')">${sz}</button>`).join('')
+          : ['XXS', 'XS', 'S', 'M', 'L', 'XL'].map(sz => `<button class="quick-add-pill" onclick="quickAddProductSize(event, '${p.product_id}', '${p.title.replace(/'/g, "\\'")}', ${p.sale_price}, '${p.color_family || 'Black'}', '${sz}')">${sz}</button>`).join('')
+        }
               </div>
             </div>
           </div>
@@ -4116,7 +5363,7 @@
       }
     }
 
-    async function addToCart(productId, title, price, colorName = 'Studio Neutral', size = 'S') {
+    async function addToCart(productId, title, price, colorName = 'Studio Neutral', size = 'S', openDrawer = true) {
       await ensureCartExists();
       await fetch('/api/checkout/cart/items', {
         method: 'POST',
@@ -4134,8 +5381,10 @@
       });
 
       await refreshCart();
-      document.getElementById('cart-drawer').classList.add('open');
-      document.getElementById('cart-overlay').classList.add('open');
+      if (openDrawer) {
+        document.getElementById('cart-drawer').classList.add('open');
+        document.getElementById('cart-overlay').classList.add('open');
+      }
     }
 
     async function quickAddCrossSell(productId, title, colorName, price) {
@@ -4552,8 +5801,8 @@
 
     async function executeCartPageCheckout() {
       if (!currentCartId) return;
-      const giftMessage = document.getElementById('gift-message-checkbox')?.checked 
-        ? (document.getElementById('gift-message-textarea')?.value || '') 
+      const giftMessage = document.getElementById('gift-message-checkbox')?.checked
+        ? (document.getElementById('gift-message-textarea')?.value || '')
         : null;
 
       const res = await (await fetch('/api/checkout/payments/place-order', {
@@ -4781,7 +6030,7 @@
         return;
       }
 
-      const matches = allProducts.filter(p => 
+      const matches = allProducts.filter(p =>
         (p.title && p.title.toLowerCase().includes(query)) ||
         (p.color_family && p.color_family.toLowerCase().includes(query)) ||
         (p.fabric_technology && p.fabric_technology.toLowerCase().includes(query)) ||
@@ -4819,10 +6068,86 @@
     async function quickAddProductSize(event, productId, title, price, colorName, size) {
       if (event) event.stopPropagation();
       try {
-        await addToCart(productId, title, price, colorName, size);
+        await addToCart(productId, title, price, colorName, size, false);
+        showAddedToBagModal(productId, title, price, colorName, size);
       } catch (e) {
         console.error('Quick add size failed:', e);
       }
+    }
+
+    function showAddedToBagModal(productId, title, price, colorName, size) {
+      const prod = allProducts.find(p => p.product_id === productId) || {};
+      const imgEl = document.getElementById('added-bag-img');
+      const titleEl = document.getElementById('added-bag-title');
+      const colorEl = document.getElementById('added-bag-color');
+      const sizeEl = document.getElementById('added-bag-size');
+      const countEl = document.getElementById('added-bag-item-count');
+      const subtotalEl = document.getElementById('added-bag-subtotal-amount');
+      const savingsEl = document.getElementById('added-bag-savings-text');
+
+      if (imgEl) imgEl.src = prod.image_url || 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=400&q=80';
+      if (titleEl) titleEl.innerText = title || prod.title || 'Accolade Straight Leg Sweatpant';
+      if (colorEl) colorEl.innerText = colorName || prod.color_family || 'Espresso';
+
+      // Format size label, e.g. XS (2-4), S (4-6), or shoe size
+      let displaySize = size;
+      if (size === 'XS') displaySize = 'XS (2-4)';
+      else if (size === 'S') displaySize = 'S (4-6)';
+      else if (size === 'M') displaySize = 'M (8-10)';
+      else if (size === 'L') displaySize = 'L (12-14)';
+      if (sizeEl) sizeEl.innerText = displaySize;
+
+      // Cart count & subtotal calculation
+      let totalQty = 1;
+      let subtotal = price || 13600;
+      if (currentCart && currentCart.items && currentCart.items.length > 0) {
+        totalQty = currentCart.items.reduce((s, it) => s + (it.quantity || 1), 0);
+        subtotal = currentCart.items.reduce((s, it) => s + (it.unit_price * (it.quantity || 1)), 0);
+      }
+      if (countEl) countEl.innerText = totalQty;
+      if (subtotalEl) subtotalEl.innerText = `₹${formatInr(subtotal)}`;
+
+      // Savings calculation (e.g. 30% or original price diff)
+      const estimatedSavings = Math.round(subtotal * 0.44);
+      if (savingsEl) savingsEl.innerText = `You're saving ₹${formatInr(estimatedSavings)} on this order!`;
+
+      // Render PAIRS GREAT WITH cross-sell items
+      const crossContainer = document.getElementById('added-bag-cross-items');
+      if (crossContainer) {
+        const recommendations = allProducts.filter(p => p.product_id !== productId).slice(0, 6);
+        crossContainer.innerHTML = recommendations.map(r => `
+          <div class="added-cross-card" onclick="openProductDetailPage('${r.product_id}', '${r.handle}')">
+            <button class="added-cross-heart" onclick="event.stopPropagation(); toggleCardWishlist(this, '${r.product_id}', '${r.title.replace(/'/g, "\\'")}', ${r.sale_price})">♡</button>
+            <img class="added-cross-img" src="${r.image_url || 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=400&q=80'}" alt="${r.title}">
+          </div>
+        `).join('');
+      }
+
+      const modal = document.getElementById('added-to-bag-modal');
+      if (modal) modal.classList.add('active');
+    }
+
+    function closeAddedToBagModal(event) {
+      if (event && event.target && event.target.id !== 'added-to-bag-modal' && !event.target.classList.contains('added-bag-close')) {
+        return;
+      }
+      const modal = document.getElementById('added-to-bag-modal');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function handleAddedViewBag() {
+      closeAddedToBagModal();
+      openCartPage();
+    }
+
+    function handleAddedCheckout() {
+      closeAddedToBagModal();
+      openCheckoutModal();
+    }
+
+    function scrollAddedBagCrossSell(dir) {
+      const el = document.getElementById('added-bag-cross-items');
+      if (el) el.scrollBy({ left: dir * 140, behavior: 'smooth' });
     }
 
     async function openProductDetailPage(productId, handle) {
@@ -4894,7 +6219,7 @@
       // Color Swatches
       selectedPdpColor = product.color_family || 'White/White';
       document.getElementById('pdp-swatch-header').innerText = `Core: ${product.color_family || 'White/White'} 5 Colors • Limited 7 Colors`;
-      
+
       const swatches = [
         { name: 'White/White', hex: '#FFFFFF' },
         { name: 'Black/Black', hex: '#111111' },
@@ -5156,7 +6481,7 @@
         return;
       }
       const q = query.toLowerCase();
-      const filtered = currentPdpReviews.filter(r => 
+      const filtered = currentPdpReviews.filter(r =>
         (r.author_name && r.author_name.toLowerCase().includes(q)) ||
         (r.headline && r.headline.toLowerCase().includes(q)) ||
         (r.comment && r.comment.toLowerCase().includes(q))
@@ -5225,4 +6550,5 @@
     });
   </script>
 </body>
+
 </html>

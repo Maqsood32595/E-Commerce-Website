@@ -56,6 +56,7 @@ async function runAllClickableLinksPietSuite() {
     let ephemeralPdpReviewId = null;
     let pdpQuickCartId = null;
     let pdpDirectCartId = null;
+    let addedBagCartId = null;
 
     try {
         // ----------------------------------------------------------------------
@@ -63,7 +64,7 @@ async function runAllClickableLinksPietSuite() {
         // ----------------------------------------------------------------------
         console.log("\n--- [GROUP 1: Mega Menu WOMEN, MEN, SHOES & GIFT GUIDE Taxonomies] ---");
         const menuRes = await (await fetch(`${baseUrl}/api/catalog/menu?gender=all`)).json();
-        
+
         if (!menuRes.menu || menuRes.menu.length < 11) {
             record('Mega Menu', 'Verify 11 Menu Sections Exist Across Tabs', false, `Found ${menuRes.menu ? menuRes.menu.length : 0} sections`);
         } else {
@@ -310,7 +311,7 @@ async function runAllClickableLinksPietSuite() {
         console.log("\n--- [GROUP 4: Community Social Lookbook Handles] ---");
         const lookbookRes = await (await fetch(`${baseUrl}/api/catalog/lookbook`)).json();
         const handles = lookbookRes.lookbook || [];
-        
+
         if (handles.length >= 18) {
             record('Lookbook', `All 18+ Community Handles Loaded (${handles.length} total)`, true);
         } else {
@@ -1093,7 +1094,7 @@ async function runAllClickableLinksPietSuite() {
 
             // Action 6: BUILT FOR PERFORMANCE Technical Feature Blueprint (5 Specifications)
             let blueprint = [];
-            try { blueprint = typeof prod.features_blueprint === 'string' ? JSON.parse(prod.features_blueprint) : (prod.features_blueprint || []); } catch (e) {}
+            try { blueprint = typeof prod.features_blueprint === 'string' ? JSON.parse(prod.features_blueprint) : (prod.features_blueprint || []); } catch (e) { }
             const has01Heel = blueprint.some(b => b.title.includes('HEEL CLIP'));
             const has02Midsole = blueprint.some(b => b.title.includes('MIDSOLE'));
             const has03Outsole = blueprint.some(b => b.title.includes('OUTSOLE'));
@@ -1104,7 +1105,7 @@ async function runAllClickableLinksPietSuite() {
 
             // Action 7: COMPARE FOOTWEAR 5-Style Matrix
             let compareData = [];
-            try { compareData = typeof prod.comparison_data === 'string' ? JSON.parse(prod.comparison_data) : (prod.comparison_data || []); } catch (e) {}
+            try { compareData = typeof prod.comparison_data === 'string' ? JSON.parse(prod.comparison_data) : (prod.comparison_data || []); } catch (e) { }
             const hasRunner = compareData.some(c => c.name === 'YOGA RUNNER');
             const hasTrail = compareData.some(c => c.name === 'YOGA TRAIL');
             const hasSunset = compareData.some(c => c.name === 'YOGA SUNSET SNEAKER');
@@ -1115,7 +1116,7 @@ async function runAllClickableLinksPietSuite() {
 
             // Action 8: HOW TO STYLE IT Editorial & Lookbook
             let stylingData = null;
-            try { stylingData = typeof prod.styling_looks === 'string' ? JSON.parse(prod.styling_looks) : (prod.styling_looks || {}); } catch (e) {}
+            try { stylingData = typeof prod.styling_looks === 'string' ? JSON.parse(prod.styling_looks) : (prod.styling_looks || {}); } catch (e) { }
             const hasWomenLooks = stylingData && Array.isArray(stylingData.women) && stylingData.women.length === 3;
             const hasMenLooks = stylingData && Array.isArray(stylingData.men) && stylingData.men.length === 3;
             record('PDP Editorial Styling', 'HOW TO STYLE IT (3 Women Looks & 3 Men Looks with Editorial Tagging)',
@@ -1456,6 +1457,204 @@ async function runAllClickableLinksPietSuite() {
             record('AI Chat Legal Disclaimer', 'Action: Verify Legal Disclaimer in Chat Footer with Terms & Privacy Policy Links',
                 homeHtml.includes('Privacy Policy and Terms of Service') && homeHtml.includes('chat may be recorded'));
 
+            // ======================================================================
+            // GROUP 17: Interactive Filter Buttons, Drawer Sections & Multi-Facet Clicks
+            // ======================================================================
+            console.log("\n--- [GROUP 17: Interactive Filter Buttons, Sections & Multi-Facet Clicks] ---");
+
+            // Action 1: Top Filter Button: [ SIZE ] Click opens Drawer with SIZE section expanded
+            record('Filter Button: [ SIZE ]', 'Action: Click Top Filter Button [ SIZE ] (openFilterDrawerToSection(\'size\'))',
+                homeHtml.includes('id="btn-filter-size"') &&
+                homeHtml.includes("openFilterDrawerToSection('size')") &&
+                homeHtml.includes('id="filter-sec-sz"') &&
+                homeHtml.includes('Clothing') &&
+                homeHtml.includes('Shoes'));
+
+            // Action 2: Top Filter Button: [ COLOR ] Click opens Drawer with COLOR section expanded
+            record('Filter Button: [ COLOR ]', 'Action: Click Top Filter Button [ COLOR ] (openFilterDrawerToSection(\'color\'))',
+                homeHtml.includes('id="btn-filter-color"') &&
+                homeHtml.includes("openFilterDrawerToSection('color')") &&
+                homeHtml.includes('id="filter-sec-col"') &&
+                homeHtml.includes('chk-col-beige') &&
+                homeHtml.includes('chk-col-black') &&
+                homeHtml.includes('chk-col-yellow'));
+
+            // Action 3: Top Filter Button: [ FABRIC ] Click opens Drawer with FABRIC section expanded
+            record('Filter Button: [ FABRIC ]', 'Action: Click Top Filter Button [ FABRIC ] (openFilterDrawerToSection(\'fabric\'))',
+                homeHtml.includes('id="btn-filter-fabric"') &&
+                homeHtml.includes("openFilterDrawerToSection('fabric')") &&
+                homeHtml.includes('id="filter-sec-fab"') &&
+                homeHtml.includes('chk-fab-airbrush') &&
+                homeHtml.includes('chk-fab-airlift') &&
+                homeHtml.includes('chk-fab-waffle'));
+
+            // Action 4: Top Filter Button: [ ALL FILTERS ] Click opens Drawer with All Facets
+            record('Filter Button: [ ALL FILTERS ]', 'Action: Click Top Filter Button [ ALL FILTERS ] (openFilterDrawer())',
+                homeHtml.includes('id="btn-filter-all"') &&
+                homeHtml.includes('openFilterDrawer()') &&
+                homeHtml.includes('id="filter-drawer"'));
+
+            // Action 5: Size Filter Selection: Clothing Size 'M' Button
+            record('Filter Size: Clothing M', 'Action: Click Size Box "M" (toggleSizeFilter(\'M\'))',
+                homeHtml.includes('id="sz-btn-M"') &&
+                homeHtml.includes("toggleSizeFilter('M')") &&
+                homeHtml.includes('filter-clothing-sizes-list'));
+
+            // Action 6: Size Filter Selection: Shoe Size '8m/9.5w' Button
+            record('Filter Size: Shoe 8m/9.5w', 'Action: Click Shoe Size Box "8m/9.5w" (toggleSizeFilter(\'8m/9.5w\'))',
+                homeHtml.includes('id="sz-btn-8m-9-5w"') &&
+                homeHtml.includes("toggleSizeFilter('8m/9.5w')") &&
+                homeHtml.includes('filter-shoe-sizes-list'));
+
+            // Action 7: Color Filter Checkbox: 'Black' with Color Swatch
+            record('Filter Color: Black Checkbox', 'Action: Select Color Checkbox "Black" (toggleColorFilter(\'Black\'))',
+                homeHtml.includes('id="chk-col-black"') &&
+                homeHtml.includes("toggleColorFilter('Black'") &&
+                homeHtml.includes('#000000'));
+
+            // Action 8: Color Filter Checkbox: 'Beige' with Color Swatch
+            record('Filter Color: Beige Checkbox', 'Action: Select Color Checkbox "Beige" (toggleColorFilter(\'Beige\'))',
+                homeHtml.includes('id="chk-col-beige"') &&
+                homeHtml.includes("toggleColorFilter('Beige'") &&
+                homeHtml.includes('#D8BC9D'));
+
+            // Action 9: Fabric Filter Checkbox: 'Airlift'
+            record('Filter Fabric: Airlift Checkbox', 'Action: Select Fabric Checkbox "Airlift" (toggleFabricFilter(\'Airlift\'))',
+                homeHtml.includes('id="chk-fab-airlift"') &&
+                homeHtml.includes("toggleFabricFilter('Airlift'"));
+
+            // Action 10: Fabric Filter Checkbox: 'Alosoft'
+            record('Filter Fabric: Alosoft Checkbox', 'Action: Select Fabric Checkbox "Alosoft" (toggleFabricFilter(\'Alosoft\'))',
+                homeHtml.includes('id="chk-fab-alosoft"') &&
+                homeHtml.includes("toggleFabricFilter('Alosoft'"));
+
+            // Action 11: Header Filter Counter & Active Tag Chip Removal
+            record('Filter Header: Active Tag Removal', 'Action: Verify Active Chip Click Triggers removeDrawerFilter()',
+                homeHtml.includes('id="filter-selected-count"') &&
+                homeHtml.includes('active-tag-chip') &&
+                homeHtml.includes('removeDrawerFilter'));
+
+            // Action 12: Clear All Filters Action Link
+            record('Filter Header: Clear All Link', 'Action: Click "Clear All" in Drawer Header (clearAllDrawerFilters())',
+                homeHtml.includes('clearAllDrawerFilters()') &&
+                homeHtml.includes('clear-all-link'));
+
+            // Action 13: Close Filter Drawer Button ✕
+            record('Filter Drawer Close Button', 'Action: Click Close Filter Drawer ✕ Button (closeFilterDrawer())',
+                homeHtml.includes('class="close-filter-btn"') &&
+                homeHtml.includes('closeFilterDrawer()'));
+
+            // Action 14: Dynamic Backend Filter API Contract (/api/catalog/filters)
+            const filtersApiRes = await (await fetch(`${baseUrl}/api/catalog/filters`)).json();
+            const validApiContract = filtersApiRes.success &&
+                Array.isArray(filtersApiRes.filters.clothingSizes) &&
+                filtersApiRes.filters.clothingSizes.includes('M') &&
+                Array.isArray(filtersApiRes.filters.shoeSizes) &&
+                filtersApiRes.filters.shoeSizes.includes('8m/9.5w') &&
+                Array.isArray(filtersApiRes.filters.colors) &&
+                filtersApiRes.filters.colors.some(c => c.name === 'Beige' && c.hex === '#D8BC9D') &&
+                filtersApiRes.filters.colors.some(c => c.name === 'Black') &&
+                Array.isArray(filtersApiRes.filters.fabrics) &&
+                filtersApiRes.filters.fabrics.includes('Airlift') &&
+                filtersApiRes.filters.fabrics.includes('Alosoft') &&
+                Array.isArray(filtersApiRes.filters.percentOff) &&
+                filtersApiRes.filters.percentOff.includes('30% Off');
+            record('Backend Filter API Contract', 'Action: GET /api/catalog/filters Contract Verification (12 Colors, 13 Fabrics, Clothing + Shoe Sizes)',
+                validApiContract);
+
+            // ======================================================================
+            // GROUP 18: Card Hover Quick-Add Size Pills & "ADDED TO BAG" Modal Workflow
+            // ======================================================================
+            console.log("\n--- [GROUP 18: Card Hover Quick-Add Size Pills & ADDED TO BAG Modal] ---");
+
+            // Action 1: Card Hover Quick-Add Size Pill Click (quickAddProductSize)
+            record('Quick Add Size Pill', 'Action: Click Card Hover Quick-Add Size Pill (quickAddProductSize)',
+                homeHtml.includes('class="quick-add-pill"') &&
+                homeHtml.includes('quickAddProductSize(event,') &&
+                homeHtml.includes('card-quick-add-overlay'));
+
+            // Action 2: "ADDED TO BAG" Modal Overlay & Dialog Activation
+            record('Added to Bag Modal', 'Action: Verify #added-to-bag-modal Overlay & Card Container',
+                homeHtml.includes('id="added-to-bag-modal"') &&
+                homeHtml.includes('class="added-to-bag-card"') &&
+                homeHtml.includes('showAddedToBagModal'));
+
+            // Action 3: Modal Title & Close Button [✕]
+            record('Added to Bag Header', 'Action: Verify Modal Header "ADDED TO BAG" and Close Button ✕',
+                homeHtml.includes('class="added-bag-title"') &&
+                homeHtml.includes('ADDED TO BAG') &&
+                homeHtml.includes('class="added-bag-close"') &&
+                homeHtml.includes('closeAddedToBagModal()'));
+
+            // Action 4: Added Product Item Details (Image, Title, Color, Size)
+            record('Added to Bag Item Details', 'Action: Verify Thumbnail, Title, Color & Size Metadata Elements',
+                homeHtml.includes('id="added-bag-img"') &&
+                homeHtml.includes('id="added-bag-title"') &&
+                homeHtml.includes('id="added-bag-color"') &&
+                homeHtml.includes('id="added-bag-size"'));
+
+            // Action 5: Order Financials (Subtotal, Item Count & Savings Callout)
+            record('Added to Bag Financials', 'Action: Verify Subtotal Count & "You\'re saving ₹... on this order!" Callout',
+                homeHtml.includes('id="added-bag-item-count"') &&
+                homeHtml.includes('id="added-bag-subtotal-amount"') &&
+                homeHtml.includes('id="added-bag-savings-text"') &&
+                homeHtml.includes("saving") &&
+                homeHtml.includes("on this order!"));
+
+            // Action 6: Action Button: [ VIEW BAG ] Click
+            record('Added to Bag: View Bag', 'Action: Click [ VIEW BAG ] Button (handleAddedViewBag() -> /cart)',
+                homeHtml.includes('id="btn-added-view-bag"') &&
+                homeHtml.includes('handleAddedViewBag()') &&
+                homeHtml.includes('VIEW BAG'));
+
+            // Action 7: Action Button: [ CHECKOUT ] Click
+            record('Added to Bag: Checkout', 'Action: Click [ CHECKOUT ] Button (handleAddedCheckout() -> checkout modal)',
+                homeHtml.includes('id="btn-added-checkout"') &&
+                homeHtml.includes('handleAddedCheckout()') &&
+                homeHtml.includes('CHECKOUT'));
+
+            // Action 8: Recommendation Carousel: "PAIRS GREAT WITH"
+            record('Added to Bag: Cross-Sells', 'Action: Verify "PAIRS GREAT WITH" Cross-Sell Carousel & Scroll Nav Arrow >',
+                homeHtml.includes('PAIRS GREAT WITH') &&
+                homeHtml.includes('id="added-bag-cross-items"') &&
+                homeHtml.includes('scrollAddedBagCrossSell(1)'));
+
+            // Action 9: Cross-Sell Item Wishlist Heart Buttons [♡]
+            record('Added to Bag: Wishlist Hearts', 'Action: Verify Wishlist Heart Buttons on Cross-Sell Recommendation Cards',
+                homeHtml.includes('class="added-cross-heart"') &&
+                homeHtml.includes('toggleCardWishlist'));
+
+            // Action 10: Live Quick-Add Cart Execution & Modal Contract Verification
+            const modalQuickAddCartRes = await (await fetch(`${baseUrl}/api/checkout/cart/create`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ currency: 'INR' })
+            })).json();
+            addedBagCartId = modalQuickAddCartRes.cart.cart_id;
+            const modalQuickAddItemRes = await (await fetch(`${baseUrl}/api/checkout/cart/items`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    cartId: addedBagCartId,
+                    productId: 'prod-accolade-straight-leg-sweatpant-espresso',
+                    variantId: 'prod-accolade-straight-leg-sweatpant-espresso-xs',
+                    title: 'Accolade Straight Leg Sweatpant',
+                    colorName: 'Espresso',
+                    size: 'XS (2-4)',
+                    unitPrice: 13600,
+                    quantity: 2
+                })
+            })).json();
+            const modalCartDetail = (await (await fetch(`${baseUrl}/api/checkout/cart/${addedBagCartId}`)).json()).cart;
+            const validQuickAddContract = modalQuickAddItemRes.success &&
+                modalCartDetail &&
+                (modalCartDetail.items || []).length === 1 &&
+                modalCartDetail.items[0].quantity === 2 &&
+                modalCartDetail.items[0].color_name === 'Espresso' &&
+                Number(modalCartDetail.subtotal) === 27200;
+            record('Added to Bag Live Contract', 'Action: Quick-Add 2 Items (₹27,200 Subtotal, Espresso XS) Live Contract Verification',
+                validQuickAddContract);
+
         } catch (pdpErr) {
             record('PDP Suite', 'PDP testing failed', false, pdpErr.message);
         }
@@ -1512,6 +1711,11 @@ async function runAllClickableLinksPietSuite() {
                 await db.query(`DELETE FROM carts WHERE cart_id = $1`, [pdpDirectCartId]);
                 console.log(`   ✓ Wiped ephemeral PDP direct cart: ${pdpDirectCartId}`);
             }
+            if (addedBagCartId) {
+                await db.query(`DELETE FROM cart_items WHERE cart_id = $1`, [addedBagCartId]);
+                await db.query(`DELETE FROM carts WHERE cart_id = $1`, [addedBagCartId]);
+                console.log(`   ✓ Wiped ephemeral Added To Bag modal cart: ${addedBagCartId}`);
+            }
         } catch (cleanupErr) {
             console.error(`   ❌ Cleanup error: ${cleanupErr.message}`);
         } finally {
@@ -1529,7 +1733,7 @@ async function runAllClickableLinksPietSuite() {
     console.log("=======================================================");
 
     const ghostOrders = (await db.query(`SELECT count(*) FROM orders WHERE customer_email LIKE '%piet%'`)).rows[0].count;
-    const ghostCarts = (await db.query(`SELECT count(*) FROM carts WHERE cart_id = $1 OR cart_id = $2 OR cart_id = $3 OR cart_id = $4`, [ephemeralCartId, cartPageCartId, pdpQuickCartId, pdpDirectCartId])).rows[0].count;
+    const ghostCarts = (await db.query(`SELECT count(*) FROM carts WHERE cart_id = $1 OR cart_id = $2 OR cart_id = $3 OR cart_id = $4 OR cart_id = $5`, [ephemeralCartId, cartPageCartId, pdpQuickCartId, pdpDirectCartId, addedBagCartId])).rows[0].count;
     const ghostWishlist = (await db.query(`SELECT count(*) FROM wishlist_items WHERE customer_email LIKE '%piet%'`)).rows[0].count;
     const ghostCustomers = (await db.query(`SELECT count(*) FROM customer_accounts WHERE email LIKE '%piet%'`)).rows[0].count;
     const ghostReviews = (await db.query(`SELECT count(*) FROM product_reviews WHERE author_name LIKE '%PIET%'`)).rows[0].count;
