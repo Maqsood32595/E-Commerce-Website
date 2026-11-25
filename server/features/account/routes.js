@@ -6,7 +6,19 @@ const security = require('./security');
 // GET /api/account/customer
 router.get('/customer', async (req, res) => {
     try {
-        const email = (req.query.email || 'sameeramaq@gmail.com').toLowerCase().trim();
+        // Prefer session token auth; fall back to email query param for backwards compat
+        const authHeader = req.headers['authorization'];
+        const token = (authHeader && authHeader.startsWith('Bearer ')) ? authHeader.slice(7) : req.query.token;
+        let email;
+        if (token) {
+            const payload = security.verifySessionToken(token);
+            if (!payload) return res.status(401).json({ success: false, error: 'Invalid or expired session token', slice: 'account' });
+            email = payload.email;
+        } else if (req.query.email) {
+            email = req.query.email.toLowerCase().trim();
+        } else {
+            return res.status(401).json({ success: false, error: 'Authentication required', slice: 'account' });
+        }
         const result = await db.query('SELECT customer_id, email, first_name, last_name, vip_status, reward_points, phone FROM customer_accounts WHERE LOWER(email) = $1', [email]);
         if (result.rows.length === 0) return res.status(404).json({ error: 'Customer not found' });
         res.json({ success: true, slice: 'account', customer: result.rows[0] });
@@ -43,7 +55,18 @@ router.put('/customer', async (req, res) => {
 // GET /api/account/orders
 router.get('/orders', async (req, res) => {
     try {
-        const email = (req.query.email || 'sameeramaq@gmail.com').toLowerCase().trim();
+        const authHeader = req.headers['authorization'];
+        const token = (authHeader && authHeader.startsWith('Bearer ')) ? authHeader.slice(7) : req.query.token;
+        let email;
+        if (token) {
+            const payload = security.verifySessionToken(token);
+            if (!payload) return res.status(401).json({ success: false, error: 'Invalid or expired session token', slice: 'account' });
+            email = payload.email;
+        } else if (req.query.email) {
+            email = req.query.email.toLowerCase().trim();
+        } else {
+            return res.status(401).json({ success: false, error: 'Authentication required', slice: 'account' });
+        }
         const result = await db.query(`
             SELECT o.*,
                    COALESCE(

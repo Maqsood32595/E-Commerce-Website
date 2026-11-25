@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../../../db');
+const adminAuth = require('../../middleware');
+
+// Protect all bulk admin routes
+router.use(adminAuth);
 
 function slugify(str) {
     return (str || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');

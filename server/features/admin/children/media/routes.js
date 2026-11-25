@@ -1,6 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const mediaService = require('./service');
+const adminAuth = require('../../middleware');
+
+// Protect all media admin routes EXCEPT the public file proxy
+// (GET /file/:mediaId is public since the GCS bucket is public-readable)
+router.use((req, res, next) => {
+    if (req.method === 'GET' && req.path.startsWith('/file/')) return next();
+    if (req.method === 'GET' && req.path === '/library') return adminAuth(req, res, next);
+    return adminAuth(req, res, next);
+});
 
 // POST /api/admin/media/upload-file (Direct Binary Stream to GCS — CORS & Browser Friendly)
 router.post(
