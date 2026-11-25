@@ -5,9 +5,16 @@ const path = require('path');
 class MediaService {
     constructor() {
         this.bucketName = process.env.GCS_BUCKET_NAME || 'alo-ecommerce-media-515620';
-        this.storage = new Storage({
-            projectId: process.env.GCP_PROJECT_ID || 'e-commerce-website-515620'
-        });
+        const storageOpts = { projectId: process.env.GCP_PROJECT_ID || 'e-commerce-website-515620' };
+        // On Render (or any non-local env), load credentials from the GCP_SERVICE_ACCOUNT_JSON env var
+        if (process.env.GCP_SERVICE_ACCOUNT_JSON) {
+            try {
+                storageOpts.credentials = JSON.parse(process.env.GCP_SERVICE_ACCOUNT_JSON);
+            } catch (e) {
+                console.error('[media.service] Failed to parse GCP_SERVICE_ACCOUNT_JSON:', e.message);
+            }
+        }
+        this.storage = new Storage(storageOpts);
     }
 
     /**

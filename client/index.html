@@ -5377,10 +5377,14 @@
       if (closeAfter) closeFilterDrawer();
     }
 
-    function selectCardSwatch(event, productId, colorName, hexCode) {
+    function selectCardSwatch(event, productId, colorName, hexCode, imageUrl) {
       if (event) event.stopPropagation();
       const colorLabel = document.getElementById(`prod-color-${productId}`);
       if (colorLabel) colorLabel.innerText = colorName;
+      if (imageUrl) {
+        const cardImg = document.getElementById(`card-img-${productId}`);
+        if (cardImg) cardImg.src = imageUrl;
+      }
       const swatchContainer = document.getElementById(`swatches-${productId}`);
       if (swatchContainer) {
         swatchContainer.querySelectorAll('.swatch-circle').forEach(el => el.classList.remove('active'));
@@ -5447,29 +5451,41 @@
         { name: 'Rich Bordeaux', hex: '#58111A' }
       ];
 
-      grid.innerHTML = products.map(p => `
+      grid.innerHTML = products.map(p => {
+        const gallery = Array.isArray(p.gallery_images) && p.gallery_images.length > 0 ? p.gallery_images : [];
+        const swatches = gallery.length > 1
+          ? gallery.map((imgUrl, idx) => ({
+              name: idx === 0 ? (p.color_family || 'Default') : `Color ${idx + 1}`,
+              hex: defaultSwatches[idx % defaultSwatches.length].hex,
+              img: imgUrl
+            }))
+          : defaultSwatches.map(sw => ({ ...sw, img: p.image_url || '' }));
+        const visibleSwatches = swatches.slice(0, 6);
+        const extraCount = swatches.length > 6 ? swatches.length - 6 : 0;
+        const sizes = Array.isArray(p.available_sizes) ? p.available_sizes.filter(Boolean) : [];
+        const defaultSize = sizes.length > 0 ? sizes[0] : 'One Size';
+
+        return `
         <div class="product-card" onclick="openProductDetailPage('${p.product_id}', '${p.handle}')" style="cursor: pointer;">
           <div class="card-img-wrap" style="position: relative;">
             <button class="wishlist-heart-btn" onclick="event.stopPropagation(); toggleCardWishlist(this, '${p.product_id}', '${p.title.replace(/'/g, "\\'")}', ${p.sale_price})" style="position: absolute; top: 10px; right: 10px; width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.9); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--brand-espresso); z-index: 5;">♡</button>
-            <img class="card-img" src="${p.image_url || 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80'}" alt="${p.title}" />
-            <!-- Hover Quick Add Overlay Bar (Exact Alo Spec from User Image) -->
+            <img class="card-img" id="card-img-${p.product_id}" src="${p.image_url || 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80'}" alt="${p.title}" />
+            ${sizes.length > 0 ? `
+            <!-- Hover Quick Add Overlay Bar -->
             <div class="card-quick-add-overlay" onclick="event.stopPropagation()">
               <span class="quick-add-header-title">QUICK ADD:</span>
               <div class="quick-add-size-pills">
-                ${(p.category_id && (p.category_id.includes('shoes') || p.category_id === 'acc-shoes') || p.title.toLowerCase().includes('runner') || p.title.toLowerCase().includes('sneaker') || p.title.toLowerCase().includes('boot') || p.title.toLowerCase().includes('mule'))
-          ? ['5W', '6W', '7W', '8W', '9W', '10W', '11W', '12W'].map(sz => `<button class="quick-add-pill" onclick="quickAddProductSize(event, '${p.product_id}', '${p.title.replace(/'/g, "\\'")}', ${p.sale_price}, '${p.color_family || 'White/White'}', '${sz}')">${sz}</button>`).join('')
-          : ['XXS', 'XS', 'S', 'M', 'L', 'XL'].map(sz => `<button class="quick-add-pill" onclick="quickAddProductSize(event, '${p.product_id}', '${p.title.replace(/'/g, "\\'")}', ${p.sale_price}, '${p.color_family || 'Black'}', '${sz}')">${sz}</button>`).join('')
-        }
+                ${sizes.map(sz => `<button class="quick-add-pill" onclick="quickAddProductSize(event, '${p.product_id}', '${p.title.replace(/'/g, "\\'")}', ${p.sale_price}, document.getElementById('prod-color-${p.product_id}')?.innerText || '${(p.color_family || 'Black').replace(/'/g, "\\'")}', '${sz}')">${sz}</button>`).join('')}
               </div>
-            </div>
+            </div>` : ''}
           </div>
           <div class="card-details">
             <!-- Swatches row -->
             <div class="swatches-row" id="swatches-${p.product_id}" style="display: flex; align-items: center; gap: 6px; margin: 10px 0 6px;">
-              ${defaultSwatches.map((sw, idx) => `
-                <span class="swatch-circle ${idx === 0 ? 'active' : ''}" id="swatch-${p.product_id}-${sw.name.replace(/\s+/g, '-').toLowerCase()}" onclick="selectCardSwatch(event, '${p.product_id}', '${sw.name}', '${sw.hex}')" style="width: 14px; height: 14px; border-radius: 50%; background: ${sw.hex}; border: 1px solid rgba(0,0,0,0.2); cursor: pointer; display: inline-block;"></span>
+              ${visibleSwatches.map((sw, idx) => `
+                <span class="swatch-circle ${idx === 0 ? 'active' : ''}" id="swatch-${p.product_id}-${sw.name.replace(/\s+/g, '-').toLowerCase()}" onclick="selectCardSwatch(event, '${p.product_id}', '${sw.name.replace(/'/g, "\\'")}', '${sw.hex}', '${(sw.img || '').replace(/'/g, "\\'")}')" style="width: 14px; height: 14px; border-radius: 50%; background: ${sw.hex}; border: 1px solid rgba(0,0,0,0.2); cursor: pointer; display: inline-block;"></span>
               `).join('')}
-              <span style="font-size: 10px; color: var(--text-muted); font-weight: 600; margin-left: 2px;">+6</span>
+              ${extraCount > 0 ? `<span style="font-size: 10px; color: var(--text-muted); font-weight: 600; margin-left: 2px;">+${extraCount}</span>` : ''}
             </div>
 
             <!-- Delicate Boxed Discount Badge -->
@@ -5483,10 +5499,11 @@
               <span class="sale-price">₹${Number(p.sale_price).toLocaleString('en-IN')}</span>
               <span class="mrp-price">₹${Number(p.mrp).toLocaleString('en-IN')}</span>
             </div>
-            <button class="btn-atc" onclick="event.stopPropagation(); addToCart('${p.product_id}', '${p.title.replace(/'/g, "\\'")}', ${p.sale_price}, document.getElementById('prod-color-${p.product_id}')?.innerText || '${(p.color_family || 'Studio Neutral').replace(/'/g, "\\'")}', 'S')">Add to Bag</button>
+            <button class="btn-atc" onclick="event.stopPropagation(); addToCart('${p.product_id}', '${p.title.replace(/'/g, "\\'")}', ${p.sale_price}, document.getElementById('prod-color-${p.product_id}')?.innerText || '${(p.color_family || 'Studio Neutral').replace(/'/g, "\\'")}', '${defaultSize}')">Add to Bag</button>
           </div>
         </div>
-      `).join('');
+      `;
+      }).join('');
     }
 
     // 4. Fetch Social Lookbook Handles
