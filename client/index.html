@@ -5452,16 +5452,18 @@
       ];
 
       grid.innerHTML = products.map(p => {
-        const gallery = Array.isArray(p.gallery_images) && p.gallery_images.length > 0 ? p.gallery_images : [];
-        const swatches = gallery.length > 1
-          ? gallery.map((imgUrl, idx) => ({
-              name: idx === 0 ? (p.color_family || 'Default') : `Color ${idx + 1}`,
-              hex: defaultSwatches[idx % defaultSwatches.length].hex,
-              img: imgUrl
-            }))
-          : defaultSwatches.map(sw => ({ ...sw, img: p.image_url || '' }));
-        const visibleSwatches = swatches.slice(0, 6);
-        const extraCount = swatches.length > 6 ? swatches.length - 6 : 0;
+        // Use real color_variants if available, else fall back to gallery_images
+        const colorVars = Array.isArray(p.color_variants) && p.color_variants.length > 0
+          ? p.color_variants
+          : (Array.isArray(p.gallery_images) && p.gallery_images.length > 1
+              ? p.gallery_images.map((imgUrl, idx) => ({
+                  name: idx === 0 ? (p.color_family || 'Default') : `Color ${idx + 1}`,
+                  hex: defaultSwatches[idx % defaultSwatches.length].hex,
+                  imageUrl: imgUrl
+                }))
+              : defaultSwatches.map(sw => ({ ...sw, imageUrl: p.image_url || '' })));
+        const visibleSwatches = colorVars.slice(0, 6);
+        const extraCount = colorVars.length > 6 ? colorVars.length - 6 : 0;
         const sizes = Array.isArray(p.available_sizes) ? p.available_sizes.filter(Boolean) : [];
         const defaultSize = sizes.length > 0 ? sizes[0] : 'One Size';
 
@@ -5483,7 +5485,11 @@
             <!-- Swatches row -->
             <div class="swatches-row" id="swatches-${p.product_id}" style="display: flex; align-items: center; gap: 6px; margin: 10px 0 6px;">
               ${visibleSwatches.map((sw, idx) => `
-                <span class="swatch-circle ${idx === 0 ? 'active' : ''}" id="swatch-${p.product_id}-${sw.name.replace(/\s+/g, '-').toLowerCase()}" onclick="selectCardSwatch(event, '${p.product_id}', '${sw.name.replace(/'/g, "\\'")}', '${sw.hex}', '${(sw.img || '').replace(/'/g, "\\'")}')" style="width: 14px; height: 14px; border-radius: 50%; background: ${sw.hex}; border: 1px solid rgba(0,0,0,0.2); cursor: pointer; display: inline-block;"></span>
+                <span class="swatch-circle ${idx === 0 ? 'active' : ''}" 
+                  id="swatch-${p.product_id}-${sw.name.replace(/\s+/g, '-').toLowerCase()}" 
+                  onclick="selectCardSwatch(event, '${p.product_id}', '${sw.name.replace(/'/g, "\\'")}', '${sw.hex}', '${(sw.imageUrl || sw.img || '').replace(/'/g, "\\'")}')" 
+                  style="width: 14px; height: 14px; border-radius: 50%; background: ${sw.hex}; border: 1px solid rgba(0,0,0,0.2); cursor: pointer; display: inline-block;"
+                  title="${sw.name}"></span>
               `).join('')}
               ${extraCount > 0 ? `<span style="font-size: 10px; color: var(--text-muted); font-weight: 600; margin-left: 2px;">+${extraCount}</span>` : ''}
             </div>
