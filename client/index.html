@@ -5469,7 +5469,7 @@
         <div class="product-card" onclick="openProductDetailPage('${p.product_id}', '${p.handle}')" style="cursor: pointer;">
           <div class="card-img-wrap" style="position: relative;">
             <button class="wishlist-heart-btn" onclick="event.stopPropagation(); toggleCardWishlist(this, '${p.product_id}', '${p.title.replace(/'/g, "\\'")}', ${p.sale_price})" style="position: absolute; top: 10px; right: 10px; width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.9); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--brand-espresso); z-index: 5;">♡</button>
-            <img class="card-img" id="card-img-${p.product_id}" src="${p.image_url || 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80'}" alt="${p.title}" />
+            <img class="card-img" id="card-img-${p.product_id}" src="${p.image_url || ''}" alt="${p.title}" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22500%22><rect width=%22400%22 height=%22500%22 fill=%22%23f5f3f0%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2218%22 fill=%22%23aaa%22>No Image</text></svg>';" />
             ${sizes.length > 0 ? `
             <!-- Hover Quick Add Overlay Bar -->
             <div class="card-quick-add-overlay" onclick="event.stopPropagation()">
